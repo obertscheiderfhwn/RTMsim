@@ -1,0 +1,31 @@
+1
+meshfiles\\mesh_permeameter1_foursets.bdf
+200
+1.01325e5 1.225 1.4 0.06
+1.35e5 1.0e5
+3e-3 0.7 3e-10 1 1 0 0 
+3e-3 0.7 3e-10 1 1 0 0  
+3e-3 0.7 3e-10 1 1 0 0  
+3e-3 0.7 3e-10 1 1 0 0  
+3e-3 0.7 3e-10 1 1 0 0  
+1 0 0 0 
+0 "results.jld2" 
+0 0.01
+16
+
+
+Input format:
+i_model 
+meshfilename 
+tmax 
+p_ref rho_ref gamma mu_resin_val 
+p_a_val p_init_val 
+t_val porosity_val K_val alpha_val refdir1_val refdir2_val refdir3_val 
+t1_val porosity1_val K1_val alpha1_val refdir11_val refdir21_val refdir31_val 
+t2_val porosity2_val K2_val alpha2_val refdir12_val refdir22_val refdir32_val 
+t3_val porosity3_val K3_val alpha3_val refdir13_val refdir23_val refdir33_val 
+t4_val porosity4_val K4_val alpha4_val refdir14_val refdir24_val refdir34_val 
+patchtype1val patchtype2val patchtype3val patchtype4val 
+i_restart restartfilename 
+i_interactive r_p 
+n_pics
