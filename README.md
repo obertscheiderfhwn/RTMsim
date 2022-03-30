@@ -52,6 +52,7 @@ rotated about the common edges to lie in the plane of the considered cell.
 ADD SOMETHINK ABOUT THE FINITE AREA METHOD HERE.
 
 The shell mesh is imported via a text file where nodes, elements and element sets are described in a format similar to the NASTRAN bulk data format. Every line contains ten fields of eight characters each. The first field contains the character name of the item. The input file for the permeameter reads:
+```
 SET 1 = 1,2,3,4,5,6,
 7,8,9,10,11,12,
 13,14,15,16
@@ -69,12 +70,12 @@ CTRIA3 3 0 19 11 17
 CTRIA3 586 0 243 302 332
 CTRIA3 587 0 262 333 259
 CTRIA3 588 0 232 259 333
+```
 Nodes are described by the keyword GRID, followed by a grid number, followed by a blank and three fileds with the x, y and z coordinates of the node. The triangular cells are defined by the keyword CTRIA3, followed by a cell number, followed by a zero7, followed by the three node numbers which constitute the cell. Nodes and elements need not be sorted nor starting with one. Cell sets are defined by the keyword SET followed by ‘ N = ’ and the cell numbers separated by commas. Not more than 6 cell numbers per line. If another line is required for additional cell numbers, these follow after 8 blanks. Up to four sets can be defined. Mesh files of this type can be created with common meshing tools. The authors used Altair HyperWorks but also free software tools like SALOMEMECA, GMSH or NETGEN can be used.
 
 
-DESCRIBE THE GUI AND THE INPUT TEXT FILE AND HOW TO START HERE
+DESCRIBE THE GUI AND THE INPUT TEXT FILE AND HOW TO START
 
-SHOW RESULT PCIS FOR THE VALIDATION CASES WHICH SHOW THAT THE CODE PERFORMS WELL
-
+SHOW RESULT PICS FOR THE VALIDATION CASES WHICH SHOW THAT THE CODE PERFORMS WELL
 
 EXPLAIN HOW TO EXTEND THE CODE FOR i_model=2,3,.. and i_method=2,3,... for numerical differentiation and flux functions
