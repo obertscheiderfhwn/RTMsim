@@ -1961,33 +1961,37 @@ module rtmsim
         deltagamma=maximum(gamma_plot)-minimum(gamma_plot);
 
         #for poly plot
-        X=Array{Float64}(undef, 3, N);
-        Y=Array{Float64}(undef, 3, N);
-        Z=Array{Float64}(undef, 3, N);
-        C_p=Array{Float32}(undef, 3, N);        
-        C_gamma=Array{Float32}(undef, 3, N);
+        inds0=findall(gamma_new.>-0.5);
+        N0=length(inds0);
+        X=Array{Float64}(undef, 3, N0);
+        Y=Array{Float64}(undef, 3, N0);
+        Z=Array{Float64}(undef, 3, N0);
+        C_p=Array{Float32}(undef, 3, N0);        
+        C_gamma=Array{Float32}(undef, 3, N0);
         inds1=findall(gamma_new.<-0.5);
         N1=length(inds1);
         X1=Array{Float64}(undef, 3, N1);
         Y1=Array{Float64}(undef, 3, N1);
         Z1=Array{Float64}(undef, 3, N1);  
         C1_gamma=Array{Float32}(undef, 3, N1);
-        for ind in 1:N;
-            X[1,ind]=gridx[cellgridid[ind,1]];
-            X[2,ind]=gridx[cellgridid[ind,2]];
-            X[3,ind]=gridx[cellgridid[ind,3]];
-            Y[1,ind]=gridy[cellgridid[ind,1]];
-            Y[2,ind]=gridy[cellgridid[ind,2]];
-            Y[3,ind]=gridy[cellgridid[ind,3]];
-            Z[1,ind]=gridz[cellgridid[ind,1]];
-            Z[2,ind]=gridz[cellgridid[ind,2]];
-            Z[3,ind]=gridz[cellgridid[ind,3]];
-            C_gamma[1,ind]=gamma_plot[ind]/deltagamma;
-            C_gamma[2,ind]=gamma_plot[ind]/deltagamma;
-            C_gamma[3,ind]=gamma_plot[ind]/deltagamma;
-            C_p[1,ind]=p_new[ind]/deltap;
-            C_p[2,ind]=p_new[ind]/deltap;
-            C_p[3,ind]=p_new[ind]/deltap;
+        C1_p=Array{Float32}(undef, 3, N1);
+        for i in 1:N0;
+            ind=inds0[i];
+            X[1,i]=gridx[cellgridid[ind,1]];
+            X[2,i]=gridx[cellgridid[ind,2]];
+            X[3,i]=gridx[cellgridid[ind,3]];
+            Y[1,i]=gridy[cellgridid[ind,1]];
+            Y[2,i]=gridy[cellgridid[ind,2]];
+            Y[3,i]=gridy[cellgridid[ind,3]];
+            Z[1,i]=gridz[cellgridid[ind,1]];
+            Z[2,i]=gridz[cellgridid[ind,2]];
+            Z[3,i]=gridz[cellgridid[ind,3]];
+            C_gamma[1,i]=gamma_plot[ind]/deltagamma;
+            C_gamma[2,i]=gamma_plot[ind]/deltagamma;
+            C_gamma[3,i]=gamma_plot[ind]/deltagamma;
+            C_p[1,i]=p_new[ind]/deltap;
+            C_p[2,i]=p_new[ind]/deltap;
+            C_p[3,i]=p_new[ind]/deltap;
         end
         xyz = reshape([X[:] Y[:] Z[:]]', :)        
         for i in 1:N1
@@ -2004,6 +2008,9 @@ module rtmsim
             C1_gamma[1,i]=0.5;
             C1_gamma[2,i]=0.5;
             C1_gamma[3,i]=0.5;
+            C1_p[1,i]=p_new[ind]/deltap;
+            C1_p[2,i]=p_new[ind]/deltap;
+            C1_p[3,i]=p_new[ind]/deltap;
         end
         xyz1 = reshape([X1[:] Y1[:] Z1[:]]', :)
 
@@ -2033,6 +2040,9 @@ module rtmsim
         hidespines!(ax1) 
         ax2 = Axis3(fig[1, 2]; aspect=(ax,ay,az), perspectiveness=0.5,viewmode = :fitzoom,title=string("Pressure at t=", string(round(t_div*t)/t_div) ,"s"))
         poly!(connect(xyz, Point{3}), connect(1:length(X), TriangleFace); color=C_p[:], strokewidth=1, colorrange=(0,1))
+        if N1>0; 
+            poly!(connect(xyz1, Point{3}), connect(1:length(X1), TriangleFace); color=C1_p[:], strokewidth=1, colorrange=(0,1))
+        end
         hidedecorations!(ax2);
         hidespines!(ax2) 
         display(fig)
@@ -2090,33 +2100,37 @@ module rtmsim
             deltagamma=maximum(gamma_plot)-minimum(gamma_plot);
 
             #for poly plot
-            X=Array{Float64}(undef, 3, N);
-            Y=Array{Float64}(undef, 3, N);
-            Z=Array{Float64}(undef, 3, N);
-            C_p=Array{Float32}(undef, 3, N);        
-            C_gamma=Array{Float32}(undef, 3, N);
+            inds0=findall(gamma_new.>-0.5);
+            N0=length(inds0);
+            X=Array{Float64}(undef, 3, N0);
+            Y=Array{Float64}(undef, 3, N0);
+            Z=Array{Float64}(undef, 3, N0);
+            C_p=Array{Float32}(undef, 3, N0);        
+            C_gamma=Array{Float32}(undef, 3, N0);
             inds1=findall(gamma_new.<-0.5);
             N1=length(inds1);
             X1=Array{Float64}(undef, 3, N1);
             Y1=Array{Float64}(undef, 3, N1);
             Z1=Array{Float64}(undef, 3, N1);  
+            C1_p=Array{Float32}(undef, 3, N1);
             C1_gamma=Array{Float32}(undef, 3, N1);
-            for ind in 1:N;
-                X[1,ind]=gridx[cellgridid[ind,1]];
-                X[2,ind]=gridx[cellgridid[ind,2]];
-                X[3,ind]=gridx[cellgridid[ind,3]];
-                Y[1,ind]=gridy[cellgridid[ind,1]];
-                Y[2,ind]=gridy[cellgridid[ind,2]];
-                Y[3,ind]=gridy[cellgridid[ind,3]];
-                Z[1,ind]=gridz[cellgridid[ind,1]];
-                Z[2,ind]=gridz[cellgridid[ind,2]];
-                Z[3,ind]=gridz[cellgridid[ind,3]];
-                C_gamma[1,ind]=gamma_plot[ind]/deltagamma;
-                C_gamma[2,ind]=gamma_plot[ind]/deltagamma;
-                C_gamma[3,ind]=gamma_plot[ind]/deltagamma;
-                C_p[1,ind]=p_new[ind]/deltap;
-                C_p[2,ind]=p_new[ind]/deltap;
-                C_p[3,ind]=p_new[ind]/deltap;
+            for i in 1:N0;
+                ind=inds0[i];
+                X[1,i]=gridx[cellgridid[ind,1]];
+                X[2,i]=gridx[cellgridid[ind,2]];
+                X[3,i]=gridx[cellgridid[ind,3]];
+                Y[1,i]=gridy[cellgridid[ind,1]];
+                Y[2,i]=gridy[cellgridid[ind,2]];
+                Y[3,i]=gridy[cellgridid[ind,3]];
+                Z[1,i]=gridz[cellgridid[ind,1]];
+                Z[2,i]=gridz[cellgridid[ind,2]];
+                Z[3,i]=gridz[cellgridid[ind,3]];
+                C_gamma[1,i]=gamma_plot[ind]/deltagamma;
+                C_gamma[2,i]=gamma_plot[ind]/deltagamma;
+                C_gamma[3,i]=gamma_plot[ind]/deltagamma;
+                C_p[1,i]=p_new[ind]/deltap;
+                C_p[2,i]=p_new[ind]/deltap;
+                C_p[3,i]=p_new[ind]/deltap;
             end
             xyz = reshape([X[:] Y[:] Z[:]]', :)
             for i in 1:N1
@@ -2133,6 +2147,9 @@ module rtmsim
                 C1_gamma[1,i]=0.5;
                 C1_gamma[2,i]=0.5;
                 C1_gamma[3,i]=0.5;
+                C1_p[1,i]=p_new[ind]/deltap;
+                C1_p[2,i]=p_new[ind]/deltap;
+                C1_p[3,i]=p_new[ind]/deltap;
             end
             xyz1 = reshape([X1[:] Y1[:] Z1[:]]', :)
 
@@ -2217,7 +2234,11 @@ module rtmsim
         
         time_vector=[];
         output_array=[];
+        inds=[];
+        inds0=[];
+        inds1=[];
         N=Int64(0);
+        N0=Int64(0);
         N1=Int64(0);
         ax=Float64(0.0);
         ay=Float64(0.0);
@@ -2249,27 +2270,30 @@ module rtmsim
                 if i_firstfile==1;
                     i_firstfile=0;
                     #for poly plot
-                    X=Array{Float64}(undef, 3, N);
-                    Y=Array{Float64}(undef, 3, N);
-                    Z=Array{Float64}(undef, 3, N);
-                    C_p=Array{Float32}(undef, 3, N);        
-                    C_gamma=Array{Float32}(undef, 3, N);
+                    inds0=findall(gamma_new.>-0.5);
+                    N0=length(inds0);
+                    X=Array{Float64}(undef, 3, N0);
+                    Y=Array{Float64}(undef, 3, N0);
+                    Z=Array{Float64}(undef, 3, N0);
+                    C_p=Array{Float32}(undef, 3, N0);        
+                    C_gamma=Array{Float32}(undef, 3, N0);
                     inds1=findall(gamma_new.<-0.5);
                     N1=length(inds1);
                     X1=Array{Float64}(undef, 3, N1);
                     Y1=Array{Float64}(undef, 3, N1);
                     Z1=Array{Float64}(undef, 3, N1);  
                     C1_gamma=Array{Float32}(undef, 3, N1);
-                    for ind in 1:N;
-                        X[1,ind]=gridx[cellgridid[ind,1]];
-                        X[2,ind]=gridx[cellgridid[ind,2]];
-                        X[3,ind]=gridx[cellgridid[ind,3]];
-                        Y[1,ind]=gridy[cellgridid[ind,1]];
-                        Y[2,ind]=gridy[cellgridid[ind,2]];
-                        Y[3,ind]=gridy[cellgridid[ind,3]];
-                        Z[1,ind]=gridz[cellgridid[ind,1]];
-                        Z[2,ind]=gridz[cellgridid[ind,2]];
-                        Z[3,ind]=gridz[cellgridid[ind,3]];
+                    for i in 1:N0;
+                        ind=inds0[i];
+                        X[1,i]=gridx[cellgridid[ind,1]];
+                        X[2,i]=gridx[cellgridid[ind,2]];
+                        X[3,i]=gridx[cellgridid[ind,3]];
+                        Y[1,i]=gridy[cellgridid[ind,1]];
+                        Y[2,i]=gridy[cellgridid[ind,2]];
+                        Y[3,i]=gridy[cellgridid[ind,3]];
+                        Z[1,i]=gridz[cellgridid[ind,1]];
+                        Z[2,i]=gridz[cellgridid[ind,2]];
+                        Z[3,i]=gridz[cellgridid[ind,3]];
                     end
                     xyz = reshape([X[:] Y[:] Z[:]]', :)
                     for i in 1:N1
@@ -2325,16 +2349,21 @@ module rtmsim
         end
         deltagamma=maximum(gamma_plot)-minimum(gamma_plot);
         
-        C_gamma=Array{Float32}(undef, 3, N);
-        for ind in 1:N;
-            C_gamma[1,ind]=gamma_plot[ind]/deltagamma;
-            C_gamma[2,ind]=gamma_plot[ind]/deltagamma;
-            C_gamma[3,ind]=gamma_plot[ind]/deltagamma;
+        C_gamma=Array{Float32}(undef, 3, N0);
+        for i in 1:N0;
+            ind=inds0[i];
+            C_gamma[1,i]=gamma_plot[ind]/deltagamma;
+            C_gamma[2,i]=gamma_plot[ind]/deltagamma;
+            C_gamma[3,i]=gamma_plot[ind]/deltagamma;
         end
 
         resolution_val=600;
         fig = Figure(resolution=(resolution_val, resolution_val))   
         ax1 = Axis3(fig[1, 1]; aspect=(ax,ay,az), perspectiveness=0.5,viewmode = :fitzoom,title=string("Filling factor at t=", string(round(t_div*t)/t_div) ,"s"))
+        p1=poly!(ax1,connect(xyz, Point{3}), connect(1:length(X), TriangleFace); color=C_gamma[:], strokewidth=1, colorrange=(0,1))
+        if N1>0;
+            p2=poly!(ax1,connect(xyz1, Point{3}), connect(1:length(X1), TriangleFace); color=C1_gamma[:], strokewidth=1, colorrange=(0,1),colormap = (:bone))
+        end
         hidedecorations!(ax1);
         hidespines!(ax1) 
         sl_t = Slider(fig[2, 1], range = time_vector[1]:  (time_vector[end]-time_vector[1])/n_pics :time_vector[end], startvalue =  time_vector[end] );
@@ -2364,14 +2393,17 @@ module rtmsim
                 end
             end
             deltagamma=maximum(gamma_plot)-minimum(gamma_plot);
-            for ind in 1:N;
-                C_gamma[1,ind]=gamma_plot[ind]/deltagamma;
-                C_gamma[2,ind]=gamma_plot[ind]/deltagamma;
-                C_gamma[3,ind]=gamma_plot[ind]/deltagamma;
+            for i in 1:N0;
+                ind=inds0[i];
+                C_gamma[1,i]=gamma_plot[ind]/deltagamma;
+                C_gamma[2,i]=gamma_plot[ind]/deltagamma;
+                C_gamma[3,i]=gamma_plot[ind]/deltagamma;
             end
-            poly!(connect(xyz, Point{3}), connect(1:length(X), TriangleFace); color=C_gamma[:], strokewidth=1, colorrange=(0,1))
+            delete!(ax1.scene,p1)
+            delete!(ax1.scene,p2)
+            p1=poly!(ax1,connect(xyz, Point{3}), connect(1:length(X), TriangleFace); color=C_gamma[:], strokewidth=1, colorrange=(0,1))
             if N1>0;
-                poly!(connect(xyz1, Point{3}), connect(1:length(X1), TriangleFace); color=C1_gamma[:], strokewidth=1, colorrange=(0,1),colormap = (:bone))
+                p2=poly!(ax1,connect(xyz1, Point{3}), connect(1:length(X1), TriangleFace); color=C1_gamma[:], strokewidth=1, colorrange=(0,1),colormap = (:bone))
             end
             ax1.title=string("Filling factor at t=", string(round(t_div*time_val)/t_div) ,"s")
             hidedecorations!(ax1);
