@@ -1,10 +1,10 @@
-# RTMsim - A finite area method for filling simulations in liquid composite moulding
+# RTMsim - Filling simulations in Resin Transfer Moulding with the Finite Area Method
 Christof Obertscheider, Aerospace Engineering Department, University of Applied Sciences Wiener Neustadt, Johannes-Gutenberg-Straße 3, 2700, Wiener Neustadt, Austria <br>
 Ewald Fauster, Processing of Composites Group, Department Polymer Engineering and Science, Montanuniversität Leoben, Otto Glöckl-Straße 2, 8700 Leoben, Austria 
 
 ## Summary
 Resin Transfer Moulding (RTM) is a manufacturing process forproducing thin-walled fiber reinforced polymer composites where dry fibers are placed inside a mould and
-resin is injected under pressure into the fibrous preform. Numerous flow models for simulating the resin flow have already been implemented in different software packages, all with particular shortcomings. Based on the analysis of these software packages, some requirements for a new simulation model were derived and a new software tool which is robust, easy-to-use and simple-to-extend was developed. The proposed model was validated with results from literature as well as experiments and compared with results from well-established RTM filling simulation tools.
+resin is injected under pressure into the fibrous preform. RTMsim is a robust, easy-to-use and simple-to-extend software tool, written in Julia, for RTM filling simulations. A shell mesh, injection pressure, resin viscosity and the parameters describing the preform are required input. The software was validated with results from literature as well as experiments and compared with results from well-established RTM filling simulation tools.
 
 ## Statement of need
 Resin Transfer Moulding (RTM) is a manufacturing process for producing thin-walled fiber reinforced polymer composites where dry fibers are placed inside a mould and resin is injected under pressure into the fibrous preform. During mould design, filling simulations can study different manufacturing concepts (i.e. placement of inlet ports and vents) to guarantee complete filling of the part and avoid air entrapment where flow fronts converge. 
@@ -40,7 +40,7 @@ compared to a volume mesh which has to fulfill cell quality requirements (e.g. f
 mid-surface. Mid-surface models are often available in composite manufacturing since computational stress analysis for thin-walled parts is performed on the part’s mid-surface too. Since a shell mesh is used in the simulation tool, the conservation laws must be solved on a shell mesh using a generalization of the
 so-called finite area method. 
 
-## Start simulation
+## Mesh preparation
 
 The prepared shell mesh is imported via a text file where nodes, elements and element sets are described in a format similar to the NASTRAN bulk data format. Every line contains ten fields of eight characters each. The first field contains the character name of the item. The input file for the permeameter reads:
 ```
@@ -62,12 +62,15 @@ CTRIA3 586 0 243 302 332
 CTRIA3 587 0 262 333 259
 CTRIA3 588 0 232 259 333
 ```
-Nodes are described by the keyword GRID, followed by a grid number, followed by a blank and three fileds with the x, y and z coordinates of the node. The triangular cells are defined by the keyword CTRIA3, followed by a cell number, followed by a zero7, followed by the three node numbers which constitute the cell. Nodes and elements need not be sorted nor starting with one. Cell sets are defined by the keyword SET followed by ‘ N = ’ and the cell numbers separated by commas. Not more than 6 cell numbers per line. If another line is required for additional cell numbers, these follow after 8 blanks. Up to four sets can be defined. Mesh files of this type can be created with common meshing tools. The authors used Altair HyperWorks but also free software tools like SALOMEMECA, GMSH or NETGEN can be used.
+Nodes are described by the keyword `GRID`, followed by a grid number, followed by a blank and three fileds with the x, y and z coordinates of the node. The triangular cells are defined by the keyword `CTRIA3`, followed by a cell number, followed by a zero, followed by the three node numbers which constitute the cell. Nodes and elements need not be sorted nor starting with one. Cell sets are defined by the keyword `SET` followed by ` N = ` and the cell numbers separated by commas. Not more than 6 cell numbers per line. If another line is required for additional cell numbers, these follow after 8 blanks. Up to four sets can be defined. Mesh files of this type can be created with common meshing tools. The authors used Altair HyperWorks but also free software tools like SALOMEMECA, GMSH or NETGEN can be used.
 
-The new simulation tool is executed with a well-defined list of parameters specified in an input text file or in the GUI. 
+# Input parameters
 
-DESCRIBE THE CODE, GUI AND THE TEXTFILE HERE
-- Basic code structure/functions and input parameters for GUI and textfile 
+RTMsim is executed with a well-defined list of parameters specified in an input text file or in the GUI. 
+
+DESCRIBE GUI AND INPUT TEXT FILE HERE
+
+# Run simulation
 
 In order to use RTMsim follow the following steps:
 - Download Julia from https://julialang.org/downloads/ and add Julia to path such that can be started from command line.
@@ -87,6 +90,7 @@ Alternatively, open Julia terminal, go to the directory with the RTMsim reposito
 - `rtmsim.start_rtmsim("input.txt")` for starting with reading the input.txt file
 
 ## VALIDATION
+
 Five different test cases are available, successfully validating the Julia implementation of the RTM filling model:
 - A permeameter experiment with isotropic in-plane permeability to validate with literature results.
 - A permeameter experiment with tilted orthotropic in-plane permeability to verify that the simulation gives the expected results.
@@ -99,7 +103,11 @@ validate the new simulation model for patches with different cavity thickness.
 
 SHOW RESULT PICS FOR THE VALIDATION CASES WHICH SHOW THAT THE CODE PERFORMS WELL
 
-THE five validation cases with the input files file input_case1.txt,...
+The five validation cases with the input files file input_case1.txt,...
 
 ## FUTURE WORK
-EXPLAIN HOW TO EXTEND THE CODE FOR i_model=2,3,.. and i_method=2,3,... for numerical differentiation and flux functions
+
+The source code is prepared for the following extensions:
+- Import mesh file in different format. Selection is based on the extension of the mesh file.
+- Input parameter `i_model` (for iso-thermal RTM `=1`) is used for adding additional functionalities. E.g. adding temperature and degree-of-cure equations with variable resin viscosity ar for VARI with variable porosity and permeability.
+- Parameter `i_method` in the functions for numerical differentiation and flux functions can be used to implement different numerical schemes. E.g. gradient limiter or second-order upwinding.
