@@ -21,8 +21,11 @@ po=GtkButton("Plot overview")
 pf=GtkButton("Plot filling")
 q=GtkButton("Quit")
 h=GtkButton("Help")
+in1=GtkButton("Select input file")
+in3=GtkButton("Run with input file")
 
 #define input fields
+in2=GtkEntry(); set_gtk_property!(in2,:text,"input.txt");
 mf=GtkEntry(); set_gtk_property!(mf,:text,"meshfiles\\mesh_permeameter1_foursets.bdf");
 t=GtkEntry(); set_gtk_property!(t,:text,"200")
 rf=GtkEntry(); set_gtk_property!(rf,:text,"results.jld2")
@@ -104,19 +107,19 @@ im=Gtk.GtkImage("rtmsim_logo1_h200px_grey.png")
 g = GtkGrid()    #Cartesian coordinates, g[column,row]
 set_gtk_property!(g, :column_spacing, 5) 
 set_gtk_property!(g, :row_spacing, 5) 
-g[1,1]=sm; g[2,1] = mf; g[3,1] = pm; g[4,1] = ps;              g[7:10,6:9] = im;
-           g[2,2] = t;  g[3,2] = ss; g[4,2] = cs; 
+g[1,1]=sm; g[2,1] = mf; g[3,1] = pm;  g[4,1] = ps;  g[7,1] = in1;  g[8,1] = in2;  g[9,1] = in3;              
+           g[2,2] = t;  g[3,2] = ss;  g[4,2] = cs; 
            g[2,3] = r;  g[3,3] = sel; g[4,3] = si; g[5,3] = ci; 
-g[2,4] = rf; g[3,4] = pr; g[4,4] = po;  g[5,4] = pf;
-
+g[2,4] = rf; g[3,4] = pr; g[4,4] = po;g[5,4] = pf;
+g[7:10,6:9] = im;
                                  g[3,11] = f1;   g[4,11] = f2;   g[5,11] = f3;   g[6,11] = f4;
 g[1,12] = par_1; g[2,12] = p0_1; g[3,12] = p1_1; g[4,12] = p2_1; g[5,12] = p3_1; g[6,12] = p4_1; 
 g[1,13] = par_2; g[2,13] = p0_2; g[3,13] = p1_2; g[4,13] = p2_2; g[5,13] = p3_2; g[6,13] = p4_2; 
 g[1,14] = par_3; g[2,14] = p0_3; g[3,14] = p1_3; g[4,14] = p2_3; g[5,14] = p3_3; g[6,14] = p4_3; 
                  g[2,15] = p0_4; g[3,15] = p1_4; g[4,15] = p2_4; g[5,15] = p3_4; g[6,15] = p4_4; 
                  g[2,16] = p0_5; g[3,16] = p1_5; g[4,16] = p2_5; g[5,16] = p3_5; g[6,16] = p4_5; 
-                 g[2,17] = p0_6; g[3,17] = p1_6; g[4,17] = p2_6; g[5,17] = p3_6; g[6,17] = p4_6;      g[10,17] = h; 
-                 g[2,18] = p0_7; g[3,18] = p1_7; g[4,18] = p2_7; g[5,18] = p3_7; g[6,18] = p4_7;      g[10,18] = q; 
+                 g[2,17] = p0_6; g[3,17] = p1_6; g[4,17] = p2_6; g[5,17] = p3_6; g[6,17] = p4_6;      g[9,17] = h; 
+                 g[2,18] = p0_7; g[3,18] = p1_7; g[4,18] = p2_7; g[5,18] = p3_7; g[6,18] = p4_7;      g[9,18] = q; 
 push!(win, g)
 
 #callback functions
@@ -239,6 +242,14 @@ function h_clicked(w)
     w=GtkWindow(i,"Help");
     show(i);
 end
+function in1_clicked(w)
+    str = pick_file(pwd(),filterlist="txt");
+    set_gtk_property!(in2,:text,str);
+end
+function in3_clicked(w)
+    str = get_gtk_property(in2,:text,String)
+    rtmsim.start_rtmsim(str)
+end
 
 #callbacks
 signal_connect(sm_clicked,sm,"clicked")
@@ -254,6 +265,8 @@ signal_connect(po_clicked,po,"clicked")
 signal_connect(pf_clicked,pf,"clicked")
 signal_connect(q_clicked,q,"clicked")
 signal_connect(h_clicked,h,"clicked")
+signal_connect(in1_clicked,in1,"clicked")
+signal_connect(in3_clicked,in3,"clicked")
 
 #show GUI
 showall(win);
