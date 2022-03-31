@@ -83,7 +83,7 @@ meshfiles\\mesh_permeameter1_foursets.bdf    #meshfilename
 3e-3 0.7 3e-10 1 1 0 0    #t3_val porosity3_val K3_val alpha3_val refdir13_val refdir23_val refdir33_val
 3e-3 0.7 3e-10 1 1 0 0    #t4_val porosity4_val K4_val alpha4_val refdir14_val refdir24_val refdir34_val 
 1 0 0 0    #patchtype1val patchtype2val patchtype3val patchtype4val 
-0 "results.jld2"    #i_restart restartfilename
+0 results.jld2    #i_restart restartfilename
 0 0.01    #i_interactive r_p
 16    #n_pics
 ```
