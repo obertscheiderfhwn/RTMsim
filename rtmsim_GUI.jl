@@ -16,6 +16,7 @@ pr=GtkButton("Plot results")
 po=GtkButton("Plot overview")
 pf=GtkButton("Plot filling")
 q=GtkButton("Quit")
+h=GtkButton("Help")
 mf=GtkEntry(); set_gtk_property!(mf,:text,"meshfiles\\mesh_permeameter1_foursets.bdf");#GAccessor.editable(GtkEditable(mf),false) 
 t=GtkEntry(); set_gtk_property!(t,:text,"200")
 rf=GtkEntry(); set_gtk_property!(rf,:text,"results.jld2")
@@ -105,7 +106,7 @@ g[1,13] = par_2; g[2,13] = p0_2; g[3,13] = p1_2; g[4,13] = p2_2; g[5,13] = p3_2;
 g[1,14] = par_3; g[2,14] = p0_3; g[3,14] = p1_3; g[4,14] = p2_3; g[5,14] = p3_3; g[6,14] = p4_3; 
                  g[2,15] = p0_4; g[3,15] = p1_4; g[4,15] = p2_4; g[5,15] = p3_4; g[6,15] = p4_4; 
                  g[2,16] = p0_5; g[3,16] = p1_5; g[4,16] = p2_5; g[5,16] = p3_5; g[6,16] = p4_5; 
-                 g[2,17] = p0_6; g[3,17] = p1_6; g[4,17] = p2_6; g[5,17] = p3_6; g[6,17] = p4_6; 
+                 g[2,17] = p0_6; g[3,17] = p1_6; g[4,17] = p2_6; g[5,17] = p3_6; g[6,17] = p4_6;      g[10,17] = h; 
                  g[2,18] = p0_7; g[3,18] = p1_7; g[4,18] = p2_7; g[5,18] = p3_7; g[6,18] = p4_7;      g[10,18] = q; 
 push!(win, g)
 
@@ -226,6 +227,11 @@ function q_clicked(w)
     GLMakie.destroy!(GLMakie.global_gl_screen())
     Gtk.destroy(win)
 end
+function h_clicked(w)
+    i=GtkImage("rtmsim_help.png");
+	w=GtkWindow(i,"Help");
+	show(i);
+end
 signal_connect(sm_clicked,sm,"clicked")
 signal_connect(pm_clicked,pm,"clicked")
 signal_connect(ps_clicked,ps,"clicked")
@@ -238,6 +244,7 @@ signal_connect(pr_clicked,pr,"clicked")
 signal_connect(po_clicked,po,"clicked")
 signal_connect(pf_clicked,pf,"clicked")
 signal_connect(q_clicked,q,"clicked")
+signal_connect(h_clicked,h,"clicked")
 
 showall(win);
 
