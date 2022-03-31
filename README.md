@@ -68,9 +68,9 @@ Nodes are described by the keyword `GRID`, followed by a grid number, followed b
 
 RTMsim is executed with a well-defined list of parameters specified in an input text file or in the GUI. The following figure shows the GUI with explaination for the parameters. 
 
-<img src="rtmsim_help.png" width="400">
+<img src="rtmsim_help.png" width="600">
 
-The complete set of input parameters can be addressed in the text file `input.txt`:
+The complete set of input parameters can be accessed in the text file `input.txt`:
 ```
 1    #i_model 
 meshfiles\\mesh_permeameter1_foursets.bdf    #meshfilename 
@@ -94,7 +94,7 @@ meshfiles\\mesh_permeameter1_foursets.bdf    #meshfilename
 In order to use RTMsim follow the following steps:
 - Download Julia from https://julialang.org/downloads/ and add Julia to path such that can be started from command line.
 - Open Julia terminal, change to package manager with `]` and `add Gtk GLMakie Makie NativeFileDialog Glob LinearAlgebra JLD2 GeometryBasics Random FileIO ProgressMeter`.
-- Go to the directory with the RTMsim repository and double click on run_rtmsim_GUI.bat for GUI or run_rtmsim.bat for use of input.txt. 
+- Go to the directory with the RTMsim repository and double click on run_rtmsim_GUI.bat. 
 
 Alternatively, open Julia terminal, go to the directory with the RTMsim repository with `cd("path")` and start with `include("rtmsim_GUI.jl")` or `include("rtmsim.jl")`. There one has direct access to all functions, e.g. 
 - `rtmsim.plot_mesh(1,"meshfiles\\mesh_permeameter1_foursets.bdf")` for plotting the mesh
