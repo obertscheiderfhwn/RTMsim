@@ -1,14 +1,18 @@
+#include RTMsim
 include("rtmsim.jl")
 import .rtmsim
 
+#include packages
 using Gtk
 using GLMakie
 using Makie
-using Gtk.ShortNames, Gtk.GConstants, Gtk.Graphics
-import Gtk.deleteat!, Gtk.libgtk_version, Gtk.GtkToolbarStyle, Gtk.GtkFileChooserAction, Gtk.GtkResponseType
 using NativeFileDialog
+using Gtk.ShortNames, Gtk.GConstants, Gtk.Graphics
 
-win = GtkWindow("RTMsim");  #, 1600,900);
+#one Gtk window
+win = GtkWindow("RTMsim"); 
+
+#define buttons
 sm=GtkButton("Select meshfile");pm=GtkButton("Plot mesh");ps=GtkButton("Plot sets")
 ss=GtkButton("Start simulation");cs=GtkButton("Continue simulation")
 sel=GtkButton("Select inlet port"); si=GtkButton("Start interactive");ci=GtkButton("Continue interactive");
@@ -17,7 +21,9 @@ po=GtkButton("Plot overview")
 pf=GtkButton("Plot filling")
 q=GtkButton("Quit")
 h=GtkButton("Help")
-mf=GtkEntry(); set_gtk_property!(mf,:text,"meshfiles\\mesh_permeameter1_foursets.bdf");#GAccessor.editable(GtkEditable(mf),false) 
+
+#define input fields
+mf=GtkEntry(); set_gtk_property!(mf,:text,"meshfiles\\mesh_permeameter1_foursets.bdf");
 t=GtkEntry(); set_gtk_property!(t,:text,"200")
 rf=GtkEntry(); set_gtk_property!(rf,:text,"results.jld2")
 r=GtkEntry(); set_gtk_property!(r,:text,"0.01")
@@ -64,6 +70,7 @@ p4_5=GtkEntry(); set_gtk_property!(p4_5,:text,"1")
 p4_6=GtkEntry(); set_gtk_property!(p4_6,:text,"0")
 p4_7=GtkEntry(); set_gtk_property!(p4_7,:text,"0")
 
+#define radio buttons
 choices = ["Ignore",  "Pressure inlet", "Pressure outlet", "Patch" ]
 f1 = Gtk.GtkBox(:v);
 r1 = Vector{RadioButton}(undef, 4)
@@ -90,16 +97,18 @@ r4[2] = RadioButton(r4[1],choices[2]);       push!(f4,r4[2])
 r4[3] = RadioButton(r4[2],choices[3]);       push!(f4,r4[3])
 r4[4] = RadioButton(r4[3],choices[4]);       push!(f4,r4[4])
 
+#define logo
 im=Gtk.GtkImage("rtmsim_logo1_h200px_grey.png")
 
-g = GtkGrid() # Cartesian coordinates, g[column,row]
+#assembly elements in grid pattern
+g = GtkGrid()    #Cartesian coordinates, g[column,row]
 set_gtk_property!(g, :column_spacing, 5) 
 set_gtk_property!(g, :row_spacing, 5) 
 g[1,1]=sm; g[2,1] = mf; g[3,1] = pm; g[4,1] = ps;              g[7:10,6:9] = im;
            g[2,2] = t;  g[3,2] = ss; g[4,2] = cs; 
            g[2,3] = r;  g[3,3] = sel; g[4,3] = si; g[5,3] = ci; 
 g[2,4] = rf; g[3,4] = pr; g[4,4] = po;  g[5,4] = pf;
-                                 #g[3,10] = p1_0; g[4,10] = p2_0; g[5,10] = p3_0; g[6,10] = p4_0;
+
                                  g[3,11] = f1;   g[4,11] = f2;   g[5,11] = f3;   g[6,11] = f4;
 g[1,12] = par_1; g[2,12] = p0_1; g[3,12] = p1_1; g[4,12] = p2_1; g[5,12] = p3_1; g[6,12] = p4_1; 
 g[1,13] = par_2; g[2,13] = p0_2; g[3,13] = p1_2; g[4,13] = p2_2; g[5,13] = p3_2; g[6,13] = p4_2; 
@@ -110,9 +119,9 @@ g[1,14] = par_3; g[2,14] = p0_3; g[3,14] = p1_3; g[4,14] = p2_3; g[5,14] = p3_3;
                  g[2,18] = p0_7; g[3,18] = p1_7; g[4,18] = p2_7; g[5,18] = p3_7; g[6,18] = p4_7;      g[10,18] = q; 
 push!(win, g)
 
+#callback functions
 function sm_clicked(w)
     str = pick_file(pwd(),filterlist="bdf");
-    #set_gtk_property!(mf,:text,splitpath(str)[end]);
     set_gtk_property!(mf,:text,str);
 end
 function pm_clicked(w)
@@ -127,8 +136,6 @@ function sel_clicked(w)
     str = get_gtk_property(mf,:text,String)
     rtmsim.plot_mesh(str,2)
 end
-
-
 function ss_clicked(w)
     str1 = get_gtk_property(mf,:text,String); str2 = get_gtk_property(t,:text,String); str3 = get_gtk_property(par_3,:text,String); str4 = get_gtk_property(par_1,:text,String); str5 = get_gtk_property(par_2,:text,String);
     str11 = get_gtk_property(p0_1,:text,String); str12 = get_gtk_property(p0_2,:text,String); str13 = get_gtk_property(p0_3,:text,String); str14 = get_gtk_property(p0_4,:text,String); str15 = get_gtk_property(p0_5,:text,String); str16 = get_gtk_property(p0_6,:text,String); str17 = get_gtk_property(p0_7,:text,String);
@@ -229,9 +236,11 @@ function q_clicked(w)
 end
 function h_clicked(w)
     i=GtkImage("rtmsim_help.png");
-	w=GtkWindow(i,"Help");
-	show(i);
+    w=GtkWindow(i,"Help");
+    show(i);
 end
+
+#callbacks
 signal_connect(sm_clicked,sm,"clicked")
 signal_connect(pm_clicked,pm,"clicked")
 signal_connect(ps_clicked,ps,"clicked")
@@ -246,8 +255,8 @@ signal_connect(pf_clicked,pf,"clicked")
 signal_connect(q_clicked,q,"clicked")
 signal_connect(h_clicked,h,"clicked")
 
+#show GUI
 showall(win);
-
 if !isinteractive()
     c = Condition()
     signal_connect(win, :destroy) do widget
