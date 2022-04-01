@@ -66,7 +66,7 @@ Nodes are described by the keyword `GRID`, followed by a grid number, followed b
 
 # Input parameters
 
-RTMsim is executed with a well-defined list of parameters specified in an input text file or in the GUI. The following figure shows the GUI with explaination for the parameters. 
+RTMsim is executed with a well-defined list of parameters specified in an input text file or in the GUI. The following figure shows the GUI with explaination for the parameters. The buttons in the first line on the LHS are used for mesh inspection, i.e. select a mesh file, plot the mesh with bounding box and plot the defined sets. The buttons in the second line on the LHS are used to start and continue the simulation. The maximum simulation time and the type and properties of the defined sets must be set before. With the buttons in the third line one can select inlet ports with specified radius interactively in addition to using the defined sets, and start and continue such a simulation. The buttons in the forth line are used for post-processing, i.e. show filling and pressure distribution of a specified output file (final results in saven in results.jld2), plot filling at four equidistant time instances and filling at several time instances which are selected with a slider bar. The buttons in the line on the RHS are used to start the simulation with the parameters from the selected text input file.
 
 <img src="rtmsim_help.png" width="600">
 
@@ -108,23 +108,25 @@ Alternatively, open Julia terminal, go to the directory with the RTMsim reposito
 - `rtmsim.plot_filling(-1,-1)` for plotting the filling at all available time steps with a slider bar
 - `rtmsim.start_rtmsim("input.txt")` for starting with reading the input.txt file
 
-## VALIDATION
+## Validation and verification
 
 Five different test cases are available, successfully validating the Julia implementation of the RTM filling model:
-- A permeameter experiment with isotropic in-plane permeability to validate with literature results.
-- A permeameter experiment with tilted orthotropic in-plane permeability to verify that the simulation gives the expected results.
-- A curved permeameter to verify the implemented model for curved geometry by comparison with the flat permeameter results.
-- An annulus filler-like part to verify the implemented model for a curved part with T-junctions by comparison with an ANSYS Fluent simulation and with a myRTM simulation.
-- A permeameter experiment with two patches with different in-plane permeability and porosity levels.
+1. Validation of the software for radial flow with isotropic in-plane peremablity: The simulated flow front position after 200 s is compared with the calculated flow front postion from literature.  
+2. Verification of the software for radial flow with tilted orthotropic in-plane permeablity: The simulated tilted elliptical flow front is analysed and the calculated orthotropic permeablity is compared with the input (K, alpha, theta).
+3. Comparison of the simulated flow front position for a complex annulus filler-like part with the simulated flow front position with Ansys Fluent and comparison of the simulated filling pattern with results from a myRTM simulation.
+4. Validation with experimental data from a radial permeameter experiment with two patches with different in-plane permeability and porosity levels. This comparison and guidelines for performing reliable filling simulations (e.g. mesh refinement) will be discussed in a follow-up paper.
 
 In a follow-up paper simulations from a real-world RTM mould for a complex part will be analyzed and compared with experiments. This will be used to
 validate the new simulation model for patches with different cavity thickness. 
 
-SHOW RESULT PICS FOR THE VALIDATION CASES WHICH SHOW THAT THE CODE PERFORMS WELL
+The following pictures show the validation results for cases 1, 2 and 3.
 
-The five validation cases with the input files file input_case1.txt,...
+<img src="validation_pic1.png" width="600">
+<img src="validation_pic2.png" width="600">
 
-## FUTURE WORK
+The input files for the four validation cases are `input_case1_coarsemesh.txt`, `input_case1_finemesh.txt`, `input_case2_coarsemesh.txt`, `input_case2_finemesh.txt`, `input_case3_coarsemesh.txt`, `input_case3_finemesh.txt, input_case4.txt`.
+
+## Future work
 
 The source code is prepared for the following extensions:
 - Import mesh file in different format. Selection is based on the extension of the mesh file.
