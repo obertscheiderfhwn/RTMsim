@@ -64,7 +64,7 @@ CTRIA3 588 0 232 259 333
 ```
 Nodes are described by the keyword `GRID`, followed by a grid number, followed by a blank and three fileds with the x, y and z coordinates of the node. The triangular cells are defined by the keyword `CTRIA3`, followed by a cell number, followed by a zero, followed by the three node numbers which constitute the cell. Nodes and elements need not be sorted nor starting with one. Cell sets are defined by the keyword `SET` followed by ` N = ` and the cell numbers separated by commas. Not more than 6 cell numbers per line. If another line is required for additional cell numbers, these follow after 8 blanks. Up to four sets can be defined. Mesh files of this type can be created with common meshing tools. The authors used Altair HyperWorks but also free software tools like SALOMEMECA, GMSH or NETGEN can be used.
 
-# Input parameters
+## Input parameters
 
 RTMsim is executed with a well-defined list of parameters specified in an input text file or in the GUI. The following figure shows the GUI with explaination for the parameters. The buttons in the first line on the LHS are used for mesh inspection, i.e. select a mesh file, plot the mesh with bounding box and plot the defined sets. The buttons in the second line on the LHS are used to start and continue the simulation. The maximum simulation time and the type and properties of the defined sets must be set before. With the buttons in the third line one can select inlet ports with specified radius interactively in addition to using the defined sets, and start and continue such a simulation. The buttons in the forth line are used for post-processing, i.e. show filling and pressure distribution of a specified output file (final results in saven in results.jld2), plot filling at four equidistant time instances and filling at several time instances which are selected with a slider bar. The buttons in the line on the RHS are used to start the simulation with the parameters from the selected text input file.
 
@@ -89,7 +89,7 @@ meshfiles\\mesh_permeameter1_foursets.bdf    #meshfilename
 ```
 
 
-# Run simulation
+## Run simulation
 
 In order to use RTMsim follow the following steps:
 - Download Julia from https://julialang.org/downloads/ and add Julia to path such that can be started from command line.
