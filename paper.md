@@ -1,22 +1,22 @@
 ---
-title: 'RTMsim - Filling simulations in Resin Transfer Moulding with the Finite Area Method'
+title: 'RTMsim - A Julia module for filling simulations in Resin Transfer Moulding with the Finite Area Method'
 tags:
-- Computational Fluid Dynamics (CFD)
-- Shell mesh
-- Resin Transfer moulding (RTM)
-- Liquid composite moulding (LCM)
-- Filling simulation
-- Julia
+  - Computational Fluid Dynamics (CFD)
+  - Shell mesh
+  - Resin Transfer moulding (RTM)
+  - Liquid composite moulding (LCM)
+  - Filling simulation
+  - Julia
 authors:
-- name: Christof Obertscheider [Corresponding author]
-  affilation: "1"
-- name: Ewald Fauster
-  affilation: "2"
+  - name: Christof Obertscheider^[Corresponding author]
+    affiliation: 1
+  - name: Ewald Fauster
+    affiliation: 2
 affiliations:
-- name: Aerospace Engineering Department, University of Applied Sciences Wiener Neustadt, Johannes-Gutenberg-Straße 3, 2700, Wiener Neustadt, Austria 
-  index: 1
-- name: Processing of Composites Group, Department Polymer Engineering and Science, Montanuniversität Leoben, Otto Glöckl-Straße 2, 8700 Leoben, Austria 
-  index: 2
+ - name: Aerospace Engineering Department, University of Applied Sciences Wiener Neustadt, Johannes-Gutenberg-Straße 3, 2700, Wiener Neustadt, Austria
+   index: 1
+ - name: Processing of Composites Group, Department Polymer Engineering and Science, Montanuniversität Leoben, Otto Glöckl-Straße 2, 8700 Leoben, Austria 
+   index: 2
 date: 7 April 2022
 bibliography: paper.bib
 ---
@@ -60,11 +60,11 @@ Five different test cases are available, successfully validating the Julia imple
 4. Validation with experimental data from a radial permeameter experiment with two patches with different in-plane permeability and porosity levels. This comparison and guidelines for performing reliable filling simulations (e.g. mesh refinement) will be discussed in a follow-up paper.
  <br>
 
-Figures \autoref{fig:pic1} and \autoref{fig:pic2} show the validation results for cases 1, 2 and 3.
+\autoref{fig:pic1} and \autoref{fig:pic2} show the validation results for cases 1, 2 and 3.
 
-![Results for tast case 1 (left) and test case 2 (right).\label{fig:pic1}](validation_pic1.png)
+![Results for test case 1 (left) and test case 2 (right).\label{fig:pic1}](validation_pic1.png)
 
-![Results for tast case 3.\label{fig:pic2}](validation_pic2.png)
+![Results for test case 3.\label{fig:pic2}](validation_pic2.png)
 
 
 
