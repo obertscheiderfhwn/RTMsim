@@ -7,16 +7,7 @@ tags:
 - Liquid composite moulding (LCM)
 - Filling simulation
 - Julia
-authors:
-- name: Christof Obertscheider [Corresponding author]
-  affilation: "1"
-- name: Ewald Fauster
-  affilation: "2"
-affiliations:
-- Aerospace Engineering Department, University of Applied Sciences Wiener Neustadt, Johannes-Gutenberg-Straße 3, 2700, Wiener Neustadt, Austria 
-  index: 1
-- Processing of Composites Group, Department Polymer Engineering and Science, Montanuniversität Leoben, Otto Glöckl-Straße 2, 8700 Leoben, Austria 
-  index: 2
+
 
 date: 7 April 2022
 bibliography: paper.bib
