@@ -26,7 +26,7 @@ In order to use RTMsim follow the following steps:
 - Open Julia terminal, change to package manager with `]` and `add Gtk GLMakie Makie NativeFileDialog Glob LinearAlgebra JLD2 GeometryBasics Random FileIO ProgressMeter`.
 - Go to the directory with the RTMsim repository and double click on run_rtmsim_GUI.bat. 
 
-Alternatively, open Julia terminal, go to the directory with the RTMsim repository with `cd("path")` and start with `include("rtmsim_GUI.jl")` or `include("rtmsim.jl")`. There one has direct access to all functions, e.g. 
+Alternatively to the third step, open a Julia terminal, go to the directory with the RTMsim repository with `cd("path")` and start with `include("rtmsim_GUI.jl")` or `include("rtmsim.jl")`. There one has direct access to all functions, e.g. 
 - `rtmsim.plot_mesh(1,"meshfiles\\mesh_permeameter1_foursets.bdf")` for plotting the mesh
 - `rtmsim.plot_sets("meshfiles\\mesh_permeameter1_foursets.bdf")` for plotting the sets specified in the mesh file
 - `rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,3,0,"results.jld2",0,0.01,16)` for starting a simulation with different patches and race tracking
@@ -68,13 +68,13 @@ CTRIA3 588 0 232 259 333
 ```
 Nodes are described by the keyword `GRID`, followed by a grid number, followed by a blank and three fileds with the x, y and z coordinates of the node. The triangular cells are defined by the keyword `CTRIA3`, followed by a cell number, followed by a zero, followed by the three node numbers which constitute the cell. Nodes and elements need not be sorted nor starting with one. Cell sets are defined by the keyword `SET` followed by ` N = ` and the cell numbers separated by commas. Not more than 6 cell numbers per line. If another line is required for additional cell numbers, these follow after 8 blanks. Up to four sets can be defined. 
 
-## Run simulation
+## Run a simulation
 
 RTMsim is executed with a well-defined list of parameters specified in an input text file or in the GUI. The following figure shows the GUI with explaination for the parameters. The buttons in the first line on the LHS are used for mesh inspection, i.e. select a mesh file, plot the mesh with bounding box and plot the defined sets. The buttons in the second line on the LHS are used to start and continue the simulation. The maximum simulation time and the type and properties of the defined sets must be set before. With the buttons in the third line one can select inlet ports with specified radius interactively in addition to using the defined sets, and start and continue such a simulation. The buttons in the forth line are used for post-processing, i.e. show filling and pressure distribution of a specified output file (final results in saven in results.jld2), plot filling at four equidistant time instances and filling at several time instances which are selected with a slider bar. The buttons in the line on the RHS are used to start the simulation with the parameters from the selected text input file.
 
 <img src="rtmsim_help.png" width="600">
 
-The complete set of input parameters can be accessed in the text file `input.txt`:
+The complete set of input parameters can be accessed in the text input file. The text input file `input_case1_coarsemesh.txt` for case 1 with the coarse mesh is:
 ```
 1    #i_model 
 meshfiles\\mesh_permeameter1_foursets.bdf    #meshfilename 
@@ -92,20 +92,22 @@ meshfiles\\mesh_permeameter1_foursets.bdf    #meshfilename
 16    #n_pics
 ```
 
+The V&V cases can be executed by selecting the appropriate input file and afterwards running the simulation with this input file. The input files for the four validation cases are `input_case1_coarsemesh.txt`, `input_case1_finemesh.txt`, `input_case2_coarsemesh.txt`, `input_case2_finemesh.txt`, `input_case3_coarsemesh.txt`, `input_case3_finemesh.txt, input_case4.txt`.
+
+
 # Validation and verification
 
-Five different test cases are available, successfully validating the Julia implementation of the RTM filling model:
+Four different test cases are available, successfully validating the Julia implementation of the RTM filling model:
 1. Validation of the software for radial flow with isotropic in-plane peremablity: The simulated flow front position after 200 s is compared with the calculated flow front postion from literature.  
 2. Verification of the software for radial flow with tilted orthotropic in-plane permeablity: The simulated tilted elliptical flow front is analysed and the calculated orthotropic permeablity is compared with the input (K, alpha, theta).
 3. Comparison of the simulated flow front position for a complex annulus filler-like part with the simulated flow front position with Ansys Fluent and comparison of the simulated filling pattern with results from a myRTM simulation.
-4. Validation with experimental data from a radial permeameter experiment with two patches with different in-plane permeability and porosity levels. This comparison and guidelines for performing reliable filling simulations (e.g. mesh refinement) will be discussed in a follow-up paper.
+4. Validation with experimental data from a radial permeameter experiment with two patches with different in-plane permeability and porosity levels. 
 
 The following pictures show the validation results for cases 1, 2 and 3.
 
 <img src="validation_pic1.png" width="600">
 <img src="validation_pic2.png" width="600">
 
-The input files for the four validation cases are `input_case1_coarsemesh.txt`, `input_case1_finemesh.txt`, `input_case2_coarsemesh.txt`, `input_case2_finemesh.txt`, `input_case3_coarsemesh.txt`, `input_case3_finemesh.txt, input_case4.txt`.
 
 # Future work
 
