@@ -25,7 +25,9 @@ bibliography: paper.bib
 Resin Transfer Moulding (RTM) is a manufacturing process for producing thin-walled fiber reinforced polymer composites where dry fibers are placed inside a mould and resin is injected under pressure into the fibrous preform. RTMsim is a robust, easy-to-use and simple-to-extend software tool, written in Julia, for RTM filling simulations. A shell mesh, injection pressure, resin viscosity and the parameters describing the preform are required input. The software was validated with results from literature as well as experiments and compared with results from well-established RTM filling simulation tools.
 
 # Statement of need
-Resin Transfer Moulding (RTM) is a manufacturing process for producing thin-walled fiber reinforced polymer composites where dry fibers are placed inside a mould and resin is injected under pressure into the fibrous preform. During mould design, filling simulations can study different manufacturing concepts (i.e. placement of inlet ports and vents) to guarantee complete filling of the part and avoid air entrapment where flow fronts converge. 
+Resin Transfer Moulding (RTM) is a manufacturing process for producing thin-walled fiber reinforced polymer composites where dry fibers are placed inside a mould and resin is injected under pressure into the fibrous preform. The thickness of the part is much smaller than the overall dimensions as depicted in \autoref{fig:rtm_pic1}. During mould design, filling simulations can study different manufacturing concepts (i.e. placement of inlet ports and vents) to guarantee complete filling of the part and avoid air entrapment where flow fronts converge. 
+
+![Schematic of a thin-shell RTM geometry for manufacturing a flat plate with linear (a) and radial (b) flow.\label{fig:rtm_pic1}](rtm_pic1.png)
 
 In the past, numerous models have been implemented in different software packages to perform filling simulations for RTM. The used simulation packages can be divided into three groups: 
 
@@ -35,7 +37,7 @@ In the past, numerous models have been implemented in different software package
 
 - Easy-to-use simulation tools such as myRTM
 
-All packages describe the flow on a macroscopic level. The first group models the flow through the porous cavity using volume-averaged Navier-Stokes equations [@groessing]. The second group makes use of some assumptions and solves in a first step a Laplace equation for the pressure inside the region which is already filled and in a second step calculates the flow velocity field to propagate the flow front. It has been shown that the first and second group render very similar results. myRTM from the third group is easy-to-use and can predict the filling pattern properly but neither predict the filling time correctly nor consider orthotropic preform permeability. Solving conservation laws for fluid flow as in the first group requires a volume mesh of the cavity and consequently the solution is more time-consuming. The second and third group can be solved on a shell mesh where the thickness of the cavity is a property of the cell (similar to porosity and permeability) and slip boundary conditions at the top and bottom walls of the cavity are assumed. 
+All packages describe the flow on a macroscopic level. The first group models the flow through the porous cavity using volume-averaged Navier-Stokes equations [@groessing]. The second group makes use of some assumptions and solves in a first step a Laplace equation for the pressure inside the region which is already filled and in a second step calculates the flow velocity field to propagate the flow front, see e.g. [@rtmworx] or [@lims]. In [@groessing] it has been shown that the first and second group render very similar results. myRTM from the third group is easy-to-use and can predict the filling pattern properly but neither predict the filling time correctly nor consider orthotropic preform permeability, see [@myrtm]. Solving conservation laws for fluid flow as in the first group requires a volume mesh of the cavity and consequently the solution is more time-consuming. The second and third group can be solved on a shell mesh where the thickness of the cavity is a property of the cell (similar to porosity and permeability) and slip boundary conditions at the top and bottom walls of the cavity are assumed. 
 
 Based on the analysis of the existing software tools for RTM filling simulations the following functional requirements for a new software tool were derived: 
 
@@ -51,7 +53,7 @@ RTMsim ia a new software tool for RTM filling simulations which fulfills these r
 
 # Modeling
 
-From a flow physics point of view the filling process is described by an incompressible resin which is injected under pressure into a cavity which initially is either evacuated or filled with air. Since the simulation tool shall run robust and independent of numerics-related input like under-relaxation coefficients or time-steps, a one phase compressible model is chosen. Conservation laws for a compressible continuity equation, momentum equations in a local cell coordinate system, an adiabatic law as equation of state and a volume-of-fluid equation to track the resin flow front must be solved. 
+From a flow physics point of view the filling process is described by an incompressible resin which is injected under pressure into a cavity which initially is either evacuated or filled with air. Since the simulation tool shall run robust and independent of numerics-related input like under-relaxation coefficients or time-steps, a one phase compressible model is chosen. The governing equations shown in [@]groessing] are modified. Conservation laws for a compressible continuity equation, momentum equations in a local cell coordinate system, an adiabatic law as equation of state and a volume-of-fluid equation to track the resin flow front must be solved. 
 
 Since the filling is a result of the pressure difference between injection pressure and initial cavity pressure, gauge pressures are used for the simulation. The initial pressure in the cavity is set equal to zero and the injection pressure is set equal to the pressure difference. This normalization to gauge pressures results in a filling which is independent of the pressure level and only depends on the pressure difference. 
 
@@ -59,7 +61,10 @@ The local cell coordinate system is used to describe the flow in the coordinate 
 
 In order to numerically solve the flow model the computational domain (time and space) is discretized. The temporal domain (i.e. the simulation time) is split into a finite number of time steps where values for the physical quantities on the spatial domain are calculated in a time-marching manner. The spatial domain (i.e. the flow volume) is split into wedge-type cells. Since the walls are assumed to be slip boundaries only one cell is used through the thickness and the cells are bounded by three control surfaces only. Therefore, the spatial domain is defined on the part’s mid-surface and the local thickness of the flow volume is a property of the cell. The mid-surface model can be curved and cells can have edges where more than two cells are connected to each other such as for handling T-junctions. The mid-surface model is divided into a finite number of triangular control areas. The control areas cover the spatial domain completely without overlapping. The cell-centered method where the nodes are placed at the centroid of the control volume is used. 
 
-Since a shell mesh is used in the simulation tool, the conservation laws must be solved on a shell mesh using a generalization of the so-called finite area method. The governing equations are discretized for every cell of the shell mesh. For the evaluation of the numerical flux functions and the pressure gradient, the neighbouring triangular cells are rotated about the common edge to lie in the plane of the considered cell. 
+Since a shell mesh is used in the simulation tool, the conservation laws must be solved on a shell mesh using a generalization of the so-called finite area method [@tukovic]. The governing equations are discretized for every cell of the shell mesh. For the evaluation of the numerical flux functions and the pressure gradient, the neighbouring triangular cells are rotated about the common edge to lie in the plane of the considered cell. \autoref{fig:mesh_pic1} shows the shell mesh which is used for the test cases 1 and 2.
+
+![Volume mesh (a) and shell mesh (b) and domain with highlighted inlet region (c) for the simulation of a radial flow experiment.\label{fig:mesh_pic1}](mesh_pic1.png)
+
 
 
 # Validation and verification
@@ -73,6 +78,8 @@ Four different test cases are available, successfully validating the Julia imple
 3. Comparison of the simulated flow front position for a complex annulus filler-like part with the simulated flow front position with Ansys Fluent and comparison of the simulated filling pattern with results from a myRTM simulation. 
 
 4. Validation with experimental data from a radial permeameter experiment with two patches with different in-plane permeability and porosity levels. This comparison and guidelines for performing reliable filling simulations (e.g. mesh refinement) will be discussed in a follow-up paper.
+
+Most of the test cases are so-called numerical permeameter experiments, see e.g. [@Fauster.2019]. The third test case is a filling study of a typical composite part which is manufactured using RTM, see [@barandun].  
 
 \autoref{fig:pic1} and \autoref{fig:pic2} show the validation results for cases 1, 2 and 3.
 
