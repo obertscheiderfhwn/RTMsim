@@ -81,4 +81,5 @@ Four different test cases are available, successfully validating the Julia imple
 ![Results for test case 3.\label{fig:pic2}](validation_pic2.png)
 
 
+# References
 
