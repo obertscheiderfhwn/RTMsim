@@ -34,11 +34,11 @@ In the past, numerous models have been implemented in different software package
 
 All packages describe the flow on a macroscopic level. The first group models the flow through the porous cavity using volume-averaged Navier-Stokes equations `@groessing`. The second group makes use of some assumptions and solves in a first step a Laplace equation for the pressure inside the region which is already filled and in a second step calculates the flow velocity field to propagate the flow front. It has been shown that the first and second group render very similar results. myRTM from the third group is easy-to-use and can predict the filling pattern properly but neither predict the filling time correctly nor consider orthotropic preform permeability. Solving conservation laws for fluid flow as in the first group requires a volume mesh of the cavity and consequently the solution is more time-consuming. The second and third group can be solved on a shell mesh where the thickness of the cavity is a property of the cell (similar to porosity and permeability) and slip boundary conditions at the top and bottom walls of the cavity are assumed. 
 
-Based on the analysis of the existing software tools for RTM filling simulations the following functional requirements for a new software tool were derived:
-- The simulation model shall give correct results for filling pattern and filling time.
-- The simulation tool takes only composite-manufacturing related inputs and the simulation shall be robust independent of numerics-related input.
-- The simulation tool takes a shell model of the geometry as input and the location-dependent properties are assigned directly on the shell elements.
-- New functionalities can be implemented by either adding equations of the same type or modifying existing equations.
+Based on the analysis of the existing software tools for RTM filling simulations the following functional requirements for a new software tool were derived: <br>
+- The simulation model shall give correct results for filling pattern and filling time. <br>
+- The simulation tool takes only composite-manufacturing related inputs and the simulation shall be robust independent of numerics-related input. <br>
+- The simulation tool takes a shell model of the geometry as input and the location-dependent properties are assigned directly on the shell elements. <br>
+- New functionalities can be implemented by either adding equations of the same type or modifying existing equations. <br>
 
 RTMsim ia a new software tool for RTM filling simulations which fulfills these requirements: Several test cases were used for successfully validating the implemented model. The simulation shall run robustly and independent of numericsrelated input. The porous cavity is fully described by a mesh file with triangular cells on the part’s mid-surface and cell set definitions (for specifying the location of the pressure injection ports and regions with different preforms by assigning different thickness, porosity and permeability values). Additional equations (e.g. for modeling the degree-of-cure) can either be added with equations of the same type or modifications of existing equations (e.g. for variable cavity thickness as needed for vacuum assisted resin infusion simulations). 
 
@@ -53,16 +53,18 @@ Since a shell mesh is used in the simulation tool, the conservation laws must be
 
 # Validation and verification
 
-Five different test cases are available, successfully validating the Julia implementation of the RTM filling model:
-1. Validation of the software for radial flow with isotropic in-plane peremablity: The simulated flow front position after 200 s is compared with the calculated flow front postion from literature.  
-2. Verification of the software for radial flow with tilted orthotropic in-plane permeablity: The simulated tilted elliptical flow front is analysed and the calculated orthotropic permeablity is compared with the input (K, alpha, theta).
-3. Comparison of the simulated flow front position for a complex annulus filler-like part with the simulated flow front position with Ansys Fluent and comparison of the simulated filling pattern with results from a myRTM simulation.
+Five different test cases are available, successfully validating the Julia implementation of the RTM filling model:  <br>
+1. Validation of the software for radial flow with isotropic in-plane peremablity: The simulated flow front position after 200 s is compared with the calculated flow front postion from literature. <br>
+2. Verification of the software for radial flow with tilted orthotropic in-plane permeablity: The simulated tilted elliptical flow front is analysed and the calculated orthotropic permeablity is compared with the input (K, alpha, theta). <br>
+3. Comparison of the simulated flow front position for a complex annulus filler-like part with the simulated flow front position with Ansys Fluent and comparison of the simulated filling pattern with results from a myRTM simulation. <br>
 4. Validation with experimental data from a radial permeameter experiment with two patches with different in-plane permeability and porosity levels. This comparison and guidelines for performing reliable filling simulations (e.g. mesh refinement) will be discussed in a follow-up paper.
+ <br>
 
-The following pictures show the validation results for cases 1, 2 and 3.
+Figures \autoref{fig:pic1} and \autoref{fig:pic2} show the validation results for cases 1, 2 and 3.
 
-<img src="validation_pic1.png" width="600">
-<img src="validation_pic2.png" width="600">
+![Results for tast case 1 (left) and test case 2 (right).\label{fig:pic1}](validation_pic1.png)
 
-The input files for the four validation cases are `input_case1_coarsemesh.txt`, `input_case1_finemesh.txt`, `input_case2_coarsemesh.txt`, `input_case2_finemesh.txt`, `input_case3_coarsemesh.txt`, `input_case3_finemesh.txt, input_case4.txt`.
+![Results for tast case 3.\label{fig:pic2}](validation_pic2.png)
+
+
 
