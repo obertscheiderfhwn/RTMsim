@@ -24,19 +24,19 @@ RTMsim ia a new software tool for RTM filling simulations which fulfills these r
 In order to use RTMsim follow the following steps:
 - Download Julia from https://julialang.org/downloads/ and add Julia to path such that can be started from command line.
 - Open Julia terminal, change to package manager with `]` and `add Gtk GLMakie Makie NativeFileDialog Glob LinearAlgebra JLD2 GeometryBasics Random FileIO ProgressMeter`.
-- Go to the directory with the RTMsim repository and double click on run_rtmsim_GUI.bat. 
+- Go to the directory with the RTMsim repository and double click on run_rtmsim_GUI.bat to start the GUI. 
 
-Alternatively to the third step, open a Julia terminal, go to the directory with the RTMsim repository with `cd("path")` and start with `include("rtmsim_GUI.jl")` or `include("rtmsim.jl")`. There one has direct access to all functions, e.g. 
-- `rtmsim.plot_mesh(1,"meshfiles\\mesh_permeameter1_foursets.bdf")` for plotting the mesh
-- `rtmsim.plot_sets("meshfiles\\mesh_permeameter1_foursets.bdf")` for plotting the sets specified in the mesh file
+Alternatively to the third step, one has access to all functions through the Julia terminal. Open a Julia terminal, change to the directory with the RTMsim repository with `cd("path")` and start the GUI with `include("rtmsim_GUI.jl")` or call all functions after `include("rtmsim.jl")`. Popular functions are:
+- `rtmsim.plot_mesh(1,"meshfiles\\mesh_permeameter1_foursets.bdf")` for plotting the mesh defined in the bdf-file
+- `rtmsim.plot_sets("meshfiles\\mesh_permeameter1_foursets.bdf")` for plotting the sets specified in the bdf-file
 - `rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,3,0,"results.jld2",0,0.01,16)` for starting a simulation with different patches and race tracking
 - `rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,3,0,"results.jld2",1,0.01,16)` for continuing the previous simulation
-- `rtmsim.plot_mesh("meshfiles\\mesh_annulusfiller1.bdf",2)` for the selection of inlet ports
+- `rtmsim.plot_mesh("meshfiles\\mesh_annulusfiller1.bdf",2)` for the manual selection of inlet ports
 - `rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_annulusfiller1.bdf",200, 0.35e5,1.205,1.4,0.06, 0.35e5,0.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 0,0,0,0, 0,"results.jld2",1,0.01,16)` for starting only with the interactively selected inlet ports
-- `rtmsim.plot_results("results.jld2")` for plotting the final filling and pressure contour
-- `rtmsim.plot_overview(-1,-1)` for plotting the filling at four equidistant time steps
-- `rtmsim.plot_filling(-1,-1)` for plotting the filling at all available time steps with a slider bar
-- `rtmsim.start_rtmsim("input.txt")` for starting with reading the input.txt file
+- `rtmsim.plot_results("results.jld2")` for plotting the final filling and pressure contours
+- `rtmsim.plot_overview(-1,-1)` for plotting the filling contours at four equidistant time instances
+- `rtmsim.plot_filling(-1,-1)` for plotting the filling at different time instances selected with a slider bar
+- `rtmsim.start_rtmsim("input.txt")` for starting a simulation with the parameters specified in the text file input.txt
 
 # Example usage
 
