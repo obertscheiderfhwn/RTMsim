@@ -112,9 +112,6 @@ Five different test cases are available, successfully validating the Julia imple
 3. Comparison of the simulated flow front position for a complex annulus filler-like part with the simulated flow front position with Ansys Fluent and comparison of the simulated filling pattern with results from a myRTM simulation.
 4. Validation with experimental data from a radial permeameter experiment with two patches with different in-plane permeability and porosity levels. This comparison and guidelines for performing reliable filling simulations (e.g. mesh refinement) will be discussed in a follow-up paper.
 
-In a follow-up paper simulations from a real-world RTM mould for a complex part will be analyzed and compared with experiments. This will be used to
-validate the new simulation model for patches with different cavity thickness. 
-
 The following pictures show the validation results for cases 1, 2 and 3.
 
 <img src="validation_pic1.png" width="600">
