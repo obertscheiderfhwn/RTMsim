@@ -18,7 +18,7 @@ affiliations:
 - name: Processing of Composites Group, Department Polymer Engineering and Science, Montanuniversität Leoben, Otto Glöckl-Straße 2, 8700 Leoben, Austria 
   index: 2
 date: 7 April 2022
-bibliography: paper.bib
+bibliography: paper.bib 
 ---
 
 # Summary
