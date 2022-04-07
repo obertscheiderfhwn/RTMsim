@@ -67,4 +67,3 @@ The following pictures show the validation results for cases 1, 2 and 3.
 
 The input files for the four validation cases are `input_case1_coarsemesh.txt`, `input_case1_finemesh.txt`, `input_case2_coarsemesh.txt`, `input_case2_finemesh.txt`, `input_case3_coarsemesh.txt`, `input_case3_finemesh.txt, input_case4.txt`.
 
-
