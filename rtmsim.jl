@@ -1,24 +1,24 @@
-# rtmsim.plot_mesh(1,"meshfiles\\mesh_permeameter1_foursets.bdf")
-# rtmsim.plot_sets("meshfiles\\mesh_permeameter1_foursets.bdf")
-# rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_permeameter1_foursets.bdf",200, 1.35e5,1.205,1.4,0.06, 1.35e5,1.0e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 1,0,0,0,0,"results.jld2",0,0.01,16);
-# rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_permeameter7_inletandoutlet.bdf",200, 0.35e5,1.205,1.4,0.06, 0.35e5,0.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 1,2,2,3,0,"results.jld2",0,0.01,16);
-# rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_permeameter1_foursets.bdf",200, 0.35e5,1.205,1.4,0.06, 0.35e5,0.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 1,2,2,2,0,"results.jld2",0,0.01,16)
-# rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_annulusfiller1.bdf",200, 0.35e5,1.205,1.4,0.06, 0.35e5,0.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 1,2,2,3,0,"results.jld2",0,0.01,16);
-# rtmsim.plot_mesh("meshfiles\\mesh_annulusfiller1.bdf",1)  #plot mesh 
-# rtmsim.plot_mesh("meshfiles\\mesh_annulusfiller1.bdf",2)  #select inlet regions
-# rtmsim.plot_sets("meshfiles\\mesh_permeameter1_foursets.bdf")
-# rtmsim.plot_results("results.jld2")
-# rtmsim.plot_overview(-1,4)
-#rtmsim.start_rtmsim("input.txt")
-
-#download Julia and add Julia to path such that can be started from command line
-#open Julia terminal and add packages
-#]
-#add Gtk GLMakie Makie NativeFileDialog Glob LinearAlgebra JLD2 GeometryBasics Random FileIO ProgressMeter
-#Go to Julia directory and double click on run_rtmsim_GUI.bat or run_rtmsim.bat for use of input.txt
-#Alternatively, open Julia terminal, cd("C:\\Users\\chris\\Desktop\\RTMsim\\rev0"), include("rtmsim.jl") 
-#    and call functions directly, e.g. see the list above
-
+# RTMsim - A Julia module for filling simulations in Resin Transfer Moulding with the Finite Area Method
+# 
+# In order to use RTMsim follow the following steps:
+# - Download Julia from https://julialang.org/downloads/ and add Julia to path such that can be started from command line.
+# - Open Julia terminal, change to package manager with ] and 
+#   add Gtk GLMakie Makie NativeFileDialog Glob LinearAlgebra JLD2 GeometryBasics Random FileIO ProgressMeter.
+# - One has access to all functions through the Julia terminal. Open a Julia terminal, 
+#   change to the directory with the RTMsim repository with cd("path") and 
+#   call all functions after include("rtmsim.jl"). 
+#   Popular functions are:
+#       rtmsim.plot_mesh(1,"meshfiles\\mesh_permeameter1_foursets.bdf") for plotting the mesh defined in the bdf-file
+#       rtmsim.plot_sets("meshfiles\\mesh_permeameter1_foursets.bdf") for plotting the sets specified in the bdf-file
+#       rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,0,"results.jld2",0,0.01,16) for starting a simulation with different patches and race tracking
+#       rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,3,0,"results.jld2",1,0.01,16) for continuing the previous simulation
+#       rtmsim.plot_mesh("meshfiles\\mesh_annulusfiller1.bdf",2) for the manual selection of inlet ports
+#       rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_annulusfiller1.bdf",200, 0.35e5,1.205,1.4,0.06, 0.35e5,0.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 0,0,0,0, 0,"results.jld2",1,0.01,16) for starting only with the interactively selected inlet ports
+#       rtmsim.plot_results("results.jld2") for plotting the final filling and pressure contours
+#       rtmsim.plot_overview(-1,-1) for plotting the filling contours at four equidistant time instances
+#       rtmsim.plot_filling(-1,-1) for plotting the filling at different time instances selected with a slider bar
+#       rtmsim.start_rtmsim("input.txt") for starting a simulation with the parameters specified in the text file input.txt
+#
 
 module rtmsim
     using Glob
@@ -27,13 +27,14 @@ module rtmsim
     using GeometryBasics
     using GLMakie
     using Makie: PriorityObservable
-    #using CairoMakie
     using Random
     using FileIO    
     using ProgressMeter
     GLMakie.activate!()
             
     function start_rtmsim(inputfilename)
+        # reads the text input file and calls the solver with the read parameters
+        
         print("Read input file "*string(inputfilename)*"\n")
         if ~isfile(inputfilename);
             errorstring=string("File ",inputfilename," not existing"* "\n"); 
@@ -147,8 +148,29 @@ module rtmsim
         t3_val,porosity3_val,K3_val,alpha3_val,refdir13_val,refdir23_val,refdir33_val,
         t4_val,porosity4_val,K4_val,alpha4_val,refdir14_val,refdir24_val,refdir34_val,
         patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_restart,restartfilename,i_interactive,r_p,n_pics);
+        # RTMsim solver with man steps
+        # - Simulation initialization
+        # - Read mesh file and prepare patches  
+        # - Find neighbouring cells
+        # - Assign parameters to cells
+        # - Create local cell coordinate systems
+        # - Calculate initial time step
+        # - Array initialization
+        # - Define simulation time and intermediate output times
+        # - Boundary conditions
+        # - (Optional initialization if i_model=2,3,..)
+        # - Time evolution (for loops over all indices inside a while loop for time evolution)
+        #     - Calculation of correction factors for cell thickness, porosity, permeability, viscosity
+        #     - Pressure gradient calculation
+        #     - Numerical flux function calculation
+        #     - Update of rho, u, v, gamma and p according to conservation laws and equation of state
+        #     - Boundary conditions
+        #     - Prepare arrays for next time step
+        #     - Saving of intermediate data
+        #     - (Opional time marching etc. for i_model=2,3,...)
+        #     - Calculation of adaptive time step 
+        #
 
-     
 
         #----------------------------------------------------------------------
         # Simulation initialization
@@ -310,7 +332,6 @@ module rtmsim
         paramset3=[porosity3_val,t3_val,K3_val,alpha3_val,refdir13_val,refdir23_val,refdir33_val];
         paramset4=[porosity4_val,t4_val,K4_val,alpha4_val,refdir14_val,refdir24_val,refdir34_val];
 
-        #return paramset,paramset1,paramset2,paramset3,paramset4
 
         #--------------------------------------------------------------------------
         # Read mesh file and prepare patches     
@@ -384,28 +405,28 @@ module rtmsim
         end
 
         #--------------------------------------------------------------------------
-        #  Prepare faces
+        #  Find neighbouring cells
         #--------------------------------------------------------------------------    
         faces,cellneighboursarray,celltype = 
             create_faces(cellgridid, N, maxnumberofneighbours);
 
 
         #--------------------------------------------------------------------------
-        #  Assign parameters
+        #  Assign parameters to cells
         #--------------------------------------------------------------------------             
         cellthickness, cellporosity, cellpermeability, cellalpha, celldirection, cellviscosity, celltype = 
             assign_parameters(i_interactive,celltype,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,patchids1,patchids2,patchids3,patchids4,inletpatchids,mu_resin_val,N);
 
 
         #--------------------------------------------------------------------------    
-        #  Create local coordinate systems
+        #  Create local cell coordinate systems
         #--------------------------------------------------------------------------    
         cellvolume, cellcentertocellcenterx, cellcentertocellcentery, T11, T12, T21, T22, cellfacenormalx, cellfacenormaly, cellfacearea = 
             create_coordinate_systems(N, cellgridid, gridx, gridy, gridz, cellcenterx,cellcentery,cellcenterz, faces, cellneighboursarray, celldirection, cellthickness,maxnumberofneighbours);
 
 
         #----------------------------------------------------------------------
-        # Time step calculation
+        # Initial time step calculation
         #----------------------------------------------------------------------
         area=minimum(cellvolume./cellthickness);
         maxspeed=max(maximum(cellpermeability./cellviscosity),maximum(cellalpha.*cellpermeability./cellviscosity))*(p_a_val-p_init_val)/minimum(cellvolume./cellthickness);  #sqrt(area);
@@ -465,7 +486,7 @@ module rtmsim
         end
 
         #----------------------------------------------------------------------
-        # Simulation time and intermediate output times
+        # Define simulation time and intermediate output times
         #----------------------------------------------------------------------
         t_out=0;
         t_progressbar=0;
@@ -590,10 +611,8 @@ module rtmsim
 
                     rho_new[ind]=rho_old[ind]-deltat*F_rho_num/(cellvolume[ind]*volume_factor[ind]);
                     S_u=-dpdx;
-                    #u_new[ind]=(rho_old[ind]*u_old[ind]-deltat*F_u_num/cellvolume[ind]+S_u*deltat)/(rho_new[ind]+cellviscosity[ind]/cellpermeability[ind]*deltat);
                     u_new[ind]=(rho_old[ind]*u_old[ind]-deltat*F_u_num/(cellvolume[ind]*volume_factor[ind])+S_u*deltat)/(rho_new[ind]+(cellviscosity[ind]*viscosity_factor[ind])/(cellpermeability[ind]*permeability_factor[ind])*deltat);
                     S_v=-dpdy;
-                    #v_new[ind]=(rho_old[ind]*v_old[ind]-deltat*F_v_num/cellvolume[ind]+S_v*deltat)/(rho_new[ind]+cellviscosity[ind]/(cellalpha[ind]*cellpermeability[ind])*deltat);   
                     v_new[ind]=(rho_old[ind]*v_old[ind]-deltat*F_v_num/(cellvolume[ind]*volume_factor[ind])+S_v*deltat)/(rho_new[ind]+(cellviscosity[ind]*viscosity_factor[ind])/(cellalpha[ind]*cellpermeability[ind]*permeability_factor[ind])*deltat);   
                     gamma_new[ind]=((cellporosity[ind]*porosity_factor[ind])*gamma_old[ind]-deltat*(F_gamma_num-gamma_old[ind]*F_gamma_num1)/(cellvolume[ind]*volume_factor[ind]))/(cellporosity[ind]*porosity_factor[ind]); 
                     gamma_new[ind]=min(1,gamma_new[ind]);
@@ -740,6 +759,7 @@ module rtmsim
 
     function numerical_flux_function(i_method,vars_P,vars_A,meshparameters);
         if i_method==1;
+            #first order upwinding
             rho_P=vars_P[1];
             u_P=vars_P[2];
             v_P=vars_P[3];
@@ -781,6 +801,7 @@ module rtmsim
 
     function numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,n_dot_u);
         if i_method==1;
+            #first order upwinding
             rho_P=vars_P[1];
             u_P=vars_P[2];
             v_P=vars_P[3];
@@ -820,11 +841,19 @@ module rtmsim
     end
 
     function delete_files();
+        #delete the intermediate output files
         rm.(glob("output_*.jld2"))
     end
 
     function read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p);
-        #read other mesh files based on extension and calculate the required mesh data or convert to Nastran format prepare with existing function                
+        #read mesh file and prepare to be used in solver:
+        # - number of cells, cell ids start with 1
+        # - x,y,z-coordinates of the nodes
+        # - x,y,z-coordinates of the cell centers
+        # - patch properties
+        #
+        #read other mesh files than Nastran bulk data format (bdf) based on extension and calculate the required mesh data or convert to Nastran format prepare with existing function                
+        
         #read Nastran mesh
         if meshfilename[end-2:end]=="bdf"
            N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids=
@@ -835,8 +864,8 @@ module rtmsim
     end
 
     function read_nastran_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p);
-        #Nastran format fixed length (8 digits), GRIDS defined in global CS (local CS field empty),
-        #Optional renumbering
+        #Nastran format fixed length (8 digits), GRIDS defined in global CS (local CS field empty)
+
         if ~isfile(meshfilename);
             errorstring=string("File ",meshfilename," not existing"* "\n"); 
             error(errorstring);
@@ -870,10 +899,8 @@ module rtmsim
                     end
                     card=thisline[1:8];
                     if cmp(card,"GRID    ")==0
-                        #print(string(thisline,"\n"));
                         gridindstring=thisline[9:16];
-                        origgridid=vcat(origgridid,parse(Int64,gridindstring));
-                        
+                        origgridid=vcat(origgridid,parse(Int64,gridindstring));                        
                         txt=thisline[25:32];
                         txt=replace(txt," "=> "");txt=replace(txt,"E" => "");txt=replace(txt,"e" => "");
                         txt1=replace(txt,"-" => "e-");txt1=replace(txt1,"+" => "e+");
@@ -892,13 +919,11 @@ module rtmsim
                         if cmp(txt1[1],'e')==0;txt2=txt1[2:end];else;txt2=txt1;end;
                         val=parse(Float64,txt2);
                         val3=val;
-
                         gridx=vcat(gridx,Float64(val1));
                         gridy=vcat(gridy,Float64(val2));
                         gridz=vcat(gridz,Float64(val3));
                         gridind=gridind+1;
-                    elseif cmp(card,"CTRIA3  ")==0;                        
-                        #print(string(thisline,"\n"));
+                    elseif cmp(card,"CTRIA3  ")==0;        
                         celloriggridid=vcat(celloriggridid,parse(Int64,thisline[9:16]));
                         i1val=parse(Int64,thisline[25:32]);
                         i1=findfirst(isequal(i1val),origgridid);
@@ -914,7 +939,6 @@ module rtmsim
                         cellgridid=vcat(cellgridid,[min(i1,i2,i3) ivec[1] max(i1,i2,i3)]);
                         ind=ind+1;    
                     elseif cmp( card[1:3],"SET")==0 || issetdefinition==1;
-                        #print(string(thisline,"\n"));
                         issetdefinition=1;
                         txt1=thisline[9:end];
                         txt1=replace(txt1," "=> "");
@@ -991,25 +1015,10 @@ module rtmsim
                 i1=findfirst(isequal(patchorigids3[i]),celloriggridid);
                 patchids3=vcat(patchids3,i1);
             end
-            #if i_interactive==2;
-            #    assign_pset(r_p,N,cellcenterx,cellcentery,cellcenterz)
-            #    psetfilename="pset.jld2"
-            #    if ~isfile(psetfilename);
-            #        errorstring=string("File ",psetfilename," not existing"* "\n"); 
-            #        error(errorstring);
-            #    end
-            #    @load psetfilename pset;
-            #    patchids4=pset;
-            #    if length(patchids4)<1;
-            #        errorstring=string("Inlet definition empty"* "\n"); 
-            #        error(errorstring);
-            #    end
-            #else
-                for i=1:length(patchorigids4);
-                    i1=findfirst(isequal(patchorigids4[i]),celloriggridid);
-                    patchids4=vcat(patchids4,i1);
-                end
-            #end
+            for i=1:length(patchorigids4);
+                i1=findfirst(isequal(patchorigids4[i]),celloriggridid);
+                patchids4=vcat(patchids4,i1);
+            end
             if i_interactive==2;
                 assign_pset(r_p,N,cellcenterx,cellcentery,cellcenterz)
                 psetfilename="pset.jld2"
@@ -1024,7 +1033,6 @@ module rtmsim
                     error(errorstring);
                 end
             end
-
             patchparameters=paramset;
             patchparameters1=[];
             patchparameters2=[];
@@ -1067,6 +1075,9 @@ module rtmsim
 
 
     function create_faces(cellgridid, N, maxnumberofneighbours);
+        # Find the set with the IDs of the neighbouring cells
+        # and identify wall cells
+
         celltype=Vector{Int64}(undef, N);
         for i in 1:N;
             celltype[i]=1;
@@ -1090,7 +1101,8 @@ module rtmsim
         facessorted=sortslices(faces,dims=1);
         vals1=unique(facessorted[:,1]);  
 
-        #THIS MUST BE GENERALIZED, CURRENTLY ONLY HARDCODED 10 NEIGHBOURING CELLS OFF A TRIA POSSIBLE
+        # this must be generalized, currently only hard-coded number of neighbouring cells of a tria is possible
+        # all considered cases had <<10 neighbouring cells 
         cellneighboursarray=Array{Int64}(undef, N, maxnumberofneighbours);
         for ind in 1:N;
             for ind_n in 1:maxnumberofneighbours;
@@ -1135,22 +1147,12 @@ module rtmsim
             end
         end
 
-        #Debug output to compare with Matlab code
-        #print("\n")
-        #for i in 1:size(cellneighboursarray,1);
-        #    print(string(string(i)," ",string(cellneighboursarray[i,:]),"\n"))
-        #end
-        #for i in 1:size(faces,1);
-        #    print(string(string(i)," ",string(faces[i]),"\n"))
-        #end
-        #for i in 1:size(celltype,1);
-        #    print(string(string(i)," ",string(celltype[i]),"\n"))
-        #end
-
         return faces, cellneighboursarray, celltype
     end
 
     function assign_parameters(i_interactive,celltype,patchparameters0,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,patchids1,patchids2,patchids3,patchids4,inletpatchids,mu_resin_val,N);
+        #assign properties to cells
+
         cellthickness=Vector{Float64}(undef, N);
         cellporosity=Vector{Float64}(undef, N);
         cellpermeability=Vector{Float64}(undef, N);
@@ -1289,16 +1291,13 @@ module rtmsim
             end
         end
 
-        #Debug output to compare with Matlab code
-        #print("\n")
-        #for i in 1:size(cellthickness,1);
-        #    print(string(string(i)," ",string(cellthickness[i]),"\n"))
-        #end        
-
         return cellthickness, cellporosity, cellpermeability, cellalpha, celldirection, cellviscosity, celltype
     end
 
     function create_coordinate_systems(N, cellgridid, gridx, gridy, gridz, cellcenterx,cellcentery,cellcenterz, faces, cellneighboursarray, celldirection, cellthickness, maxnumberofneighbours);
+        # define the local cell coordinate system and 
+        # the transformation matrix from the local cell coordinate system from the neighbouring cell to the local cell coordinate system of the considered cell
+
         cellvolume=Vector{Float64}(undef, N);
         cellcentertocellcenterx=Array{Float64}(undef, N, maxnumberofneighbours);
         cellcentertocellcentery=Array{Float64}(undef, N, maxnumberofneighbours);
@@ -1332,13 +1331,11 @@ module rtmsim
         theta=Vector{Float64}(undef, N);
 
         for ind in 1:N;
-            #The following geometric description is in the local cell
-            #coordinate system where the neighbouring cells are rotated to
-            #lie on a plane, i.e. considered as flat geometry
-        
-            #create local cell coordinate system: x-axis with unit vector b1 is
-            #from i1 to i2, y-axis is the orthogonal component from i1 to i3, z-axis
-            #is the cross-product
+            # First, an intermediate orthonormal basis {b1, b2, b3} is created with 
+            # first direction pointing from node with smallest ID to node with medium ID, 
+            # second direction pointing in the orthogonal component from node with smallest ID to node with highest ID and 
+            # third direction given by the cross product of the first two directions. 
+            # The origin of the local coordinate system is the geometric center of the triangular cell. 
             i1=cellgridid[ind,1];
             i2=cellgridid[ind,2];
             i3=cellgridid[ind,3];  
@@ -1350,17 +1347,15 @@ module rtmsim
             b2[ind,1:3]=b2[ind,1:3]/sqrt(dot(b2[ind,1:3],b2[ind,1:3]));
             b3[ind,1:3]=cross(b1[ind,1:3],b2[ind,1:3]);   
 
-            #new cell CS is given by the projection of the primary direction in local CS
+            # Then the reference vector is formulated in the intermediate orthonormal basis 
             Tmat=[b1[ind,1] b2[ind,1] b3[ind,1]; b1[ind,2] b2[ind,2] b3[ind,2]; b1[ind,3] b2[ind,3] b3[ind,3]];
             xvec=celldirection[ind,:];
             bvec=Tmat\xvec;
             r1=[bvec[1] bvec[2] bvec[3]]';  #ref dir in local CS
 
-            #Calculate the angle by which b1 must be rotated about the b3-axis to
-            #match r1 via relation rotation matrix Rz(theta)*[1;0;0]=r1, i.e.
-            #cos(theta)=r1(1) and sin(theta)=r1(2);
+            # In order to get the local coordinate system the basis {b1, b2, b3} is rotated by angle theta about the b3-axis.
+            # Calculate the angle by which b1 must be rotated about the b3-axis to match r1 via relation rotation matrix Rz(theta)*[1;0;0]=r1, i.e. cos(theta)=r1(1) and sin(theta)=r1(2);
             theta[ind]=atan(r1[2],r1[1]);
-            
             #Rotation of theta about nvec=b3 to get c1 and c2 
             nvec=b3[ind,:];
             xvec=b1[ind,:];
@@ -1394,13 +1389,6 @@ module rtmsim
             bvec=Tmat\xvec;
             gridxlocal[ind,3]=bvec[1];gridylocal[ind,3]=bvec[2];gridzlocal[ind,3]=bvec[3];
         end
-        #Debug output to compare with Matlab code
-        #print("\n")
-        #for i in 1:20;  #size(gridxlocal,1);
-        #    print(string(string(i)," ",string(gridxlocal[i,:]),"\n"))
-        #    print(string(string(i)," ",string(gridylocal[i,:]),"\n"))
-        #    print(string(string(i)," ",string(gridzlocal[i,:]),"\n"))
-        #end 
 
         cellids=[Int64(-9) Int64(-9)];
         gridids=[Int64(-9) Int64(-9)];
@@ -1413,26 +1401,28 @@ module rtmsim
         f1=[Float64(-9.0), Float64(-9.0), Float64(-9.0)];
         f2=[Float64(-9.0), Float64(-9.0), Float64(-9.0)];
         f3=[Float64(-9.0), Float64(-9.0), Float64(-9.0)];
+        # In a next step the flattened geometry is created, i.e. the cell center and
+        # the non-common node of the neighbouring cell is rotated about
+        # the common edge to lie in the plane of the considered cell with ID ind
         for ind in 1:N;
             cellneighboursline=cellneighboursarray[ind,:];
             cellneighboursline=cellneighboursline[cellneighboursline .> 0]
             for i_neighbour in 1:length(cellneighboursline);
-                #cell centers of neighbouring cells in local coordinate system
-                #1) projection of cell center P=(0,0) onto straigth line through
-                #i1 and i2 to get point Q1 and calculation of length l1 of line
-                #segment PQ1
-                #2)projection of neighbouring cell center A onto straight line
-                #through i1 and i2 to get point Q2 in global coordinate system,
-                #calculatin of length l2 of segment AQ2 and then
-                #transformation of Q2 into local coordinate system and then
-                #cellcentertocellcenterx/y(ind,1) is given by vector addition
-                #PQ1+Q1Q2+l2/l1*PQ1
+                # Find first the cell center of neighbouring cell in local coordinate system of cell ind
+                # 1) projection of cell center P=(0,0) onto straigth line through
+                #    i1 and i2 to get point Q1 and calculation of length l1 of line
+                #    segment PQ1
+                # 2) projection of neighbouring cell center A onto straight line
+                #    through i1 and i2 to get point Q2 in global coordinate system,
+                #    calculatin of length l2 of segment AQ2 and then
+                #    transformation of Q2 into local coordinate system and then
+                #    cellcentertocellcenterx/y(ind,1) is given by vector addition
+                #    PQ1+Q1Q2+l2/l1*PQ1
             
                 #for every neighbour find the two indices belonging to the boundary
                 #face in between; face direction is from smaller to larger index
                 #x0..local coordinates of smaller index
                 #r0..vector from smaller to larger index in LCS
-                #ind, cellneighboursarray{ind}, 
                 inds1=findall(isequal(ind),faces[:,3]);
                 inds2=findall(isequal(cellneighboursline[i_neighbour]),faces[:,3]);
                 mat1=faces[inds1,:];
@@ -1441,7 +1431,6 @@ module rtmsim
                 mat4=sortslices(mat3,dims=1);
                 for irow in 1:size(mat4,1)-1;
                     if mat4[irow,1]==mat4[irow+1,1] && mat4[irow,2]==mat4[irow+1,2];
-                        #cellids=[mat4[irow,3] mat4[irow+1,3]];  #ind must be in the first column
                         if mat4[irow,3]==ind
                             cellids=[ind mat4[irow+1,3]];
                         else
@@ -1456,24 +1445,20 @@ module rtmsim
                 x0=[gridxlocal[ind,ia], gridylocal[ind,ia], gridzlocal[ind,ia]];
                 r0=[gridxlocal[ind,ib]-gridxlocal[ind,ia], gridylocal[ind,ib]-gridylocal[ind,ia], gridzlocal[ind,ib]-gridzlocal[ind,ia]];
 
-                #define xvec as the vector between cell centers ind and
-                #neighbouring cell center (A)
-                #(in GCS) and transform xvec in local coordinates bvec, this gives
-                #A in LCS
-                #find normal distance from A in LCS to the cell boundary
-                #with that cell center A in flat geometry and face normal vector
-                #can be defined
-                #Fill the cell arrays
+                #Define xvec as the vector between cell centers ind and neighbouring cell center (A) (in GCS) 
+                #and transform xvec into local coordinates bvec, this gives A in LCS.
+                #Find normal distance from A in LCS to the cell boundary with that cell center A in flat geometry and 
+                #face normal vector can be defined.
                 x=[[0.0], [0.0], [0.0]];  #P at origin of local CS
                 Px=x[1];
                 Py=x[2];
                 Pz=x[3];
-                lambda=dot(x-x0,r0)/dot(r0,r0);  #dot(x-x0,r0)/dot(r0,r0);
+                lambda=dot(x-x0,r0)/dot(r0,r0);  
                 Q1x=x0[1]+lambda*r0[1];
                 Q1y=x0[2]+lambda*r0[2];
                 Q1z=x0[3]+lambda*r0[3];
                 vec1=[Px-Q1x, Py-Q1y, Pz-Q1z];
-                l1=sqrt(dot(vec1,vec1));  #norm([Px-Q1x;Py-Q1y;Pz-Q1z]); 
+                l1=sqrt(dot(vec1,vec1)); 
                 nvec=[(Q1x-Px), (Q1y-Py), (Q1z-Pz)];
                 nvec=nvec/sqrt(dot(nvec,nvec));
                 cellfacenormalx[ind,i_neighbour]=only(nvec[1]);
@@ -1498,10 +1483,8 @@ module rtmsim
                 vec3=[gridxlocal[ind,ib]-gridxlocal[ind,ia], gridylocal[ind,ib]-gridylocal[ind,ia], gridzlocal[ind,ib]-gridzlocal[ind,ia]];
                 cellfacearea[ind,i_neighbour]=0.5*(cellthickness[cellids[1]]+cellthickness[cellids[2]])*sqrt(dot(vec3,vec3));
 
-                #transfromation matrix for (u,v) of neighrouring cells to local
-                #coordinate system
-                #find the two common grid points: gridids
-                #the third one is setdiff(cellgridid(cellids(2),:),gridids)                
+                #Transformation matrix for (u,v) of neighbouring cells to local coordinate system.
+                #Find the two common grid points and the third non-common grid point               
                 ind21=-9;  #Issues with setdiff, therefore manual implementation  #setdiff(cellgridid[cellids[2],:],gridids)
                 for ind_tmp in 1:3
                     if cellgridid[cellids[2],ind_tmp]!=gridids[1] && cellgridid[cellids[2],ind_tmp]!=gridids[2]
@@ -1511,7 +1494,7 @@ module rtmsim
                 thirdgrid=only(findall(isequal(ind21),cellgridid[cellids[2],:]));
                 common1grid=only(findall(isequal(gridids[1]),cellgridid[cellids[2],:]));
                 common2grid=only(findall(isequal(gridids[2]),cellgridid[cellids[2],:]));   
-                #construction of the third one in outside normal direction
+                #construction of the third one in outside normal direction for the flat geometry
                 #based on the length of the two non-common edges
                 gridxlocal_neighbour[2]=only(gridxlocal[ind,ia]);  #gridxlocal(ind,common1grid);
                 gridxlocal_neighbour[3]=only(gridxlocal[ind,ib]);  #gridxlocal(ind,common2grid);
@@ -1520,8 +1503,6 @@ module rtmsim
                 gridzlocal_neighbour[2]=0.0;
                 gridzlocal_neighbour[3]=0.0;
                 
-                #Issues with setdiff, therefore manual implementation
-                #ind3=setdiff(cellgridid(cellids(2),:),cellgridid(ind,:));
                 ind3=-9;
                 for ind_tmp in 1:3
                     if cellgridid[cellids[2],ind_tmp]!=cellgridid[ind,1] && cellgridid[cellids[2],ind_tmp]!=cellgridid[ind,2] && cellgridid[cellids[2],ind_tmp]!=cellgridid[ind,3]
@@ -1545,13 +1526,7 @@ module rtmsim
                 gridylocal_neighbour[1]=only(Py+(Q1y-Py)+(Q2y-Q1y)+l2/l1*(Q1y-Py));
                 gridzlocal_neighbour[1]=Float64(0);
 
-                #construction LCS f1,f2,f3 according to procedure from
-                #above from points
-                #gridxlocal_neighbour(j),gridylocal_neighbour(j)
-                #Procedure:
-                #create local cell coordinate system: x-axis with unit vector b1 is
-                #from i1 to i2, y-axis is the orthogonal component from i1 to i3, z-axis
-                #is the cross-product
+                #Construction of LCS f1,f2,f3 according to procedure from above using the points gridxlocal_neighbour(j),gridylocal_neighbour(j)
                 ivec1=[only(cellgridid[cellids[2],1]), only(cellgridid[cellids[2],2]), only(cellgridid[cellids[2],3])];                           
                 min_val=min(ivec1[1],ivec1[2],ivec1[3]); 
                 max_val=max(ivec1[1],ivec1[2],ivec1[3]); 
@@ -1569,7 +1544,7 @@ module rtmsim
                 a2=a2/sqrt(dot(a2,a2));
                 f2=a2-dot(f1,a2)/dot(f1,f1)*f1;
                 f2=f2/sqrt(dot(f2,f2));
-                f3=cross(f1,f2);     
+                f3=cross(f1,f2);    
         
                 nvec=f3;
                 xvec=f1;
@@ -1583,18 +1558,15 @@ module rtmsim
                 f3=c3;
                 Tmat=[f1[1] f2[1] f3[1]; f1[2] f2[2] f3[2]; f1[3] f2[3] f3[3]];
 
+                #Assign transformation matrix for the velocities in the local coordinate systems
                 #(u,v)_e=T*(u,v)_f
                 T11[ind,i_neighbour]=Tmat[1,1];
                 T12[ind,i_neighbour]=Tmat[1,2];
                 T21[ind,i_neighbour]=Tmat[2,1];
                 T22[ind,i_neighbour]=Tmat[2,2];
-                #Debug output        
-                #print(string(string(ind)," ",string(i_neighbour)," ",string(gridxlocal_neighbour),"\n"))     
-                #print(string(string(ind)," ",string(i_neighbour)," ",string(gridylocal_neighbour),"\n"))       
-                #print(string(string(ind)," ",string(i_neighbour)," ",string(T11[ind,i_neighbour])," ",string(T12[ind,i_neighbour])," ",string(T21[ind,i_neighbour])," ",string(T22[ind,i_neighbour]),"\n"))     
             end
 
-            #cell volume
+            #calculate cell volume
             vec1=[gridxlocal[ind,2]-gridxlocal[ind,1], gridylocal[ind,2]-gridylocal[ind,1], gridzlocal[ind,2]-gridzlocal[ind,1]];
             vec2=[gridxlocal[ind,3]-gridxlocal[ind,1], gridylocal[ind,3]-gridylocal[ind,1], gridzlocal[ind,3]-gridzlocal[ind,1]];
             vec3=cross(vec1,vec2);
@@ -1606,13 +1578,15 @@ module rtmsim
 
 
     function plot_mesh(meshfilename,i_mode)
+        #create mesh plot with cells with i_mode==1 and
+        #create mesh plots with cell center nodes with i_mode==2 for manual selection of inlet ports
+
         #dummy values for calling function read_mesh
         paramset=[0.5,0.3,3e-10,1.0,1.0,0.0,0.0];paramset1=paramset;paramset2=paramset;paramset3=paramset;paramset4=paramset;
         patchtype1val=-1;patchtype2val=-1;patchtype3val=-1;patchtype4val=-1;i_interactive=0;
         r_p=0.01;
         N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids=
             read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p);
-        #@load "meshvariables.jld2" gridx gridy gridz cellgridid N
 
         #for poly plot
         X=Array{Float64}(undef, 3, N);
@@ -1687,9 +1661,7 @@ module rtmsim
             filename="inletpostions.jld2"
             @save filename inletpos_xyz
 
-            markersizeval=maxdelta*100;  #*20;
-            #fig, ax1, p = scatter(positions,markersize=markersizeval)
-            #poly!(connect(xyz, Point{3}), connect(1:length(X), TriangleFace); color=C[:], strokewidth=1)
+            markersizeval=maxdelta*100;
             fig = Figure()
             ax1 = Axis3(fig[1, 1]; aspect=(ax,ay,az), perspectiveness=0.5,viewmode = :fitzoom,title="Mesh")
             p=scatter!(ax1, positions,markersize=markersizeval)
@@ -1723,13 +1695,14 @@ module rtmsim
 
 
     function plot_sets(meshfilename)
+        #create a plot with the up to four cell sets defined in the mesh file
+
         #dummy values for calling function read_nastran_mesh
         paramset=[0.5,0.3,3e-10,1.0,1.0,0.0,0.0];paramset1=paramset;paramset2=paramset;paramset3=paramset;paramset4=paramset;
         patchtype1val=-1;patchtype2val=-1;patchtype3val=-1;patchtype4val=-1;i_interactive=0;
         r_p=0.01;
         N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids=
             read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p);
-        #@load "patchvariables.jld2" gridx gridy gridz cellgridid N patchids1 patchids2 patchids3 patchids4
         
         if isempty(patchids1);
             n_patch=0;
@@ -1832,32 +1805,6 @@ module rtmsim
             C2[2*N+ind]=0.0;
         end
 
-        ##CairoMakie
-        #if n_patch>=1;
-        #    CairoMakie.activate!()
-        #    f = CairoMakie.Figure(resolution = (600, 600))
-        #    ax1=CairoMakie.Axis(f[1, 1],  title = "Set 1",aspect=DataAspect() )
-        #    CairoMakie.poly!(f[1, 1],connect(xyz, Point{3}), connect(1:length(X), TriangleFace); color=C_patch1[:], strokewidth=1)                 
-        #    CairoMakie.hidedecorations!(ax1)
-        #    if n_patch>=2;
-        #        ax2=CairoMakie.Axis(f[1, 2],  title = "Set 2",aspect=DataAspect() )
-        #        CairoMakie.poly!(f[1, 2],connect(xyz, Point{3}), connect(1:length(X), TriangleFace); color=C_patch2[:], strokewidth=1)                 
-        #        CairoMakie.hidedecorations!(ax2)
-        #    end
-        #    if n_patch>=3;
-        #        ax3=CairoMakie.Axis(f[2, 1],  title = "Set 3",aspect=DataAspect() )
-        #        CairoMakie.poly!(f[2, 1],connect(xyz, Point{3}), connect(1:length(X), TriangleFace); color=C_patch3[:], strokewidth=1)                 
-        #        CairoMakie.hidedecorations!(ax3)
-        #    end
-        #    if n_patch>=4;     
-        #        ax4=CairoMakie.Axis(f[2, 2],  title = "Set 4",aspect=DataAspect() )
-        #        CairoMakie.poly!(f[2, 2],connect(xyz, Point{3}), connect(1:length(X), TriangleFace); color=C_patch4[:], strokewidth=1)                 
-        #        CairoMakie.hidedecorations!(ax4)
-        #    end
-        #    setfilename="setoverview.png";
-        #    CairoMakie.save(setfilename, f)
-        #end
-
         resolution_val=300;
         if n_patch==1;
             fig = Figure(resolution=(1*resolution_val, resolution_val))
@@ -1868,6 +1815,7 @@ module rtmsim
         elseif n_patch==4;
             fig = Figure(resolution=(4*resolution_val, resolution_val))
         end
+
         #bounding box
         deltax=maximum(gridx)-minimum(gridx);
         deltay=maximum(gridy)-minimum(gridy);
@@ -1904,10 +1852,11 @@ module rtmsim
     end
 
     function assign_pset(r_p,N,cellcenterx,cellcentery,cellcenterz)
+        #create the cell set from the manually selected inlet port nodes
+
         filename="inletpostions.jld2"
         @load filename inletpos_xyz
         n_p=size(inletpos_xyz,1)-1;
-        #r_p=0.01;
         patchpids=[];
         i=1;
         for i_p in 2:n_p+1;
@@ -1941,6 +1890,9 @@ module rtmsim
     end
 
     function plot_results(resultsfilename)
+        #create contour plots of the filling factor and the pressure after loading a results file
+        #default call: rtmsim.plot_results("results.jld2")
+
         if ~isfile(resultsfilename);
             errorstring=string("File ",resultsfilename," not existing"* "\n"); 
             error(errorstring);
@@ -2050,6 +2002,11 @@ module rtmsim
 
 
     function plot_overview(n_out,n_pics)
+        #create filling factor contour plots
+        #n_out ist the index of the last output file, if n_out==-1 the output file with the highest index is chosen
+        #consider the last n_pics for creating the contour plots at four equidistant time intervals, if n_pics==-1 all available output files are considered
+        #default call is plot_overview(-1,-1)
+
         val=0;
 		n_out_start=-1;
         if n_out==-1;
@@ -2207,6 +2164,11 @@ module rtmsim
 
 
     function plot_filling(n_out,n_pics)
+        #create a window showing the filling factor contour plot at a selected time instance. Selection is with slider bar.
+        #n_out ist the index of the last output file, if n_out==-1 the output file with the highest index is chosen
+        #consider the last n_pics for creating the contour plots at four equidistant time intervals, if n_pics==-1 all available output files are considered
+        #default call is plot_filling(-1,-1)
+
         val=0;
 		n_out_start=-1;
         if n_out==-1;

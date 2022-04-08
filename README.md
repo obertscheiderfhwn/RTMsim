@@ -1,4 +1,4 @@
-# RTMsim - Filling simulations in Resin Transfer Moulding with the Finite Area Method
+# RTMsim - A Julia module for filling simulations in Resin Transfer Moulding with the Finite Area Method
 
 
 # Statement of need
