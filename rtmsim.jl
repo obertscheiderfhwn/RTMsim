@@ -610,6 +610,7 @@ module rtmsim
                     end
 
                     rho_new[ind]=rho_old[ind]-deltat*F_rho_num/(cellvolume[ind]*volume_factor[ind]);
+                    rho_new[ind]=max(rho_new[ind],0.0)
                     S_u=-dpdx;
                     u_new[ind]=(rho_old[ind]*u_old[ind]-deltat*F_u_num/(cellvolume[ind]*volume_factor[ind])+S_u*deltat)/(rho_new[ind]+(cellviscosity[ind]*viscosity_factor[ind])/(cellpermeability[ind]*permeability_factor[ind])*deltat);
                     S_v=-dpdy;
