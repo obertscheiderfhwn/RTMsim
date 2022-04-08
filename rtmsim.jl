@@ -1663,7 +1663,7 @@ module rtmsim
 
             markersizeval=maxdelta*100;
             fig = Figure()
-            ax1 = Axis3(fig[1, 1]; aspect=(ax,ay,az), perspectiveness=0.5,viewmode = :fitzoom,title="Mesh")
+            ax1 = Axis3(fig[1, 1]; aspect=(ax,ay,az), perspectiveness=0.5,viewmode = :fitzoom,title="Select inlets with p + LMB")
             p=scatter!(ax1, positions,markersize=markersizeval)
             hidedecorations!(ax1);
             hidespines!(ax1) 
