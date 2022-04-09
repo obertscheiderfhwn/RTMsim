@@ -24,9 +24,8 @@ RTMsim ia a new software tool for RTM filling simulations which fulfills these r
 In order to use RTMsim follow the following steps:
 - Download Julia from https://julialang.org/downloads/ and add Julia to path such that can be started from command line.
 - Open Julia terminal, change to package manager with `]` and `add Gtk GLMakie Makie NativeFileDialog Glob LinearAlgebra JLD2 GeometryBasics Random FileIO ProgressMeter`.
-- Go to the directory with the RTMsim repository and double click on run_rtmsim_GUI.bat to start the GUI. 
-
-Alternatively to the third step, one has access to all functions through the Julia terminal. Open a Julia terminal, change to the directory with the RTMsim repository with `cd("path")` and start the GUI with `include("rtmsim_GUI.jl")` or call all functions after `include("rtmsim.jl")`. Popular functions are:
+- For Windows: Go to the directory with the RTMsim repository and double click on run_rtmsim_GUI.bat to start the GUI. 
+- For all operating systems: One has access to all functions through the Julia terminal. Open a Julia terminal, change to the directory with the RTMsim repository with `cd("path")` and start the GUI with `include("rtmsim_GUI.jl")` or call all functions after `include("rtmsim.jl")`. Popular functions are:
 - `rtmsim.plot_mesh(1,"meshfiles\\mesh_permeameter1_foursets.bdf")` for plotting the mesh defined in the bdf-file
 - `rtmsim.plot_sets("meshfiles\\mesh_permeameter1_foursets.bdf")` for plotting the sets specified in the bdf-file
 - `rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,0,"results.jld2",0,0.01,16)` for starting a simulation with different patches and race tracking
@@ -101,17 +100,16 @@ The V&V cases can be executed by selecting the appropriate input file and afterw
 
 # Validation and verification
 
-Four different test cases are available, successfully validating the Julia implementation of the RTM filling model:
+Three different test cases are available, successfully validating the Julia implementation of the RTM filling model:
 1. Validation of the software for radial flow with isotropic in-plane peremablity: The simulated flow front position after 200 s is compared with the calculated flow front postion from literature.  
 2. Verification of the software for radial flow with tilted orthotropic in-plane permeablity: The simulated tilted elliptical flow front is analysed and the calculated orthotropic permeablity is compared with the input (K, alpha, theta).
 3. Comparison of the simulated flow front position for a complex annulus filler-like part with the simulated flow front position with Ansys Fluent and comparison of the simulated filling pattern with results from a myRTM simulation.
-4. Validation with experimental data from a radial permeameter experiment with two patches with different in-plane permeability and porosity levels. 
 
-The following pictures show the validation results for cases 1, 2 and 3.
+The following pictures show the simulation results for the test cases and are compared to V&V results.
 
 <img src="validation_pic1.png" width="600">
 <img src="validation_pic2.png" width="600">
-
+<img src="validation_pic3.png" width="600">
 
 # Future work
 
