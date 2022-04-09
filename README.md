@@ -103,18 +103,17 @@ Three different test cases are available, successfully validating the Julia impl
 
 The following pictures show the simulation results (after rotating the views with LMB) for the test cases and which have to be compared with V&V results.
 
-
+Results for coarse and fine mesh of case 1:
 <img src="validation_case1.png">
-<figcaption align = "center">Results for coarse and fine mesh of case 1.</figcaption> <br>
 
+Results for coarse and fine mesh of case 2:
 <img src="validation_case2.png">
-<figcaption align = "center">Results for coarse and fine mesh of case 2.</figcaption> <br>
 
+Results for coarse mesh of case 3:
 <img src="validation_case3a.png">
-<figcaption align = "center">Results for coarse mesh of case 3.</figcaption> <br>
 
+Results for fine mesh of case 3:
 <img src="validation_case3b.png">
-<figcaption align = "center">Results for fine mesh of case 3.</figcaption> <br>
 
 # Future work
 
