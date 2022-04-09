@@ -1,6 +1,6 @@
 1    #i_model 
 meshfiles\\mesh_annulusfiller1.bdf    #meshfilename 
-400    #tmax
+300    #tmax
 1.01325e5 1.225 1.4 0.06    #p_ref rho_ref gamma mu_resin_val 
 1.35e5 1.0e5    #p_a_val p_init_val 
 3e-3 0.7 3e-10 1 1 0 0    #t_val porosity_val K_val alpha_val refdir1_val refdir2_val refdir3_val 
