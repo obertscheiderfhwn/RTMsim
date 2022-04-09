@@ -21,11 +21,7 @@ RTMsim ia a new software tool for RTM filling simulations which fulfills these r
 
 # Installation instructions
 
-In order to use RTMsim follow the following steps:
-- Download Julia from https://julialang.org/downloads/ and add Julia to path such that can be started from command line.
-- Open Julia terminal, change to package manager with `]` and `add Gtk GLMakie Makie NativeFileDialog Glob LinearAlgebra JLD2 GeometryBasics Random FileIO ProgressMeter`.
-- For Windows: Go to the directory with the RTMsim repository and double click on run_rtmsim_GUI.bat to start the GUI. 
-- For all operating systems: One has access to all functions through the Julia terminal. Open a Julia terminal, change to the directory with the RTMsim repository with `cd("path")` and start the GUI with `include("rtmsim_GUI.jl")` or call all functions after `include("rtmsim.jl")`. Popular functions are:
+In order to use RTMsim for filling simulations, download Julia from https://julialang.org/downloads/ and add Julia to path such that can be started from command line, open Julia terminal, change to package manager with `]` and `add Gtk GLMakie Makie NativeFileDialog Glob LinearAlgebra JLD2 GeometryBasics Random FileIO ProgressMeter`. For Windows operating system: Go to the directory with the RTMsim repository and double click on run_rtmsim_GUI.bat to start the GUI. For all operating systems: One has access to all functions through the Julia terminal. Open a Julia terminal, change to the directory with the RTMsim repository with `cd("path")` and start the GUI with `include("rtmsim_GUI.jl")` or call all functions after `include("rtmsim.jl")`. Popular functions are:
 - `rtmsim.plot_mesh(1,"meshfiles\\mesh_permeameter1_foursets.bdf")` for plotting the mesh defined in the bdf-file
 - `rtmsim.plot_sets("meshfiles\\mesh_permeameter1_foursets.bdf")` for plotting the sets specified in the bdf-file
 - `rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,0,"results.jld2",0,0.01,16)` for starting a simulation with different patches and race tracking
@@ -95,7 +91,7 @@ meshfiles\\mesh_permeameter1_foursets.bdf    #meshfilename
 
 Parameter `i_model` specifies the flow model. `meshfilename` specified the relative or absolute path to the used mesh file. `tmax` defines the simulated filling time. The parameters in the forth line define the adiabatic equation of state (reference pressure, reference density, adiabatic index) for air and the dynamic viscosity of the resin. The parameters in the fifth line define injection pressure and initial cavity pressure. The parameters in the lines 6 to 10 specify the preform parameters for the main preform and the optional four sets with different preform paramerts. The preform parameters of the four optional sets are only used if the corresponding patch type in line 11 is set equal to 2. If equal to 0, the patch is ignored and part of the main preform. If equal to 1, the patch is a pressure inlet with injection pressure. If equal to 3, the patch is a pressure outlet with initial cavity pressure. The sets for the patches are defined in the mesh file in ascending order. If less than four are defined, patch types cannot be assigned. The preform parameters are preform thickness, porosity, permeability in first principal cell direction, alpha as permeablity fraction in second principal cell direction and the three components of a reference vector which is projected onto the cells to define the first principal cell direction. The parameters in line 12 are used for continuing a simulation, if `i_restart=1` with the data saven in the `restartfilename`. In line 13 the interactive mode can be turned on if `i_interactive=1`. At selected points in the preform (plot the mesh with second parameter `=2`), additional inlet port with radius `r_p` are assigned. If all patch types are `=0`, only the selected inlet ports are used. Otherwise the settings are cummulative. The last parameter `n_pics' determines the number of intermediate outputs.
 
-The V&V cases can be executed by selecting the appropriate input file and afterwards running the simulation with this input file. The input files for the four validation cases are `input_case1_coarsemesh.txt`, `input_case1_finemesh.txt`, `input_case2_coarsemesh.txt`, `input_case2_finemesh.txt`, `input_case3_coarsemesh.txt`, `input_case3_finemesh.txt, input_case4.txt`.
+The V&V cases can be executed by selecting the appropriate input file and afterwards running the simulation with this input file. The input files for the four validation cases are `input_case1_coarsemesh.txt`, `input_case1_finemesh.txt`, `input_case2_coarsemesh.txt`, `input_case2_finemesh.txt`, `input_case3_coarsemesh.txt`, `input_case3_finemesh.txt, input_case4.txt` or from the Julia terminal with `rtmsim.start_rtmsim("input_case1_coarsemesh.txt")` with the different input file name as argument. The filling overview is created with the button `Plot overview` or with `rtmsim.plot_overview(-1,-1)`;
 
 
 # Validation and verification
@@ -105,11 +101,12 @@ Three different test cases are available, successfully validating the Julia impl
 2. Verification of the software for radial flow with tilted orthotropic in-plane permeablity: The simulated tilted elliptical flow front is analysed and the calculated orthotropic permeablity is compared with the input (K, alpha, theta).
 3. Comparison of the simulated flow front position for a complex annulus filler-like part with the simulated flow front position with Ansys Fluent and comparison of the simulated filling pattern with results from a myRTM simulation.
 
-The following pictures show the simulation results for the test cases and are compared to V&V results.
+The following pictures show the simulation results (after rotating the views with LMB) for the test cases and which have to be compared with V&V results.
 
-<img src="validation_pic1.png" width="600">
-<img src="validation_pic2.png" width="600">
-<img src="validation_pic3.png" width="600">
+<img src="validation_case1.png" width="600">
+<img src="validation_case2.png" width="600">
+<img src="validation_case3a.png" width="600">
+<img src="validation_case3b.png" width="600">
 
 # Future work
 
