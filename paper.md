@@ -81,11 +81,13 @@ Four different test cases are available, successfully validating the Julia imple
 
 Most of the test cases are so-called numerical permeameter experiments, see e.g. [@Fauster.2019]. The third test case is a filling study of a typical composite part which is manufactured using RTM, see [@barandun].  
 
-\autoref{fig:pic1} and \autoref{fig:pic2} show the validation results for cases 1, 2 and 3.
+\autoref{fig:pic1} and \autoref{fig:pic2} show the binary filling fraction for cases 1, 2 and 3. For every cell i the fraction function is either $0$ or $1$, depending on the filling fraction being $\leq$ or $>$ than a threshold value. The threshold for the volume-of-fluid method is determined from the permeameter simulation with isotropic permeabilities (case 1). The circular and elliptical flow fronts for cases 1 and 2 are calculated from the simulated flow front with an image processing algorithm [@Fauster.2019]. For case 1 also a comparison with results from an analytical formula [@advani]  is shown. 
 
-![Results for test case 1 (left) and test case 2 (right).\label{fig:pic1}](validation_pic1.png)
+![Simulated flow front for case 1 after 200 s for a coarse and a fine mesh and flow front positions at different time instances calculated with an analytical formula and calculated from the simulated flow front with an image processing algorithm for a coarse and a fine mesh. The values for the fine mesh agree well with the results from the analytical formula. The values for the coarse mesh show an error of $\leq 15$ which decreases significantly in the course of time but the shape is no smooth circle.\label{fig:pic1}](validation_pic1.png)
 
-![Results for test case 3.\label{fig:pic2}](validation_pic2.png)
+![Simulated flow front for case 1 after 200 s for a coarse and a fine mesh. Simulation input is porosity $0.70$, permeability $3.0 \cdot 10^{−10}$ m$^2$ in first principal direction, $30^\circ$ to the horizontal and permeability $1.5 \cdot 10^{−10}$ m$^2$ in second principal direction. An algorithm for determining the flow front position from an optical permeameter was adapted to calculate the permeablity: The results are $2.91 \cdot 10^{−10}$ m$^2$, $1.41 \cdot 10^{−10}$ m$^2$ and angle $30^\circ$ for the fine mesh and $2.43 \cdot 10^{−10}$ m$^2$, $1.17 \cdot 10^{−10}$ m$^2$ and $29^\circ$ for the coarse mesh. For the fine mesh (2198 cells for a domain with 600 × 600 mm), this reverse engineering shows very good agreement of the calculated permeability values with the values used as simulation input. For the coarse mesh (588 cells) the agreement is still acceptable.\label{fig:pic2}](validation_pic2.png)
+
+![Results for test case 3. The results for the new simulation tool with the fine mesh are in good agreement with the ANSYS Fluent results for both filling pattern and filling time. myRTM shows similar filling patterns for same filling degrees as the new simulation tool with the coarse mesh. This comparison shows that a coarse mesh can be used for filling simulations where only the flow front propagation is investigated, if the filling time is important a mesh refinement study must be performed. \label{fig:pic3}](validation_pic3.png)
 
 
 # References
