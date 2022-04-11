@@ -664,7 +664,7 @@ module rtmsim
             end      
 
             #Save intermediate data
-            if t>=t_out  || t>=tmax-deltat;
+            if t>=t_out  || t>=tmax-1.5*deltat;
                 if i_model==1;
                     if i_restart==1;
                         t_temp=t;
@@ -678,7 +678,7 @@ module rtmsim
                     for i in 1:length(inds)
                         gamma_new[inds[i]]=Float64(-2.0); 
                     end
-                    if t>=(tmax+t_restart)-deltat;
+                    if t>=(tmax+t_restart)-1.5*deltat;
                         t_temp1=t;
                         t=(tmax+t_restart);
                     end
