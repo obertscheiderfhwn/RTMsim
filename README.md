@@ -104,16 +104,22 @@ Three different test cases are available, successfully validating the Julia impl
 The following pictures show the simulation results (after rotating the views with LMB) for the test cases and which have to be compared with V&V results.
 
 Results for coarse and fine mesh of case 1:
-<img src="validation_case1.png">
+<img src="validation_case1a.png"><br>
+<img src="validation_case1a.png"><br>
+According to an anlytical estimation, the flow front after 50, 100, 150 and 200 s is a circle with radius 0.114, 0.150, 0.178 and 0.200 mm. The values for the fine mesh agree well with the results from the analytical formula. The values for the coarse mesh show an error of $\leq 15$ which decreases significantly in the course of time but the shape is no smooth circle.
 
 Results for coarse and fine mesh of case 2:
-<img src="validation_case2.png">
+<img src="validation_case2a.png"><br>
+<img src="validation_case2a.png"><br>
+Simulation input is porosity $0.70$, permeability $3.0 \cdot 10^{−10}$ m$^2$ in first principal direction, $30^\circ$ to the horizontal and permeability $1.5 \cdot 10^{−10}$ m$^2$ in second principal direction. Analyzing the flow front after 200 s, the orthotropic permeability is described by $2.91 \cdot 10^{−10}$ m$^2$, $1.41 \cdot 10^{−10}$ m$^2$ and angle $30^\circ$ for the fine mesh and $2.43 \cdot 10^{−10}$ m$^2$, $1.17 \cdot 10^{−10}$ m$^2$ and $29^\circ$ for the coarse mesh. For the fine mesh (2198 cells for a domain with 600 × 600 mm), this reverse engineering shows very good agreement of the calculated permeability values with the values used as simulation input. For the coarse mesh (588 cells) the agreement is still acceptable.
 
 Results for coarse mesh of case 3:
-<img src="validation_case3a.png">
+<img src="validation_case3a.png"><br>
+If the position of inlet and outlet ports is investigated, simulations with a coarse mesh and short simulation time is sufficient since the flow front progagation is predicted properly.
 
 Results for fine mesh of case 3:
-<img src="validation_case3b.png">
+<img src="validation_case3a.png"><br>
+The acutal filling time can be predicted with a fine mesh. A mesh refinement study must be performed.
 
 # Future work
 
