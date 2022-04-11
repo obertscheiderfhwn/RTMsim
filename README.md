@@ -98,10 +98,10 @@ The V&V cases can be executed by selecting the appropriate input file and afterw
 
 Three different test cases are available, successfully validating the Julia implementation of the RTM filling model:
 1. Validation of the software for radial flow with isotropic in-plane peremablity: The simulated flow front position after 200 s is compared with the calculated flow front postion from literature.  
-2. Verification of the software for radial flow with tilted orthotropic in-plane permeablity: The simulated tilted elliptical flow front is analysed and the calculated orthotropic permeablity is compared with the input (K, alpha, theta).
+2. Verification of the software for radial flow with tilted orthotropic in-plane permeablity: The simulated tilted elliptical flow front is analysed and the calculated orthotropic permeablity is compared with the input.
 3. Comparison of the simulated flow front position for a complex annulus filler-like part with the simulated flow front position with Ansys Fluent and comparison of the simulated filling pattern with results from a myRTM simulation.
 
-The following pictures show the simulation results (after rotating the views with LMB) for the test cases and which have to be compared with V&V results.
+The following pictures show the simulation results (after rotating the views with LMB) for the test cases and which have to be compared with V&V data.
 
 Results for coarse and fine mesh of case 1:
 <img src="validation_case1a.png"><br>
@@ -111,7 +111,7 @@ According to an anlytical estimation, the flow front after 50, 100, 150 and 200 
 Results for coarse and fine mesh of case 2:
 <img src="validation_case2a.png"><br>
 <img src="validation_case2a.png"><br>
-Simulation input is porosity $0.70$, permeability $3.0 \cdot 10^{−10}$ m$^2$ in first principal direction, $30^\circ$ to the horizontal and permeability $1.5 \cdot 10^{−10}$ m$^2$ in second principal direction. Analyzing the flow front after 200 s, the orthotropic permeability is described by $2.91 \cdot 10^{−10}$ m$^2$, $1.41 \cdot 10^{−10}$ m$^2$ and angle $30^\circ$ for the fine mesh and $2.43 \cdot 10^{−10}$ m$^2$, $1.17 \cdot 10^{−10}$ m$^2$ and $29^\circ$ for the coarse mesh. For the fine mesh (2198 cells for a domain with 600 × 600 mm), this reverse engineering shows very good agreement of the calculated permeability values with the values used as simulation input. For the coarse mesh (588 cells) the agreement is still acceptable.
+Simulation input is porosity $$0.70$$, permeability $$3.0 \cdot 10^{−10}$$ m$$^2$$ in first principal direction, $$30^\circ$$ to the horizontal and permeability $$1.5 \cdot 10^{−10}$$ m$$^2$$ in second principal direction. Analyzing the flow front after 200 s, the orthotropic permeability is described by $$2.91 \cdot 10^{−10}$$ m$$^2$$, $$1.41 \cdot 10^{−10}$$ m$$^2$$ and angle $$30^\circ$$ for the fine mesh and $$2.43 \cdot 10^{−10}$$ m$$^2$$, $$1.17 \cdot 10^{−10}$$ m$$^2$$ and $$29^\circ$$ for the coarse mesh. For the fine mesh (2198 cells for a domain with 600 × 600 mm), this reverse engineering shows very good agreement of the calculated permeability values with the values used as simulation input. For the coarse mesh (588 cells) the agreement is still acceptable.
 
 Results for coarse and fine mesh of case 3:
 <img src="validation_case3a.png"><br>
