@@ -105,7 +105,7 @@ The following pictures show the simulation results (after rotating the views wit
 
 Results for coarse and fine mesh of case 1:
 <img src="validation_case1a.png"><br>
-<img src="validation_case1a.png"><br>
+<img src="validation_case1b.png"><br>
 According to an anlytical estimation, the flow front after 50, 100, 150 and 200 s is a circle with radius 0.114, 0.150, 0.178 and 0.200 mm. The values for the fine mesh agree well with the results from the analytical formula. The values for the coarse mesh show an error of $\leq 15$ which decreases significantly in the course of time but the shape is no smooth circle.
 
 Results for coarse and fine mesh of case 2:

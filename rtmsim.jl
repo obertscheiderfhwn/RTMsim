@@ -664,7 +664,7 @@ module rtmsim
             end      
 
             #Save intermediate data
-            if t>=t_out  || t>=tmax-1.5*deltat;
+            if (t>=t_out  || t>=tmax-1.5*deltat) && n_out<=n_pics;
                 if i_model==1;
                     if i_restart==1;
                         t_temp=t;
