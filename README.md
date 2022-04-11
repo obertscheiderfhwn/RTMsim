@@ -113,13 +113,11 @@ Results for coarse and fine mesh of case 2:
 <img src="validation_case2a.png"><br>
 Simulation input is porosity $0.70$, permeability $3.0 \cdot 10^{−10}$ m$^2$ in first principal direction, $30^\circ$ to the horizontal and permeability $1.5 \cdot 10^{−10}$ m$^2$ in second principal direction. Analyzing the flow front after 200 s, the orthotropic permeability is described by $2.91 \cdot 10^{−10}$ m$^2$, $1.41 \cdot 10^{−10}$ m$^2$ and angle $30^\circ$ for the fine mesh and $2.43 \cdot 10^{−10}$ m$^2$, $1.17 \cdot 10^{−10}$ m$^2$ and $29^\circ$ for the coarse mesh. For the fine mesh (2198 cells for a domain with 600 × 600 mm), this reverse engineering shows very good agreement of the calculated permeability values with the values used as simulation input. For the coarse mesh (588 cells) the agreement is still acceptable.
 
-Results for coarse mesh of case 3:
+Results for coarse and fine mesh of case 3:
 <img src="validation_case3a.png"><br>
-If the position of inlet and outlet ports is investigated, simulations with a coarse mesh and short simulation time is sufficient since the flow front progagation is predicted properly.
+<img src="validation_case3a.png"><br>
+If the position of inlet and outlet ports is investigated, simulations with a coarse mesh and short simulation time is sufficient since the flow front progagation is predicted properly. The acutal filling time can be predicted with a fine mesh. A mesh refinement study must be performed. 
 
-Results for fine mesh of case 3:
-<img src="validation_case3a.png"><br>
-The acutal filling time can be predicted with a fine mesh. A mesh refinement study must be performed.
 
 # Future work
 
