@@ -106,7 +106,7 @@ The following pictures show the simulation results (after rotating the views wit
 Results for coarse and fine mesh of case 1:
 <img src="validation_case1a.png"><br>
 <img src="validation_case1b.png"><br>
-According to an anlytical estimation, the flow front after 50, 100, 150 and 200 s is a circle with radius 0.114, 0.150, 0.178 and 0.200 mm. The values for the fine mesh agree well with the results from the analytical formula. The values for the coarse mesh show an error of $\leq 15$ which decreases significantly in the course of time but the shape is no smooth circle.
+According to an anlytical estimation, the flow front after 50, 100, 150 and 200 s is a circle with radius 0.114, 0.150, 0.178 and 0.200 mm. The values for the fine mesh agree well with the results from the analytical formula. The values for the coarse mesh show an error of <15% which decreases significantly in the course of time but the shape is no smooth circle.
 
 Results for coarse and fine mesh of case 2:
 <img src="validation_case2a.png"><br>
@@ -120,7 +120,7 @@ If the position of inlet and outlet ports is investigated, simulations with a co
 
 # Other examples of usage
 
-Show here other use cases: Permeameter with patches and race tracking, Annulus filler with inlet and outlet, Annuls filler with cascade injection and selecting inlets interactively
+Show here other use cases: Permeameter with patches and race tracking, Annulus filler with inlet and outlet, Annuls filler with cascade injection and selecting inlets interactively (1. Inspect bounding box, 2. Select inlet, 3. Run interactively, 4. Inspect)
 
 
 # Future work
