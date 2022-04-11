@@ -122,7 +122,15 @@ If the position of inlet and outlet ports is investigated, simulations with a co
 
 Show here other use cases:
 
-- Permeameter with patches and race tracking (same porosity but permeablity higher by factor 10) started from GUI, 
+- This examples shows shows how to start a simulation with the GUI. First, inspect the mesh files and plot the pre-defined sets:<br>
+<img src="example1d.png"><br>
+Select the mesh file `meshfiles\\mesh_permeameter1_foursets.bdf` and sett all other parameters:<br>
+<img src="example1a.png"><br>
+Set 1 is the pressure inlet, set 2 and set 3 are reinforcement patches with lower permeability and set 4 is a racetracking channel between the main preform and set 3 with same porosity but a factor 10 higher permeability than the main preform. Plot the filling overview after 200 s simulation time:<br>
+<img src="example1c.png"><br>
+Continue for another 100 s simulation time:<br>
+<img src="example1d.png"><br>
+
 
 - This example shows how to modify the code. If pressure outlets are defined, wiggles at the pressure outlet are introduced. To limit these oscillations a gradient limiter is used. The function is called with i_method=2 as first argument: 
 `dpdx,dpdy=numerical_gradient(2,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);` <br>
