@@ -1,4 +1,4 @@
-# RTMsim - A Julia module for filling simulations in Resin Transfer Moulding with the Finite Area Method
+# RTMsim - A Julia module for filling simulations in Resin Transfer Moulding
 
 
 # Statement of need
@@ -115,12 +115,12 @@ Simulation input is porosity 0.70, permeability 3.0e-10 m^2 in first principal d
 
 Results for coarse and fine mesh of case 3:
 <img src="validation_case3a.png"><br>
-<img src="validation_case3a.png"><br>
-If the position of inlet and outlet ports is investigated, simulations with a coarse mesh and short simulation time is sufficient since the flow front progagation is predicted properly. The acutal filling time can be predicted with a fine mesh. A mesh refinement study must be performed. 
+<img src="validation_case3b.png"><br>
+If the position of inlet and outlet ports is investigated, simulations with a coarse mesh and short simulation time is sufficient since the flow front progagation is predicted properly. The acutal filling time can be predicted with a fine mesh. A mesh refinement study must be performed. With the coarse mesh it takes approximately 50 s longer to reach the same filling state.
 
 # Other examples of usage
 
-Show here other use cases: Permeameter with patches and race tracking, Annulus filler with inlet and outlet, Annuls filler with cascade injection and selecting inlets interactively (1. Inspect bounding box, 2. Select inlet, 3. Run interactively, 4. Inspect)
+Show here other use cases: Permeameter with patches and race tracking (same porosity but permeablity higher by factor 10), Annulus filler with inlet and outlet, Annuls filler with cascade injection and selecting inlets interactively (1. Inspect bounding box, 2. Select inlet, 3. Run interactively, 4. Inspect flow front and optional screenshot, 5. Add additional inlet port or replace first one, 6. Continue simulation, 7. Inspect flow front and optional screenshot)
 
 
 # Future work
