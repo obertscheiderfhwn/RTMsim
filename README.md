@@ -135,9 +135,6 @@ The filling overview is:<br>
 
 
 
- Annulus filler with inlet and outlet (start from command line with i_method=2 for gradient calculation; this method is recommended if outlets are defined),
-
-
 - Annuls filler with cascade injection and selecting inlets interactively (1. Inspect bounding box, 2. Select inlet, 3. Run interactively, 4. Inspect flow front and optional screenshot, 5. Add additional inlet port or replace first one, 6. Continue simulation, 7. Inspect flow front and optional screenshot)
 
 
