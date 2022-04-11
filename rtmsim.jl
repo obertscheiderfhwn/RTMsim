@@ -663,8 +663,20 @@ module rtmsim
                 next!(p);
             end      
 
+            #Adaptive time stepping
+            if iter>n_pics;
+                inds1=findall(isequal(1),celltype);
+                inds2=findall(isequal(-3),celltype);
+                inds=vcat(inds1,inds2);               
+                weight_deltatnew=Float64(0.5);  #0.1;  #
+                betat2=Float64(0.1);
+                deltat=(1-weight_deltatnew)*deltat+weight_deltatnew* betat2*minimum( (sqrt.(cellvolume[inds]./cellthickness[inds])) ./ sqrt.(u_new[inds].^2+v_new[inds].^2) );  
+                deltatmax=tmax/(4*n_pics); #at least four steps between writing output
+                deltat=min(deltat,deltatmax);
+            end
+
             #Save intermediate data
-            if (t>=t_out  || t>=tmax-1.5*deltat) && n_out<=n_pics;
+            if t>=t_out  || (t+deltat>tmax);
                 if i_model==1;
                     if i_restart==1;
                         t_temp=t;
@@ -716,18 +728,6 @@ module rtmsim
                 # -write save data to output files
             end
             
-            #Adaptive time stepping
-            if iter>n_pics;
-                inds1=findall(isequal(1),celltype);
-                inds2=findall(isequal(-3),celltype);
-                inds=vcat(inds1,inds2);               
-                weight_deltatnew=Float64(0.5);  #0.1;  #
-                betat2=Float64(0.1);
-                deltat=(1-weight_deltatnew)*deltat+weight_deltatnew* betat2*minimum( (sqrt.(cellvolume[inds]./cellthickness[inds])) ./ sqrt.(u_new[inds].^2+v_new[inds].^2) );  
-                deltatmax=tmax/(4*n_pics); #at least four steps between writing output
-                deltat=min(deltat,deltatmax);
-            end
-
 
             iter=iter+1;
             t=t+deltat; 
@@ -750,6 +750,26 @@ module rtmsim
                 Amat[i_neighbour,1]=cellcentertocellcenterx[ind,i_neighbour]
                 Amat[i_neighbour,2]=cellcentertocellcentery[ind,i_neighbour]
                 bvec[i_neighbour]=p_old[i_A]-p_old[i_P];
+            end
+            xvec=Amat[1:len_cellneighboursline,:]\bvec[1:len_cellneighboursline];
+            dpdx=xvec[1];
+            dpdy=xvec[2];
+        elseif i_method==2;
+            #least square solution to determine gradient with limiter
+            cellneighboursline=cellneighboursarray[ind,:];
+            cellneighboursline=cellneighboursline[cellneighboursline .> 0]
+            len_cellneighboursline=length(cellneighboursline)
+            bvec=Vector{Float64}(undef,len_cellneighboursline);
+            Amat=Array{Float64}(undef,len_cellneighboursline,2);  
+            wi=Vector{Float64}(undef,len_cellneighboursline);
+            for i_neighbour in 1:len_cellneighboursline;
+                i_P=ind;
+                i_A=cellneighboursarray[ind,i_neighbour];  
+                exp_limiter=2;
+                wi[i_neighbour]=1/(sqrt((cellcentertocellcenterx[ind,i_neighbour])^2+(cellcentertocellcentery[ind,i_neighbour])^2))^exp_limiter;
+                Amat[i_neighbour,1]=wi[i_neighbour]*cellcentertocellcenterx[ind,i_neighbour]
+                Amat[i_neighbour,2]=wi[i_neighbour]*cellcentertocellcentery[ind,i_neighbour]
+                bvec[i_neighbour]=wi[i_neighbour]*(p_old[i_A]-p_old[i_P]);
             end
             xvec=Amat[1:len_cellneighboursline,:]\bvec[1:len_cellneighboursline];
             dpdx=xvec[1];

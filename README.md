@@ -120,7 +120,25 @@ If the position of inlet and outlet ports is investigated, simulations with a co
 
 # Other examples of usage
 
-Show here other use cases: Permeameter with patches and race tracking (same porosity but permeablity higher by factor 10), Annulus filler with inlet and outlet, Annuls filler with cascade injection and selecting inlets interactively (1. Inspect bounding box, 2. Select inlet, 3. Run interactively, 4. Inspect flow front and optional screenshot, 5. Add additional inlet port or replace first one, 6. Continue simulation, 7. Inspect flow front and optional screenshot)
+Show here other use cases:
+
+- Permeameter with patches and race tracking (same porosity but permeablity higher by factor 10) started from GUI, 
+
+- This example shows how to modify the code. If pressure outlets are defined, wiggles at the pressure outlet are introduced. To limit these oscillations a gradient limiter is used. The function is called with i_method=2 as first argument: 
+`dpdx,dpdy=numerical_gradient(2,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);` <br>
+After compiling the code and starting the GUI the simulation is started with the following settings:<br>
+<img src="example2a.png"><br>
+The results plot shows the completely filled part with the grey inlet and outlet port and the pressure contour with the wiggles:<br>
+<img src="example2b.png"><br>
+The filling overview is:<br>
+<img src="example2c.png"><br>
+
+
+
+ Annulus filler with inlet and outlet (start from command line with i_method=2 for gradient calculation; this method is recommended if outlets are defined),
+
+
+- Annuls filler with cascade injection and selecting inlets interactively (1. Inspect bounding box, 2. Select inlet, 3. Run interactively, 4. Inspect flow front and optional screenshot, 5. Add additional inlet port or replace first one, 6. Continue simulation, 7. Inspect flow front and optional screenshot)
 
 
 # Future work
