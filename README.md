@@ -118,6 +118,10 @@ Results for coarse and fine mesh of case 3:
 <img src="validation_case3a.png"><br>
 If the position of inlet and outlet ports is investigated, simulations with a coarse mesh and short simulation time is sufficient since the flow front progagation is predicted properly. The acutal filling time can be predicted with a fine mesh. A mesh refinement study must be performed. 
 
+# Other examples
+
+Show here other use cases: Permeameter with patches and race tracking, Annulus filler with inlet and outlet, Annuls filler with cascade injection and selecting inlets interactively
+
 
 # Future work
 
