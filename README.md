@@ -143,7 +143,21 @@ The filling overview is:<br>
 
 
 
-- Annuls filler with cascade injection and selecting inlets interactively (1. Inspect bounding box, 2. Select inlet, 3. Run interactively, 4. Inspect flow front and optional screenshot, 5. Add additional inlet port or replace first one, 6. Continue simulation, 7. Inspect flow front and optional screenshot)
+- This example shows a workflow if the inlet ports are selected interactively. First, select the mesh file Select the mesh file `meshfiles\\mesh_annulusfiller1.bdf` and plot the mesh to see the bounding box size of the part:<br>
+<img src="example3a.png"><br>
+Specify the inlet port radius and press the Select inlet port button:<br>
+<img src="example3b.png"><br>
+Rotate the view with the nodes with LMB and select an inlet port location with key `p`+LMB. After selection it is highlighted:<br>
+<img src="example3c.png"><br>
+Multiple selection is possible. Then close the window and start the simulation in clicking the Start interactive button with the settings shown above. All radio button show ignore if only the interactively selected inlet is used. Sets defining different preform properties and also inlet and outlet regions can also be used in interactive mode. <br>
+<img src="example3d.png"><br>
+If cascade injection is used, select two inlet ports. The first one at the same location as before and the second one at the end of the current position of the flow front, close the window and continue the simulation with the button Continue interactive.<br>
+<img src="example3e.png"><br>
+The filling and the final pressure contour are:<br>
+<img src="example3f.png"><br>
+<img src="example3g.png"><br>
+The filling without cascade injection after 400 s is much slower: <br>
+<img src="example3h.png"><br>
 
 
 # Future work
