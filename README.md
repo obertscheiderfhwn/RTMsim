@@ -94,7 +94,7 @@ Parameter `i_model` specifies the flow model. `meshfilename` specified the relat
 The V&V cases can be executed by selecting the appropriate input file and afterwards running the simulation with this input file. The input files for the four validation cases are `input_case1_coarsemesh.txt`, `input_case1_finemesh.txt`, `input_case2_coarsemesh.txt`, `input_case2_finemesh.txt`, `input_case3_coarsemesh.txt`, `input_case3_finemesh.txt, input_case4.txt` or from the Julia terminal with `rtmsim.start_rtmsim("input_case1_coarsemesh.txt")` with the different input file name as argument. The filling overview is created with the button `Plot overview` or with `rtmsim.plot_overview(-1,-1)`;
 
 
-# Validation and verification
+# Validation and verification examples
 
 Three different test cases are available, successfully validating the Julia implementation of the RTM filling model:
 1. Validation of the software for radial flow with isotropic in-plane peremablity: The simulated flow front position after 200 s is compared with the calculated flow front postion from literature.  
@@ -118,11 +118,11 @@ Results for coarse and fine mesh of case 3:
 <img src="validation_case3b.png"><br>
 If the position of inlet and outlet ports is investigated, simulations with a coarse mesh and short simulation time is sufficient since the flow front progagation is predicted properly. The acutal filling time can be predicted with a fine mesh. A mesh refinement study must be performed. With the coarse mesh it takes approximately 50 s longer to reach the same filling state.
 
-# Other examples of usage
+# Examples of usage
 
-Show here other use cases:
+The following three examples show typical use cases how RTMsim is used by engineers:
 
-- This examples shows shows how to start a simulation with the GUI. First, inspect the mesh files and plot the pre-defined sets:<br>
+1. This examples shows shows how to start a simulation with the GUI. First, inspect the mesh files and plot the pre-defined sets:<br>
 <img src="example1d.png"><br>
 Select the mesh file `meshfiles\\mesh_permeameter1_foursets.bdf` and sett all other parameters:<br>
 <img src="example1a.png"><br>
@@ -131,10 +131,9 @@ Set 1 is the pressure inlet, set 2 and set 3 are reinforcement patches with lowe
 Continue for another 100 s simulation time:<br>
 <img src="example1c.png"><br>
 
-
-- This example shows how to modify the code. If pressure outlets are defined, wiggles at the pressure outlet are introduced. To limit these oscillations a gradient limiter is used. The function is called with i_method=2 as first argument: 
+2. This example shows how to use outlet ports and how to modify the code. If outlet ports are defined, the outlet ports are connected to the catch pot (typically at ambient pressure or evacuated). If no outlet ports are defined, these hoses are clamped. If pressure outlets are defined, wiggles at the pressure outlet are introduced. To limit these oscillations a gradient limiter is used in the function `numerical_gradient`. The function is called with i_method=2 as first argument: 
 `dpdx,dpdy=numerical_gradient(2,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);` <br>
-After compiling the code and starting the GUI the simulation is started with the following settings:<br>
+After modifying and compiling the code and starting the GUI, the simulation is started with the following settings:<br>
 <img src="example2a.png"><br>
 The results plot shows the completely filled part with the grey inlet and outlet port and the pressure contour with the wiggles:<br>
 <img src="example2b.png"><br>
@@ -143,7 +142,7 @@ The filling overview is:<br>
 
 
 
-- This example shows a workflow if the inlet ports are selected interactively. First, select the mesh file Select the mesh file `meshfiles\\mesh_annulusfiller1.bdf` and plot the mesh to see the bounding box size of the part:<br>
+3. This example shows a workflow if the inlet ports are selected interactively. First, select the mesh file Select the mesh file `meshfiles\\mesh_annulusfiller1.bdf` and plot the mesh to see the bounding box size of the part:<br>
 <img src="example3a.png"><br>
 Specify the inlet port radius and press the Select inlet port button:<br>
 <img src="example3b.png"><br>
