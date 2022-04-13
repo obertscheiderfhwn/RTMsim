@@ -101,7 +101,7 @@ r4[3] = RadioButton(r4[2],choices[3]);       push!(f4,r4[3])
 r4[4] = RadioButton(r4[3],choices[4]);       push!(f4,r4[4])
 
 #define logo
-im=Gtk.GtkImage("rtmsim_logo1_h200px_grey.png")
+im=Gtk.GtkImage("figures\\rtmsim_logo1_h200px_grey.png")
 
 #assembly elements in grid pattern
 g = GtkGrid()    #Cartesian coordinates, g[column,row]
@@ -238,7 +238,7 @@ function q_clicked(w)
     Gtk.destroy(win)
 end
 function h_clicked(w)
-    i=GtkImage("rtmsim_help.png");
+    i=GtkImage("figures\\rtmsim_help.png");
     w=GtkWindow(i,"Help");
     show(i);
 end
