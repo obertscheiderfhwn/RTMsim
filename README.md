@@ -91,27 +91,27 @@ meshfiles\\mesh_permeameter1_foursets.bdf    #meshfilename
 
 Parameter `i_model` specifies the flow model (`=1` for iso-thermal RTM). `meshfilename` specified the relative or absolute path to the used mesh file. `tmax` defines the simulated filling time. The parameters in the forth line define the adiabatic equation of state (reference pressure, reference density, adiabatic index) for air and the dynamic viscosity of the resin. The parameters in the fifth line define injection pressure and initial cavity pressure. The parameters in the lines 6 to 10 specify the preform parameters for the main preform and the optional four sets with different preform parameters. The preform parameters of the four optional sets are only used if the corresponding patch type in line 11 is set equal to 2. If equal to 0, the patch is ignored and part of the main preform. If equal to 1, the patch is a pressure inlet with injection pressure. If equal to 3, the patch is a pressure outlet with initial cavity pressure. The sets for the patches are defined in the mesh file in ascending order. If less than four are defined, patch types cannot be assigned. The preform parameters are preform thickness, porosity, permeability in first principal cell direction, permeablitiy fraction alpha specifies the permeablity in the second principal cell direction as alpha times permeablity in the first principal direction and the three components of a reference vector which is projected onto the cells to define the first principal cell direction. The parameters in line 12 are used for continuing a simulation, if `i_restart=1` with the data saved in file `restartfilename`. In line 13 the interactive mode can be turned on if `i_interactive=1`. At selected points in the preform (plot the mesh with second parameter `=2` and select with `p`+LMB), additional inlet port with radius `r_p` are assigned. If all patch types are `=0`, only the selected inlet ports are used. Otherwise the settings are cummulative. The last parameter `n_pics` determines the number of intermediate outputs.
 
-The V&V cases can be executed by selecting the appropriate input file and afterwards running the simulation with this input file. The input files for the four validation cases are `input_case1_coarsemesh.txt`, `input_case1_finemesh.txt`, `input_case2_coarsemesh.txt`, `input_case2_finemesh.txt`, `input_case3_coarsemesh.txt`, `input_case3_finemesh.txt, input_case4.txt` or from the Julia terminal with `rtmsim.start_rtmsim("input_case1_coarsemesh.txt")` with the different input file name as argument. The filling overview is created with the button `Plot overview` or with `rtmsim.plot_overview(-1,-1)`;
+The validation and verification cases can be executed by selecting the appropriate input file and afterwards running the simulation with this input file. The input files for the four validation cases are `input_case1_coarsemesh.txt`, `input_case1_finemesh.txt`, `input_case2_coarsemesh.txt`, `input_case2_finemesh.txt`, `input_case3_coarsemesh.txt`, `input_case3_finemesh.txt, input_case4.txt` or from the Julia terminal with `rtmsim.start_rtmsim("inputfiles\\input_case1_coarsemesh.txt")` with the different input file name as argument. The input file names are saved in directory `inputfiles`. The filling overview is created with the button `Plot overview` or with `rtmsim.plot_overview(-1,-1)`. 
 
 
 # Validation and verification examples
 
 Three different test cases are available, successfully validating the Julia implementation of the RTM filling model:
-1. Validation of the software for radial flow with isotropic in-plane peremablity: The simulated flow front position after 200 s is compared with the calculated flow front postion from literature.  
-2. Verification of the software for radial flow with tilted orthotropic in-plane permeablity: The simulated tilted elliptical flow front is analysed and the calculated orthotropic permeablity is compared with the input.
-3. Comparison of the simulated flow front position for a complex annulus filler-like part with the simulated flow front position with Ansys Fluent and comparison of the simulated filling pattern with results from a myRTM simulation.
+1. Validation of the software tool for radial flow with isotropic in-plane peremablity: The simulated flow front position after 200 s is compared with the calculated flow front postion from literature.  
+2. Verification of the software tool for radial flow with tilted orthotropic in-plane permeablity: The simulated tilted elliptical flow front is analysed and the calculated orthotropic permeablity is compared with the simulation input.
+3. Comparison of the simulated flow front position for a complex annulus filler-like part with the simulated flow front position from Ansys Fluent and comparison of the simulated filling pattern with results from a myRTM simulation.
 
-The following pictures show the simulation results (after rotating the views with LMB) for the test cases and which have to be compared with V&V data.
+The following passages show and explain the simulation results (after rotating the views with LMB) for the test cases.
 
 Results for coarse and fine mesh of case 1:
 <img src="figures/validation_case1a.png"><br>
 <img src="figures/validation_case1b.png"><br>
-According to an anlytical estimation, the flow front after 50, 100, 150 and 200 s is a circle with radius 0.114, 0.150, 0.178 and 0.200 mm. The values for the fine mesh agree well with the results from the analytical formula. The values for the coarse mesh show an error of <15% which decreases significantly in the course of time but the shape is no smooth circle.
+According to an analytical estimation, the flow front after 50, 100, 150 and 200 s is a circle with radius 0.114, 0.150, 0.178 and 0.200 mm. The values for the fine mesh agree well with the results from the analytical formula. The values for the coarse mesh show an error of <15% which decreases significantly in the course of time but the shape is no smooth circle.
 
 Results for coarse and fine mesh of case 2:
 <img src="figures/validation_case2a.png"><br>
 <img src="figures/validation_case2b.png"><br>
-Simulation input is porosity 0.70, permeability 3.0e-10 m^2 in first principal direction, 30° to the horizontal and permeability 1.5e-10 m^2 in second principal direction. Analyzing the flow front after 200 s, the orthotropic permeability is described by 2.91e-10 m^2, 1.41e-10 m^2 and angle 30° for the fine mesh and 2.43e-10 m^2, 1.17e-10 m^2 and 29° for the coarse mesh. For the fine mesh (2198 cells for a domain with 600 × 600 mm), this reverse engineering shows very good agreement of the calculated permeability values with the values used as simulation input. For the coarse mesh (588 cells) the agreement is still acceptable.
+Simulation input is porosity 0.70, permeability 3.0e-10 m^2 in first principal direction 30° to the horizontal and permeability 1.5e-10 m^2 in second principal direction. Analyzing the flow front after 200 s, the orthotropic permeability is described by 2.91e-10 m^2, 1.41e-10 m^2 and angle 30° for the fine mesh and 2.43e-10 m^2, 1.17e-10 m^2 and 29° for the coarse mesh. For the fine mesh (2198 cells for a domain with 600 × 600 mm), this reverse engineering shows very good agreement of the calculated orthotropic permeability  with the values used as simulation input. For the coarse mesh (588 cells) the agreement is still acceptable.
 
 Results for coarse and fine mesh of case 3:
 <img src="figures/validation_case3a.png"><br>
@@ -122,35 +122,35 @@ If the position of inlet and outlet ports is investigated, simulations with a co
 
 The following three examples show typical use cases how RTMsim is used by engineers:
 
-1. This examples shows shows how to start a simulation with the GUI. First, inspect the mesh files and plot the pre-defined sets:<br>
+1. This examples shows how to start a simulation with the GUI. First, inspect the mesh file and plot the pre-defined sets:<br>
 <img src="figures/example1d.png"><br>
-Select the mesh file `meshfiles\\mesh_permeameter1_foursets.bdf` and sett all other parameters:<br>
+Select the mesh file `meshfiles\\mesh_permeameter1_foursets.bdf` and set all other parameters as shown:<br>
 <img src="figures/example1a.png"><br>
-Set 1 is the pressure inlet, set 2 and set 3 are reinforcement patches with lower permeability and set 4 is a racetracking channel between the main preform and set 3 with same porosity but a factor 10 higher permeability than the main preform. Plot the filling overview after 200 s simulation time:<br>
+Set 1 is the pressure inlet, set 2 and set 3 are reinforcement patches with lower permeability and set 4 is a racetracking channel between the main preform and set 3 with same porosity but a factor 10 higher permeability than the main preform (racetracking with higher permeablity=higher flow speed takes place in thin regions between different patches or at the preform boundary). Start the simulation and plot the filling overview after 200 s simulation time:<br>
 <img src="figures/example1b.png"><br>
-Continue for another 100 s simulation time:<br>
+Continue the simulation for another 100 s simulation time and plot the filling overview:<br>
 <img src="figures/example1c.png"><br>
 
 2. This example shows how to use outlet ports and how to modify the code. If outlet ports are defined, the outlet ports are connected to the catch pot (typically at ambient pressure or evacuated). If no outlet ports are defined, these hoses are clamped. If pressure outlets are defined, wiggles at the pressure outlet are introduced. To limit these oscillations a gradient limiter is used in the function `numerical_gradient`. The function is called with i_method=2 as first argument: 
 `dpdx,dpdy=numerical_gradient(2,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);` <br>
 After modifying and compiling the code and starting the GUI, the simulation is started with the following settings:<br>
 <img src="figures/example2a.png"><br>
-The results plot shows the completely filled part with the grey inlet and outlet port and the pressure contour with the wiggles:<br>
+The results plot shows the completely filled part with the grey inlet and outlet ports and the pressure contour with the wiggles:<br>
 <img src="figures/example2b.png"><br>
 The filling overview is:<br>
 <img src="figures/example2c.png"><br>
 
 
 
-3. This example shows a workflow if the inlet ports are selected interactively. First, select the mesh file Select the mesh file `meshfiles\\mesh_annulusfiller1.bdf` and plot the mesh to see the bounding box size of the part:<br>
+3. This example shows a workflow for selecting the inlet ports interactively. First, select the mesh file `meshfiles\\mesh_annulusfiller1.bdf` and plot the mesh to see the bounding box size of the part:<br>
 <img src="figures/example3a.png"><br>
 Specify the inlet port radius and press the Select inlet port button:<br>
 <img src="figures/example3b.png"><br>
-Rotate the view with the nodes with LMB and select an inlet port location with key `p`+LMB. After selection it is highlighted:<br>
+Rotate the view with the nodes with LMB and select an inlet port location with key `p`+LMB. After selection the node is highlighted:<br>
 <img src="figures/example3c.png"><br>
-Multiple selection is possible. Then close the window and start the simulation in clicking the Start interactive button with the settings shown above. All radio button show ignore if only the interactively selected inlet is used. Sets defining different preform properties and also inlet and outlet regions can also be used in interactive mode. <br>
+Selection of multiple nodes is possible. Then close the graphics window and start the simulation with the settings shown above by clicking the Start interactive button. All radio buttons show ignore if only the interactively selected inlet is used. In general, sets defining different preform properties or additional inlet ports or outlet regions can also be used in interactive mode. Plot the filling overview:<br>
 <img src="figures/example3d.png"><br>
-If cascade injection is used, select two inlet ports. The first one at the same location as before and the second one at the end of the current position of the flow front, close the window and continue the simulation with the button Continue interactive.<br>
+If cascade injection is planned (additional inlet port which is activated just befor the flow front reaches this location), select two inlet ports after clicking the button Select inlet port. The first one at the same location as before and the second one at the end of the current position of the flow front. Close the graphics window and continue the simulation with the button Continue interactive.<br>
 <img src="figures/example3e.png"><br>
 The filling and the final pressure contour are:<br>
 <img src="figures/example3f.png"><br>
