@@ -559,7 +559,7 @@ module rtmsim
                     #Pressure gradient calculation
                     dpdx,dpdy=numerical_gradient(1,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);
 
-                    #FV scheme for continuity equation
+                    #FV scheme for rho,u,v,vof conservation laws
                     cellneighboursline=cellneighboursarray[ind,:];
                     cellneighboursline=cellneighboursline[cellneighboursline .> 0]
                     len_cellneighboursline=length(cellneighboursline)
