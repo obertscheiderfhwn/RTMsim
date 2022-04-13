@@ -207,7 +207,12 @@ module rtmsim
 
         #Output simulation parameter overview
         print("\n")
-        print("RTMsim started with parameters:\n")
+        print("RTMsim started with the following parameters:\n")
+        print("i_model=",i_model,"\n")
+            if i_model!=1;
+                errorstring=string("Only iso-thermal RTM implemented, i.e. i_model must be =1 instead of ",string(i_model)*"\n"); 
+                error(errorstring);
+            end
         print("meshfilename=",meshfilename,"\n")
             if ~isfile(meshfilename);
                 errorstring=string("File ",meshfilename," not existing"* "\n"); 
