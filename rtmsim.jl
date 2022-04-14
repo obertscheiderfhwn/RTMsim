@@ -563,7 +563,7 @@ module rtmsim
                 if celltype[ind]==1  || celltype[ind]==-3; 
                     #Pressure gradient calculation
                     dpdx,dpdy=numerical_gradient(1,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);
-
+                    
                     #FV scheme for rho,u,v,vof conservation laws
                     cellneighboursline=cellneighboursarray[ind,:];
                     cellneighboursline=cellneighboursline[cellneighboursline .> 0]
@@ -631,7 +631,7 @@ module rtmsim
                     end
                 end
             end
-            
+
             #boundary conditions, only for pressure boundary conditions
             for ind in 1:N;
                 if celltype[ind]==-1;  #pressure inlet
@@ -658,7 +658,6 @@ module rtmsim
             rho_old=rho_new;
             p_old=p_new;
             gamma_old=gamma_new;
-
 
             #Progress bar with percentage during run
             prozent = (t/tmax)*100;  
@@ -732,7 +731,6 @@ module rtmsim
                 # -array preparation for next time step
                 # -write save data to output files
             end
-            
 
             iter=iter+1;
             t=t+deltat; 
@@ -838,8 +836,8 @@ module rtmsim
             gamma_A=vars_A[4];
             n_x=meshparameters[1];
             n_y=meshparameters[2];
-            A=meshparameters[3];                              
-            n_dot_rhou=n_dot_u*rho_A;
+            A=meshparameters[3];        
+            n_dot_rhou=n_dot_u*0.5*(rho_A+rho_P);
             phi=1;
             F_rho_num_add=n_dot_rhou*phi*A;
             if n_dot_u<=0 
