@@ -131,7 +131,7 @@ Set 1 is the pressure inlet, set 2 and set 3 are reinforcement patches with lowe
 Continue the simulation for another 100 s simulation time and plot the filling overview:<br>
 <img src="figures/example1c.png"><br>
 
-2. This example shows how to use outlet ports and how to modify the code. If outlet ports are defined, the outlet ports are connected to the catch pot (typically at ambient pressure or evacuated). If no outlet ports are defined, these hoses are clamped. If pressure outlets are defined, wiggles at the pressure outlet are introduced. To limit these oscillations a gradient limiter is used in the function `numerical_gradient`. The function is called with i_method=2 as first argument: 
+2. This example shows how to use outlet ports and how to modify the code. If outlet ports are defined, the outlet ports are connected to the catch pot (typically at ambient pressure or evacuated). If no outlet ports are defined, these hoses are clamped. If pressure outlets are defined, wiggles at the pressure outlet can be introduced. To limit these oscillations a gradient limiter is used in the function `numerical_gradient`. The function is called with i_method=2 as first argument: 
 `dpdx,dpdy=numerical_gradient(2,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);` <br>
 After modifying and compiling the code and starting the GUI, the simulation is started with the following settings:<br>
 <img src="figures/example2a.png"><br>
