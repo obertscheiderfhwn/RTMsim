@@ -212,6 +212,6 @@ function numerical_gradient(i_method,ind,p_old,cellneighboursarray,cellcentertoc
         end
         return dpdx,dpdy
     end
-    ```
+```
 
 After modifying and compiling the RTMsim module, a simulation can be started with the GUI or with the terminal.
