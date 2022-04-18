@@ -131,7 +131,7 @@ Set 1 is the pressure inlet, set 2 and set 3 are reinforcement patches with lowe
 Continue the simulation for another 100 s simulation time and plot the filling overview:<br>
 <img src="figures/example1c.png"><br>
 
-2. This example shows how to use outlet ports and how to modify the code. If outlet ports are defined, the outlet ports are connected to the catch pot (typically at ambient pressure or evacuated). If no outlet ports are defined, these hoses are clamped. If pressure outlets are defined, wiggles at the pressure outlet can be introduced. To limit these oscillations a gradient limiter is used in the function `numerical_gradient`. The function is called with i_method=2 as first argument: 
+2. This example shows how to use outlet ports and how to customize the code. If outlet ports are defined, the outlet ports are connected to the catch pot (typically at ambient pressure or evacuated). If no outlet ports are defined, these hoses are clamped. If wiggles (oscillations) are present in the pressure contour plot, a gradient limiter is used in the function `numerical_gradient`. The function is called with i_method=2 as first argument: 
 `dpdx,dpdy=numerical_gradient(2,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);` <br>
 After modifying and compiling the code and starting the GUI, the simulation is started with the following settings:<br>
 <img src="figures/example2a.png"><br>
@@ -139,7 +139,8 @@ The results plot shows the completely filled part with the grey inlet and outlet
 <img src="figures/example2b.png"><br>
 The filling overview is:<br>
 <img src="figures/example2c.png"><br>
-
+The filling overview without pressure shows only slighly differences at the end of the filling:<br>
+<img src="figures/example2e.png"><br>
 
 
 3. This example shows a workflow for selecting the inlet ports interactively. First, select the mesh file `meshfiles\\mesh_annulusfiller1.bdf` and plot the mesh to see the bounding box size of the part:<br>
@@ -165,3 +166,7 @@ The source code is prepared for the following extensions:
 - Import mesh file in different format. Selection is based on the extension of the mesh file.
 - Input parameter `i_model` (for iso-thermal RTM `=1`) is used for adding additional functionalities. E.g. adding temperature and degree-of-cure equations with variable resin viscosity ar for VARI with variable porosity and permeability.
 - Parameter `i_method` in the functions for numerical differentiation and flux functions can be used to implement different numerical schemes. E.g. gradient limiter or second-order upwinding.
+
+E.g. a numerical gradient calculation with gradient limiter is used if the function `numerical_gradient` is called with i_method=2 as first argument: 
+`dpdx,dpdy=numerical_gradient(2,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);` <br>
+After modifying and compiling the RTMsim module, a simulation can be started with the GUI or with the terminal.
