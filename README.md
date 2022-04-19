@@ -139,7 +139,7 @@ The results plot shows the completely filled part with the grey inlet and outlet
 <img src="figures/example2b.png"><br>
 The filling overview is:<br>
 <img src="figures/example2c.png"><br>
-The filling overview without pressure shows only slighly differences at the very end of the filling:<br>
+The filling overview without pressure outlet shows only small differences at the very end of the filling:<br>
 <img src="figures/example2e.png"><br>
 
 
