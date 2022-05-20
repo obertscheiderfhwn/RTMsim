@@ -94,7 +94,7 @@ Parameter `i_model` specifies the flow model (`=1` for iso-thermal RTM). `meshfi
 The validation and verification cases can be executed by selecting the appropriate input file and afterwards running the simulation with this input file. The input files for the four validation cases are `input_case1_coarsemesh.txt`, `input_case1_finemesh.txt`, `input_case2_coarsemesh.txt`, `input_case2_finemesh.txt`, `input_case3_coarsemesh.txt`, `input_case3_finemesh.txt, input_case4.txt` or from the Julia terminal with `rtmsim.start_rtmsim("inputfiles\\input_case1_coarsemesh.txt")` with the different input file name as argument. The input file names are saved in directory `inputfiles`. The filling overview is created with the button `Plot overview` or with `rtmsim.plot_overview(-1,-1)`. 
 
 
-# Validation and verification examples
+# Validation and verification cases
 
 Three different test cases are available, successfully validating the Julia implementation of the RTM filling model:
 1. Validation of the software tool for radial flow with isotropic in-plane peremablity: The simulated flow front position after 200 s is compared with the calculated flow front postion from literature.  
@@ -118,7 +118,7 @@ Results for coarse and fine mesh of case 3:
 <img src="figures/validation_case3b.png"><br>
 If the position of inlet and outlet ports is investigated, simulations with a coarse mesh and short simulation time is sufficient since the flow front progagation is predicted properly. The acutal filling time can be predicted with a fine mesh. A mesh refinement study must be performed. With the coarse mesh it takes approximately 50 s longer to reach the same filling state.
 
-# Examples of usage
+# Use cases
 
 The following three examples show typical use cases how RTMsim is used by engineers:
 
