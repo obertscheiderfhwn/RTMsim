@@ -30,7 +30,8 @@ module rtmsim
     using Random
     using FileIO    
     using ProgressMeter
-    GLMakie.activate!()
+    GLMakie.activate!()    
+    #using MAT  #temporary output in Matlab mat-format
             
     function start_rtmsim(inputfilename)
         # reads the text input file and calls the solver with the read parameters
@@ -148,7 +149,7 @@ module rtmsim
         t3_val,porosity3_val,K3_val,alpha3_val,refdir13_val,refdir23_val,refdir33_val,
         t4_val,porosity4_val,K4_val,alpha4_val,refdir14_val,refdir24_val,refdir34_val,
         patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_restart,restartfilename,i_interactive,r_p,n_pics);
-        # RTMsim solver with man steps
+        # RTMsim solver with main steps
         # - Simulation initialization
         # - Read mesh file and prepare patches  
         # - Find neighbouring cells
@@ -700,6 +701,9 @@ module rtmsim
                     end
                     outputfilename=string("output_", string(n_out), ".jld2")                
                     @save outputfilename t rho_new u_new v_new p_new gamma_new gridx gridy gridz cellgridid N n_out
+                    #temporary output in Matlab mat-format
+                    #outputfilename=string("output_", string(n_out), ".mat") 
+                    #matwrite(outputfilename, Dict("t" => t,"rho_new" => rho_new,"u_new" => u_new,"v_new" => v_new,"p_new" => p_new,"gamma_new" => gamma_new,"gridx" => gridx,"gridy" => gridy,"gridz" => gridz,"cellgridid" => cellgridid,"N" => N,"n_out" => n_out))
                     outputfilename=string("results.jld2")
                     @save outputfilename t rho_new u_new v_new p_new gamma_new gridx gridy gridz cellgridid N n_out
                     if t>=(tmax+t_restart)-deltat;
