@@ -90,5 +90,16 @@ Most of the test cases are so-called numerical permeameter experiments, see e.g.
 ![Results for test case 3. The results for the new simulation tool with the fine mesh are in good agreement with the ANSYS Fluent results for both filling pattern and filling time. myRTM shows similar filling patterns for same filling degrees as the new simulation tool with the coarse mesh. This comparison shows that a coarse mesh can be used for filling simulations where only the flow front propagation is investigated, if the filling time is important a mesh refinement study must be performed. \label{fig:pic3}](figures/validation_pic3.png)
 
 
+# Outlook
+A customized version of the implemented PDE solver is used for a bachelor thesis at the ISSE Augsburg. ADD A PASSAGE ABOUT THE TOPIC.
+
+The source code is prepared for the following extensions:
+- Import of mesh file in different format.
+- Additional functionalities, e.g. adding temperature and degree-of-cure equations with variable resin viscosity ar for VARI with variable porosity and permeability.
+- Different methods for numerical differentiation and for the calculation of the numerical flux functions .
+
+
+
+
 # References
 

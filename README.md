@@ -210,5 +210,6 @@ In the function a case selection determines the used method:
     return dpdx,dpdy
 end
 ```
-
 After modifying and compiling the RTMsim module, a simulation can be started with the GUI or with the terminal.
+
+Suggestions for functionalities to be implemented and user feedback from case studies with this software are appreciated. 
