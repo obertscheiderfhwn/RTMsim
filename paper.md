@@ -91,7 +91,7 @@ Most of the test cases are so-called numerical permeameter experiments, see e.g.
 
 
 # Outlook
-A customized version of the implemented PDE solver is used for a bachelor thesis at the ISSE Augsburg. ADD A PASSAGE ABOUT THE TOPIC.
+A customized version of the implemented PDE solver is used for a bachelor thesis at the ISSE Augsburg. Reinforcement learing is used...
 
 The source code is prepared for the following extensions:
 - Import of mesh file in different format.
