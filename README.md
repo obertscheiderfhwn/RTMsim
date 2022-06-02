@@ -213,3 +213,13 @@ end
 After modifying and compiling the RTMsim module, a simulation can be started with the GUI or with the terminal.
 
 Suggestions for functionalities to be implemented and user feedback from case studies with this software are appreciated. 
+
+# Citation
+If RTMsim is used for research or development, please use the following BiBTeX entry:
+```
+@misc{RTMsim,
+  author =       {Obertscheider, Christof and Fauster, Ewald},
+  title =        {RTMsim - A Julia module for filling simulations in Resin Transfer Moulding},
+  howpublished = {\url{https://github.com/obertscheiderfhwn/RTMsim}},
+  year =         {2022}
+}
