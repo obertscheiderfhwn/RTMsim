@@ -131,9 +131,7 @@ Set 1 is the pressure inlet, set 2 and set 3 are reinforcement patches with lowe
 Continue the simulation for another 100 s simulation time and plot the filling overview:<br>
 <img src="figures/example1c.png"><br>
 
-2. This example shows how to use outlet ports and how to customize the code. If outlet ports are defined, the outlet ports are connected to the catch pot (typically at ambient pressure or evacuated). If no outlet ports are defined, these hoses are clamped. If wiggles (oscillations) are present in the pressure contour plot, a gradient limiter is used in the function `numerical_gradient`. The function is called with i_method=2 as first argument: 
-`dpdx,dpdy=numerical_gradient(2,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);` <br>
-After modifying and compiling the code and starting the GUI, the simulation is started with the following settings:<br>
+2. This example shows how to use outlet ports. If outlet ports are defined, the outlet ports are connected to the catch pot (typically at ambient pressure or evacuated). If no outlet ports are defined, these hoses are clamped. The simulation is started with the following settings:<br>
 <img src="figures/example2a.png"><br>
 The results plot shows the completely filled part with the grey inlet and outlet ports and the pressure contour with the wiggles:<br>
 <img src="figures/example2b.png"><br>
@@ -167,11 +165,13 @@ The source code is prepared for the following extensions:
 - Input parameter `i_model` (for iso-thermal RTM `=1`) is used for adding additional functionalities. E.g. adding temperature and degree-of-cure equations with variable resin viscosity ar for VARI with variable porosity and permeability.
 - Parameter `i_method` in the functions for numerical differentiation and flux functions can be used to implement different numerical schemes. E.g. gradient limiter or second-order upwinding.
 
+E.g. if wiggles (oscillations) are present in the pressure contour plot, a gradient limiter is used in the function `numerical_gradient`. The function is called with i_method=2 as first argument: 
+`dpdx,dpdy=numerical_gradient(2,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);` <br>
+
 E.g. a numerical gradient calculation with gradient limiter is used if the function `numerical_gradient` is called with i_method=2 as first argument: 
 `dpdx,dpdy=numerical_gradient(2,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);` <br>
 In the function a case selection determines the used method:
 ```
-function numerical_gradient(i_method,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);
     if i_method==1;
         #least square solution to determine gradient
         cellneighboursline=cellneighboursarray[ind,:];
