@@ -167,9 +167,6 @@ The source code is prepared for the following extensions:
 
 E.g. if wiggles (oscillations) are present in the pressure contour plot, a gradient limiter is used in the function `numerical_gradient`. The function is called with i_method=2 as first argument: 
 `dpdx,dpdy=numerical_gradient(2,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);` <br>
-
-E.g. a numerical gradient calculation with gradient limiter is used if the function `numerical_gradient` is called with i_method=2 as first argument: 
-`dpdx,dpdy=numerical_gradient(2,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);` <br>
 In the function a case selection determines the used method:
 ```
     if i_method==1;
