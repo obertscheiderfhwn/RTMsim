@@ -8,16 +8,16 @@
 #   change to the directory with the RTMsim repository with cd("path") and 
 #   call all functions after include("rtmsim.jl"). 
 #   Popular functions are:
-#       rtmsim.plot_mesh(1,"meshfiles\\mesh_permeameter1_foursets.bdf") for plotting the mesh defined in the bdf-file
+#       rtmsim.plot_mesh("meshfiles\\mesh_permeameter1_foursets.bdf",1) for plotting the mesh defined in the bdf-file
 #       rtmsim.plot_sets("meshfiles\\mesh_permeameter1_foursets.bdf") for plotting the sets specified in the bdf-file
 #       rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,0,"results.jld2",0,0.01,16) for starting a simulation with different patches and race tracking
-#       rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,3,0,"results.jld2",1,0.01,16) for continuing the previous simulation
+#       rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,1,"results.jld2",0,0.01,16) for continuing the previous simulation
 #       rtmsim.plot_mesh("meshfiles\\mesh_annulusfiller1.bdf",2) for the manual selection of inlet ports
 #       rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_annulusfiller1.bdf",200, 0.35e5,1.205,1.4,0.06, 0.35e5,0.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 0,0,0,0, 0,"results.jld2",1,0.01,16) for starting only with the interactively selected inlet ports
 #       rtmsim.plot_results("results.jld2") for plotting the final filling and pressure contours
 #       rtmsim.plot_overview(-1,-1) for plotting the filling contours at four equidistant time instances
 #       rtmsim.plot_filling(-1,-1) for plotting the filling at different time instances selected with a slider bar
-#       rtmsim.start_rtmsim("input.txt") for starting a simulation with the parameters specified in the text file input.txt
+#       rtmsim.start_rtmsim("inputfiles\\input.txt") for starting a simulation with the parameters specified in the text file input.txt
 #
 
 module rtmsim
@@ -272,7 +272,7 @@ module rtmsim
                 errorstring="Injection pressure must be greater than initial pressure"
                 error(errorstring)
             end
-            if p_a_val<=0.0 || p_init_val<=0.0;
+            if p_a_val<=0.0 || p_init_val<0.0;
                 errorstring="Wrong value for p_a_val,p_init_val (must be >0.0,>0.0)"
                 error(errorstring)
             end 
