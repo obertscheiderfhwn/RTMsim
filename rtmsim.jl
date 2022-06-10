@@ -378,7 +378,7 @@ module rtmsim
         end
         if ~isempty(patchids3); 
             if patchtype3val==1;        
-                print("patch 4 is pressure inlet \n"); 
+                print("patch 3 is pressure inlet \n"); 
             elseif patchtype3val==2;        
                 print(string("parameters for patch 3: ",string(patchparameters3), "\n" ) );
                 if patchparameters3[1]<=0.0 || patchparameters3[1]>1.0 || patchparameters3[2]<=0.0 || patchparameters3[3]<=0 || patchparameters3[4]<=0;
