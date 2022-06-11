@@ -564,6 +564,7 @@ module rtmsim
                 if celltype[ind]==1  || celltype[ind]==-3; 
                     #Pressure gradient calculation
                     dpdx,dpdy=numerical_gradient(1,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);
+                    #dpdx,dpdy=numerical_gradient(3,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);
                     
                     #FV scheme for rho,u,v,vof conservation laws
                     cellneighboursline=cellneighboursarray[ind,:];
@@ -781,6 +782,35 @@ module rtmsim
             xvec=Amat[1:len_cellneighboursline,:]\bvec[1:len_cellneighboursline];
             dpdx=xvec[1];
             dpdy=xvec[2];
+        elseif i_method==3;
+            #least square solution to determine gradient - runtime optimized
+            cellneighboursline=cellneighboursarray[ind,:];
+            cellneighboursline=cellneighboursline[cellneighboursline .> 0]
+            len_cellneighboursline=length(cellneighboursline)
+            bvec=Vector{Float64}(undef,len_cellneighboursline);
+            Amat=Array{Float64}(undef,len_cellneighboursline,2);  
+            for i_neighbour in 1:len_cellneighboursline;
+                i_P=ind;
+                i_A=cellneighboursarray[ind,i_neighbour];  
+                Amat[i_neighbour,1]=cellcentertocellcenterx[ind,i_neighbour]
+                Amat[i_neighbour,2]=cellcentertocellcentery[ind,i_neighbour]
+                bvec[i_neighbour]=p_old[i_A]-p_old[i_P];
+            end
+            #xvec=Amat[1:len_cellneighboursline,:]\bvec[1:len_cellneighboursline];
+            #dpdx=xvec[1];
+            #dpdy=xvec[2];
+
+            Aplus=transpose(Amat)*Amat;
+            a=Aplus[1,1]
+            b=Aplus[1,2]
+            c=Aplus[2,1]
+            d=Aplus[2,2] 
+            bvec_mod=transpose(Amat)*bvec
+            inv = 1/(a * d - b * c)
+            # 1 / (ad -bc) * [d -b; -c a]
+            dpdx = inv * d * bvec_mod[1] - inv * b * bvec_mod[2]
+            dpdy = -inv * c * bvec_mod[1] + inv * a * bvec_mod[2]
+
         end
         return dpdx,dpdy
     end
