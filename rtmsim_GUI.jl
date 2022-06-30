@@ -13,10 +13,10 @@ using Gtk.ShortNames, Gtk.GConstants, Gtk.Graphics
 win = GtkWindow("RTMsim"); 
 
 #define buttons
-sm=GtkButton("Select meshfile");pm=GtkButton("Plot mesh");ps=GtkButton("Plot sets")
+sm=GtkButton("Select mesh file");pm=GtkButton("Plot mesh");ps=GtkButton("Plot sets")
 ss=GtkButton("Start simulation");cs=GtkButton("Continue simulation")
 sel=GtkButton("Select inlet port"); si=GtkButton("Start interactive");ci=GtkButton("Continue interactive");
-pr=GtkButton("Plot results")
+sr=GtkButton("Select results file");pr=GtkButton("Plot results")
 po=GtkButton("Plot overview")
 pf=GtkButton("Plot filling")
 q=GtkButton("Quit")
@@ -110,7 +110,7 @@ set_gtk_property!(g, :row_spacing, 5)
 g[1,1]=sm; g[2,1] = mf; g[3,1] = pm;  g[4,1] = ps;  g[7,1] = in1;  g[8,1] = in2;  g[9,1] = in3;              
            g[2,2] = t;  g[3,2] = ss;  g[4,2] = cs; 
            g[2,3] = r;  g[3,3] = sel; g[4,3] = si; g[5,3] = ci; 
-g[2,4] = rf; g[3,4] = pr; g[4,4] = po;g[5,4] = pf;
+g[1,4] = sr; g[2,4] = rf; g[3,4] = pr; g[4,4] = po;g[5,4] = pf;
 g[7:10,6:9] = im;
                                  g[3,11] = f1;   g[4,11] = f2;   g[5,11] = f3;   g[6,11] = f4;
 g[1,12] = par_1; g[2,12] = p0_1; g[3,12] = p1_1; g[4,12] = p2_1; g[5,12] = p3_1; g[6,12] = p4_1; 
@@ -126,6 +126,10 @@ push!(win, g)
 function sm_clicked(w)
     str = pick_file(pwd(),filterlist="bdf");
     set_gtk_property!(mf,:text,str);
+end
+function sr_clicked(w)
+    str = pick_file(pwd(),filterlist="jld2");
+    set_gtk_property!(rf,:text,str);
 end
 function pm_clicked(w)
     str = get_gtk_property(mf,:text,String)
@@ -253,6 +257,7 @@ end
 
 #callbacks
 signal_connect(sm_clicked,sm,"clicked")
+signal_connect(sr_clicked,sr,"clicked")
 signal_connect(pm_clicked,pm,"clicked")
 signal_connect(ps_clicked,ps,"clicked")
 signal_connect(ss_clicked,ss,"clicked");

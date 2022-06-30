@@ -18,7 +18,8 @@
 #       rtmsim.plot_overview(-1,-1) for plotting the filling contours at four equidistant time instances
 #       rtmsim.plot_filling(-1,-1) for plotting the filling at different time instances selected with a slider bar
 #       rtmsim.start_rtmsim("inputfiles\\input.txt") for starting a simulation with the parameters specified in the text file input.txt
-#
+#       rtmsim.rtmsim_rev1(1,"meshfiles\\mesh_permeameter1_meshrefinement.bdf",40, 101325,1000,200,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,0,0,0,0,"results.jld2",0,0.01,16) for nearly incompressible fluid
+
 
 module rtmsim
     using Glob
@@ -323,12 +324,32 @@ module rtmsim
             b=[p_int1;p_int3;p_int4];
             apvals=A\b;
             ap1=apvals[1];ap2=apvals[2];ap3=apvals[3];
-        T_a=Float64(295);
-        T_b=Float64(295);
-        T_init=Float64(295);
         rho_a=(p_a/kappa)^(Float64(1)/gamma);
         rho_b=(p_b/kappa)^(Float64(1)/gamma);
         rho_init=(p_init/kappa)^(Float64(1)/gamma);
+
+        if gamma>=100;  #insert here coefficients for an incompressible EOS with resin mass density as rho_ref 
+                        #at p_b and 0.9*rho_ref at p_a but the EOS is for deltap and consequently normalized pressure values
+            ap1=0;
+            ap2=(p_b-p_init)/(0.1*rho_ref);
+            ap3=p_b-(p_b-p_init)/0.1; 
+            rho_a=p_a/ap2-ap3/ap2;
+            rho_b=p_b/ap2-ap3/ap2;
+            rho_init=p_init/ap2-ap3/ap2;
+            print(string("ap1: ",string(ap1) , "\n" ) );
+            print(string("ap2: ",string(ap2) , "\n" ) ); 
+            print(string("ap3: ",string(ap3) , "\n" ) ); 
+            print(string("p_a: ",string(p_a) , "\n" ) );
+            print(string("p_b: ",string(p_b) , "\n" ) );
+            print(string("p_init: ",string(p_init) , "\n" ) );
+            print(string("rho_a: ",string(rho_a) , "\n" ) );
+            print(string("rho_b: ",string(rho_b) , "\n" ) );
+            print(string("rho_init: ",string(rho_init) , "\n" ) );
+        end
+        
+        T_a=Float64(295);
+        T_b=Float64(295);
+        T_init=Float64(295);
         gamma_a=Float64(1.0);
         gamma_b=Float64(1.0);    
         gamma_init=Float64(0.0);
@@ -402,7 +423,7 @@ module rtmsim
                 print("patch 4 is pressure outlet \n");   
             end
         end
-        if patchtype1val!=1 && patchtype2val!=1 && patchtype3val!=1 && patchtype3val!=1 && i_interactive==0
+        if patchtype1val!=1 && patchtype2val!=1 && patchtype3val!=1 && patchtype3val!=1 && i_interactive==0 && i_restart==0
             errorstring=string("No inlet defined" * "\n"); 
             error(errorstring);
         end
@@ -531,10 +552,12 @@ module rtmsim
         end
 
         #Abort if no pressure inlet is defined, neither interactively nor as patch
-        inds1=findall(isequal(-1),celltype);
-        if isempty(inds1)
-            errorstring="No pressure inlet ports defined";
-            error(errorsting);
+        if i_restart==0;
+            inds1=findall(isequal(-1),celltype);
+            if isempty(inds1)
+                errorstring="No pressure inlet ports defined";
+                error(errorsting);
+            end
         end
 
         #----------------------------------------------------------------------
@@ -675,7 +698,11 @@ module rtmsim
                 inds2=findall(isequal(-3),celltype);
                 inds=vcat(inds1,inds2);               
                 weight_deltatnew=Float64(0.5);  #0.1;  #
-                betat2=Float64(0.1);
+                if gamma>=100;
+                    betat2=Float64(0.1*0.1);
+                else
+                    betat2=Float64(0.1);
+                end
                 deltat=(1-weight_deltatnew)*deltat+weight_deltatnew* betat2*minimum( (sqrt.(cellvolume[inds]./cellthickness[inds])) ./ sqrt.(u_new[inds].^2+v_new[inds].^2) );  
                 deltatmax=tmax/(4*n_pics); #at least four steps between writing output
                 deltat=min(deltat,deltatmax);
@@ -702,9 +729,11 @@ module rtmsim
                     end
                     outputfilename=string("output_", string(n_out), ".jld2")                
                     @save outputfilename t rho_new u_new v_new p_new gamma_new gridx gridy gridz cellgridid N n_out
+                    
                     #temporary output in Matlab mat-format
                     #outputfilename=string("output_", string(n_out), ".mat") 
                     #matwrite(outputfilename, Dict("t" => t,"rho_new" => rho_new,"u_new" => u_new,"v_new" => v_new,"p_new" => p_new,"gamma_new" => gamma_new,"gridx" => gridx,"gridy" => gridy,"gridz" => gridz,"cellgridid" => cellgridid,"N" => N,"n_out" => n_out))
+                    
                     outputfilename=string("results.jld2")
                     @save outputfilename t rho_new u_new v_new p_new gamma_new gridx gridy gridz cellgridid N n_out
                     if t>=(tmax+t_restart)-deltat;
@@ -1761,7 +1790,7 @@ module rtmsim
         r_p=0.01;
         N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids=
             read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p);
-        
+
         if isempty(patchids1);
             n_patch=0;
             errorstring=string("No sets defined"* "\n"); 
@@ -2053,6 +2082,8 @@ module rtmsim
         if N1>0; 
             poly!(connect(xyz1, Point{3}), connect(1:length(X1), TriangleFace); color=C1_p[:], strokewidth=1, colorrange=(0,1))
         end
+        Colorbar(fig[1, 3], limits = (0, deltap), colormap = :viridis,  vertical=true, height=Relative(0.5));  
+        #Colorbar(fig[2, 2], limits = (0, deltap), colormap = :viridis,  vertical=false, width=Relative(0.5));
         hidedecorations!(ax2);
         hidespines!(ax2) 
         display(fig)
