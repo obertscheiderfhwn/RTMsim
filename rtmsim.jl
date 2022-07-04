@@ -475,6 +475,7 @@ module rtmsim
         v_new=Vector{Float64}(undef, N);
         p_new=Vector{Float64}(undef, N);
         gamma_new=Vector{Float64}(undef, N);
+        gamma_out=Vector{Float64}(undef, N);
         for ind in 1:N;
             u_old[ind]=u_init;
             v_old[ind]=v_init;
@@ -488,6 +489,7 @@ module rtmsim
             rho_new[ind]=-9e9;
             p_new[ind]=-9e9;
             gamma_new[ind]=-9e9;
+            gamma_out[ind]=-9e9;
         end        
         thickness_factor=Vector{Float64}(undef, N);
         volume_factor=Vector{Float64}(undef, N);
@@ -501,7 +503,7 @@ module rtmsim
                 errorstring=string("File ",restartfilename," not existing"  * "\n"); 
                 error(errorstring);
             end
-            @load restartfilename t rho_new u_new v_new p_new gamma_new gridx gridy gridz cellgridid N n_out
+            @load restartfilename t rho_new u_new v_new p_new gamma_new gamma_out gridx gridy gridz cellgridid N n_out
             u_old=u_new;
             v_old=v_new;
             rho_old=rho_new;
@@ -715,38 +717,33 @@ module rtmsim
                         t_temp=t;
                         t=t+t_restart;
                     end
+                    for i in 1:N
+                        gamma_out[i]=gamma_new[i] 
+                    end
                     inds=findall(isequal(-1),celltype); #if pressure inlet cells are present
                     for i in 1:length(inds)
-                        gamma_new[inds[i]]=Float64(-1.0); 
+                        gamma_out[inds[i]]=Float64(-1.0); 
                     end
                     inds=findall(isequal(-2),celltype); #if pressure outlet cells are present, they should not be plotted in the gamma-plot because not updated
                     for i in 1:length(inds)
-                        gamma_new[inds[i]]=Float64(-2.0); 
+                        gamma_out[inds[i]]=Float64(-2.0); 
                     end
                     if t>=(tmax+t_restart)-1.5*deltat;
                         t_temp1=t;
                         t=(tmax+t_restart);
                     end
                     outputfilename=string("output_", string(n_out), ".jld2")                
-                    @save outputfilename t rho_new u_new v_new p_new gamma_new gridx gridy gridz cellgridid N n_out
+                    @save outputfilename t rho_new u_new v_new p_new gamma_new gamma_out gridx gridy gridz cellgridid N n_out
                     
                     #temporary output in Matlab mat-format
                     #outputfilename=string("output_", string(n_out), ".mat") 
                     #matwrite(outputfilename, Dict("t" => t,"rho_new" => rho_new,"u_new" => u_new,"v_new" => v_new,"p_new" => p_new,"gamma_new" => gamma_new,"gridx" => gridx,"gridy" => gridy,"gridz" => gridz,"cellgridid" => cellgridid,"N" => N,"n_out" => n_out))
                     
                     outputfilename=string("results.jld2")
-                    @save outputfilename t rho_new u_new v_new p_new gamma_new gridx gridy gridz cellgridid N n_out
+                    @save outputfilename t rho_new u_new v_new p_new gamma_new gamma_out gridx gridy gridz cellgridid N n_out
                     if t>=(tmax+t_restart)-deltat;
                         t=t_temp1;
-                    end
-                    inds=findall(isequal(-1),celltype); #if pressure inlet cells are present
-                    for i in 1:length(inds)
-                        gamma_new[inds[i]]=p_a; 
-                    end
-                    inds=findall(isequal(-2),celltype); #if pressure outlet cells are present, they should not be plotted in the gamma-plot because not updated
-                    for i in 1:length(inds)
-                        gamma_new[inds[i]]=p_init; 
-                    end                  
+                    end                    
                     if i_restart==1;
                         t=t_temp;
                     end       
@@ -1986,12 +1983,12 @@ module rtmsim
         end
         t_digits=2; 
         t_div=10^2;
-        @load resultsfilename t rho_new u_new v_new p_new gamma_new gridx gridy gridz cellgridid N n_out
+        @load resultsfilename t rho_new u_new v_new p_new gamma_new gamma_out gridx gridy gridz cellgridid N n_out
 
         gamma_plot=Vector{Float64}(undef, N);
         deltap=maximum(p_new)-minimum(p_new);     
         for ind=1:N;
-            if gamma_new[ind]>0.8;
+            if gamma_out[ind]>0.8;
                 gamma_plot[ind]=1;
             else
                 gamma_plot[ind]=0;
@@ -2000,14 +1997,14 @@ module rtmsim
         deltagamma=maximum(gamma_plot)-minimum(gamma_plot);
 
         #for poly plot
-        inds0=findall(gamma_new.>-0.5);
+        inds0=findall(gamma_out.>-0.5);
         N0=length(inds0);
         X=Array{Float64}(undef, 3, N0);
         Y=Array{Float64}(undef, 3, N0);
         Z=Array{Float64}(undef, 3, N0);
         C_p=Array{Float32}(undef, 3, N0);        
         C_gamma=Array{Float32}(undef, 3, N0);
-        inds1=findall(gamma_new.<-0.5);
+        inds1=findall(gamma_out.<-0.5);
         N1=length(inds1);
         X1=Array{Float64}(undef, 3, N1);
         Y1=Array{Float64}(undef, 3, N1);
@@ -2131,13 +2128,13 @@ module rtmsim
             else
                 loadfilename="results_temp.jld2"
                 cp(outputfilename,loadfilename;force=true);
-                @load loadfilename t rho_new u_new v_new p_new gamma_new gridx gridy gridz cellgridid N n_out
+                @load loadfilename t rho_new u_new v_new p_new gamma_new gamma_out gridx gridy gridz cellgridid N n_out
             end
 
             gamma_plot=Vector{Float64}(undef, N);
             deltap=maximum(p_new)-minimum(p_new);      
             for ind=1:N;
-                if gamma_new[ind]>0.8;
+                if gamma_out[ind]>0.8;
                     gamma_plot[ind]=1;
                 else
                     gamma_plot[ind]=0;
@@ -2146,14 +2143,14 @@ module rtmsim
             deltagamma=maximum(gamma_plot)-minimum(gamma_plot);
 
             #for poly plot
-            inds0=findall(gamma_new.>-0.5);
+            inds0=findall(gamma_out.>-0.5);
             N0=length(inds0);
             X=Array{Float64}(undef, 3, N0);
             Y=Array{Float64}(undef, 3, N0);
             Z=Array{Float64}(undef, 3, N0);
             C_p=Array{Float32}(undef, 3, N0);        
             C_gamma=Array{Float32}(undef, 3, N0);
-            inds1=findall(gamma_new.<-0.5);
+            inds1=findall(gamma_out.<-0.5);
             N1=length(inds1);
             X1=Array{Float64}(undef, 3, N1);
             Y1=Array{Float64}(undef, 3, N1);
@@ -2315,20 +2312,20 @@ module rtmsim
             else
                 loadfilename="results_temp.jld2"
                 cp(outputfilename,loadfilename;force=true);
-                @load loadfilename t rho_new u_new v_new p_new gamma_new gridx gridy gridz cellgridid N n_out
+                @load loadfilename t rho_new u_new v_new p_new gamma_new gamma_out gridx gridy gridz cellgridid N n_out
                 #print(string(i_plot)*" \n")
                 #print(string(i_out)*" \n")
                 if i_firstfile==1;
                     i_firstfile=0;
                     #for poly plot
-                    inds0=findall(gamma_new.>-0.5);
+                    inds0=findall(gamma_old.>-0.5);
                     N0=length(inds0);
                     X=Array{Float64}(undef, 3, N0);
                     Y=Array{Float64}(undef, 3, N0);
                     Z=Array{Float64}(undef, 3, N0);
                     C_p=Array{Float32}(undef, 3, N0);        
                     C_gamma=Array{Float32}(undef, 3, N0);
-                    inds1=findall(gamma_new.<-0.5);
+                    inds1=findall(gamma_out.<-0.5);
                     N1=length(inds1);
                     X1=Array{Float64}(undef, 3, N1);
                     Y1=Array{Float64}(undef, 3, N1);
@@ -2379,12 +2376,12 @@ module rtmsim
                     ay=(deltay+eps_delta)/(mindelta+eps_delta);
                     az=(deltaz+eps_delta)/(mindelta+eps_delta);
                     time_vector=t;
-                    output_array=gamma_new; 
+                    output_array=gamma_out; 
                     N_val=N;
 
                 else
                     time_vector=vcat(time_vector,t);
-                    output_array=hcat(output_array,gamma_new);
+                    output_array=hcat(output_array,gamma_out);
                 end
             end
             i_out=i_out+1;
