@@ -119,7 +119,7 @@ Three different test cases are available, successfully validating the Julia impl
 
 The following passages show and explain the simulation results (after rotating the views with LMB) for the test cases.
 
-Results for coarse and fine mesh of case 1 (Preform size 0.6 x 0.6 x 0.003 m^3, central injection gate with 0.013 m diameter, 35000 Pa injection pressure, dynamic viscosity 0.06 Pas, porosity 0.7, isotropic permeablity 3 \cdot 10^{-10} m^2):
+Results for coarse and fine mesh of case 1 (Preform size ![0.6 x 0.6 x 0.003 m^3], central injection gate with 0.013 m diameter, 35000 Pa injection pressure, dynamic viscosity 0.06 Pas, porosity 0.7, isotropic permeablity 3 \cdot 10^{-10} m^2):
 <img src="figures/validation_case1a.png"><br>
 <img src="figures/validation_case1b.png"><br>
 According to an analytical estimation, the flow front after 50, 100, 150 and 200 s is a circle with radius 0.114, 0.150, 0.178 and 0.200 m. The values for the fine mesh agree well with the results from the analytical formula. The values for the coarse mesh show an error of <15% which decreases significantly in the course of time but the shape is no smooth circle.
