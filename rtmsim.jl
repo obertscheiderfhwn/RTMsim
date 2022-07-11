@@ -307,7 +307,7 @@ module rtmsim
         p_init=p_init_val;
         p_b=p_a_val;
         #Normalization for Delta p: p->p-p_init
-            p_eps=Float64(0.001e5); 
+            p_eps=Float64(0.001e5); #Float64(0.000e5);  #
             p_a=p_a-p_init+p_eps;
             p_init=p_init-p_init+p_eps;
             p_b=p_a-p_init+p_eps;
@@ -330,12 +330,35 @@ module rtmsim
 
         if gamma>=100;  #insert here coefficients for an incompressible EOS with resin mass density as rho_ref 
                         #at p_b and 0.9*rho_ref at p_a but the EOS is for deltap and consequently normalized pressure values
-            ap1=0;
-            ap2=(p_b-p_init)/(0.1*rho_ref);
-            ap3=p_b-(p_b-p_init)/0.1; 
-            rho_a=p_a/ap2-ap3/ap2;
-            rho_b=p_b/ap2-ap3/ap2;
-            rho_init=p_init/ap2-ap3/ap2;
+            #ap1=0;
+            #ap2=(p_b-p_init)/(0.1*rho_ref);
+            #ap3=p_b-(p_b-p_init)/0.1; 
+            #rho_a=p_a/ap2-ap3/ap2;
+            #rho_b=p_b/ap2-ap3/ap2;
+            #rho_init=p_init/ap2-ap3/ap2;
+
+            rho_a=rho_ref;
+            rho_b=rho_a;
+            rho_init=0.0;
+            p_int1=p_init; rho_int1=rho_init;
+            p_int2=p_init+0.9*(p_a-p_init); rho_int2=0.1*rho_a;
+            p_int3=p_a; rho_int3=rho_a;
+            #A=[rho_int1^2 rho_int1 Float64(1.0); rho_int2^2 rho_int2 Float64(1.0); rho_int3^2 rho_int3 Float64(1.0)];
+            #b=[p_int1;p_int2;p_int3];
+            A=[rho_int1^2 rho_int1 Float64(1.0); rho_int3^2 rho_int3 Float64(1.0); 2*rho_int3 Float64(1.0) 0];
+            b=[p_int1;p_int3;Float64(0.0)];
+            apvals=A\b;
+            ap1=apvals[1];ap2=apvals[2];ap3=apvals[3];
+            #ap1*rho_new[ind]^2+ap2*rho_new[ind]+ap3;
+
+
+            print(string("rho_int1: ",string(rho_int1) , "\n" ) );
+            print(string("rho_int2: ",string(rho_int2) , "\n" ) );
+            print(string("rho_int3: ",string(rho_int3) , "\n" ) );
+            print(string("p_int1: ",string(p_int1) , "\n" ) );
+            print(string("p_int2: ",string(p_int2) , "\n" ) );
+            print(string("p_int3: ",string(p_int3) , "\n" ) );
+            
             print(string("ap1: ",string(ap1) , "\n" ) );
             print(string("ap2: ",string(ap2) , "\n" ) ); 
             print(string("ap3: ",string(ap3) , "\n" ) ); 
