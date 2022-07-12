@@ -23,7 +23,7 @@ RTMsim is a new software tool for RTM filling simulations which fulfills these r
 
 In order to use RTMsim for filling simulations perform the following steps:
 - Download Julia from https://julialang.org/downloads/
-- Install and add an environment variable such that the Julia terminal can be started from the command line.
+- Install Julia and add an environment variable such that the Julia terminal can be started from the command line.
 - Open a Julia terminal. 
 - Change to package manager with `]` and `add Gtk GLMakie Makie NativeFileDialog Glob LinearAlgebra JLD2 GeometryBasics Random FileIO ProgressMeter`
 - Download a RTMsim release (https://github.com/obertscheiderfhwn/RTMsim/releases/tag/1.0 for the version corresponding to the JOSS paper) and extract.  
@@ -36,11 +36,11 @@ In order to use RTMsim for filling simulations perform the following steps:
 
 ## Mesh preparation
 
-The new simulation tool does not include mesh generation. A 3-node triangular shell mesh with the pre-defined regions must be generated with a meshing tool before starting the filling simulation. The authors used Altair HyperWorks but also free software tools such as SALOMEMECA, GMSH or NETGEN can be used.
+The new simulation tool does not include mesh generation. A 3-node triangular shell mesh with the pre-defined regions must be generated with a meshing tool before starting the filling simulation. The authors used Altair HyperWorks but also free software tools such as SALOME-MECA, GMSH or NETGEN can be used.
 
 The shell mesh is created on the part's mid-surface. Mid-surface models are often available in composite manufacturing since computational stress analysis for thin-walled parts is performed on the part’s mid-surface too. 
 
-The prepared shell mesh is imported via a text file where nodes, elements and element sets are described in a format similar to the NASTRAN bulk data format. Every line contains ten fields of eight characters each. The first field contains the character name of the item. The following paragraph shows an example for such a mesh file:
+The prepared shell mesh is imported via a text file where nodes, elements and element sets are described in a format similar to the NASTRAN bulk data format. Every line (except for the set definitions) contains ten fields of eight characters each. The first field contains the character name of the item. The following paragraph shows an example for such a mesh file:
 ```
 SET 1 = 1,2,3,4,5,6,
         7,8,9,10,11,12,
@@ -60,7 +60,7 @@ CTRIA3       586       0     243     302     332
 CTRIA3       587       0     262     333     259
 CTRIA3       588       0     232     259     333
 ```
-Nodes are described by the keyword `GRID`, followed by a grid number, followed by a blank and three fields with the x, y and z coordinates of the node. The triangular cells are defined by the keyword `CTRIA3`, followed by a cell number, followed by a zero, followed by the three node numbers which constitute the cell. Nodes and cells need not be sorted nor starting with one. Cell sets are defined by the keyword `SET` followed by ` N = ` and the cell numbers separated by commas. Not more than 6 cell numbers per line. Then contininue in the line below. Up to four sets can be defined. 
+Nodes are described by the keyword `GRID`, followed by a grid number, followed by a blank and three fields with the x, y and z coordinates of the node. The triangular cells are defined by the keyword `CTRIA3`, followed by a cell number, followed by a zero, followed by the three node numbers which constitute the cell. Nodes and cells need not be sorted nor starting with one. Cell sets are defined by the keyword `SET` followed by ` N = ` and the cell numbers separated by commas. Not more than 6 cell numbers per line. Then continue with the cell numbers in the line below after 8 blanks at the beginning of the line. Up to four sets can be defined. 
 
 ## Run simulation
 
@@ -133,7 +133,7 @@ Simulation input is porosity 0.70, permeability 3.0e-10 m^2 in first principal d
 Results for coarse and fine mesh of case 3:
 <img src="figures/validation_case3a.png"><br>
 <img src="figures/validation_case3b.png"><br>
-If the position of inlet and outlet ports is investigated, simulations with a coarse mesh and short simulation time is sufficient since the flow front progagation is predicted properly. The actual filling time can be predicted with a fine mesh. A mesh refinement study must be performed. With the coarse mesh it takes approximately 50 s longer to reach the same filling state. If the predicted filling with the fine mesh is considered correct, the error with the coarse mesh is approximately 20%. This is in good agreement with the results from case 1 where the domain size is similar and the permeability values are the same.
+If the position of inlet and outlet ports is investigated, simulations with a coarse mesh and short simulation time is sufficient since the flow front progagation is predicted properly. The actual filling time can be predicted with a fine mesh. A mesh refinement study must be performed. With the coarse mesh it takes approximately 50 s longer to reach the same filling state. If the predicted filling with the fine mesh is considered correct, the error with the coarse mesh is approximately 20%. This is in good agreement with the results from case 1 where domain size, coarse and fine mesh are similar and the permeability values are the same. 
 
 # Use cases
 
