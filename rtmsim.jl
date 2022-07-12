@@ -2341,7 +2341,7 @@ module rtmsim
                 if i_firstfile==1;
                     i_firstfile=0;
                     #for poly plot
-                    inds0=findall(gamma_old.>-0.5);
+                    inds0=findall(gamma_out.>-0.5);
                     N0=length(inds0);
                     X=Array{Float64}(undef, 3, N0);
                     Y=Array{Float64}(undef, 3, N0);
