@@ -87,7 +87,7 @@ Four different test cases are available, successfully validating the Julia imple
 
 
 # Outlook
-A customized version of the implemented PDE solver is used for a bachelor thesis at ISSE Augsburg. Reinforcement learning (RL) algorithms are used to control the RTM process. The aim is to prevent the formation of dry spots by controlling the pressure values of the individual injection valves. RL is a form of machine learning and learns by interacting with a suitable environment. Simulations are often used as a training environment. A customized lightweight implementation of RTMsim was used as training environment. 
+A customized version of the implemented PDE solver is used for a Bachelor thesis at the Institute for Software and Systems Engineering of the University of Augsburg [@BSc_ISSE]. Reinforcement learning (RL) algorithms are used to control the RTM process. The aim is to prevent the formation of dry spots by controlling the pressure values of the individual injection valves. RL is a form of machine learning and learns by interacting with a suitable environment. Simulations are often used as a training environment. A customized lightweight implementation of RTMsim was used as training environment. 
 
 The source code is prepared for the following extensions:
 
@@ -97,7 +97,8 @@ The source code is prepared for the following extensions:
 
 - Different methods for numerical differentiation and for the calculation of the numerical flux functions.
 
-
+# Software download
+The current release can be downloaded from https://github.com/obertscheiderfhwn/RTMsim/releases/. Installation instruction and use cases are described in the included README.md file.
 
 
 
