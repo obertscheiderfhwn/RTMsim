@@ -49,7 +49,7 @@ Based on the analysis of the existing software tools for RTM filling simulations
 
 - New functionalities can be implemented by either adding equations of the same type or modifying existing equations.
 
-RTMsim ia a new software tool for RTM filling simulations which fulfills these requirements: Several test cases were used for successfully validating the implemented model. The simulation run robustly and independent of numerics related input such as under-relaxation coefficients or time step. The porous cavity is fully described by a mesh file with triangular cells on the part’s mid-surface and cell set definitions (for specifying the location of the pressure injection ports and vents and regions with different preforms by assigning different thickness, porosity and permeability values). Additional equations (e.g. for modeling the degree-of-cure) can be added with equations of the same type and modifications of existing equations (e.g. for variable cavity thickness as needed for vacuum assisted resin infusion simulations) are possible with cell properties which vary over simulation time. 
+RTMsim ia a new software tool for RTM filling simulations which fulfills these requirements: Several test cases were used for successfully validating the implemented model. The simulations run robustly and independent of numerics related input such as under-relaxation coefficients or time step. The porous cavity is fully described by a mesh file with triangular cells on the part’s mid-surface and cell set definitions (for specifying the location of pressure injection ports and vents and for specifying regions with different properties than the main preform by assigning different thickness, porosity and permeability values). Additional equations (e.g. for modeling the degree-of-cure) can be added with equations of the same type and modifications of existing equations (e.g. for variable cavity thickness as needed for vacuum assisted resin infusion simulations) are possible with cell properties which vary over simulation time. 
 
 # Modeling
 
@@ -67,7 +67,7 @@ Since a shell mesh is used in the simulation tool, the conservation laws must be
 
 # Validation and verification
 
-Four different test cases are available, successfully validating the Julia implementation of the RTM filling model. Test cases 1, 2 and 4 are so-called numerical permeameter experiments, see e.g. [@Fauster.2019]. The third test case is a filling study of a typical composite part which is manufactured using RTM, see [@barandun]. 
+Four different test cases are available, successfully validating the Julia implementation of the RTM filling model. Test cases 1, 2 and 4 are so-called numerical permeameter experiments, see e.g. [@Fauster.2019]. The third test case is a filling study of a typical composite part which is manufactured using RTM, see [@barandun]. The four testcases are:
 
 1. Validation of the software for radial flow with isotropic in-plane permeablity: The simulated flow front position after 200 s is compared with the calculated flow front position from literature. The preform size is $0.6 \times 0.6 \times 0.003$ m$^3$ with a central injection gate with 0.02 m diameter. The preform has porosity $0.70$ and isotropic permeability $3.0 \cdot 10^{−10}$ m$^2$. Resin with dynamic viscosity 0.06 Pas is injected with 35000 Pa pressure.
 
@@ -93,7 +93,7 @@ The source code is prepared for the following extensions:
 
 - Import of mesh file in different format.
 
-- Additional functionalities, e.g. adding temperature and degree-of-cure equations with variable resin viscosity ar for VARI with variable porosity and permeability.
+- Additional functionalities, e.g. adding temperature and degree-of-cure equations with variable resin viscosity or for VARI with variable porosity and permeability.
 
 - Different methods for numerical differentiation and for the calculation of the numerical flux functions.
 
