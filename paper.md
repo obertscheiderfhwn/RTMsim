@@ -67,7 +67,7 @@ Since a shell mesh is used in the simulation tool, the conservation laws must be
 
 # Validation and verification
 
-Four different test cases are available, successfully validating the Julia implementation of the RTM filling model. Test cases 1, 2 and 4 are so-called numerical permeameter experiments, see e.g. [@Fauster.2019]. The third test case is a filling study of a typical composite part which is manufactured using RTM, see [@barandun]. The four testcases are:
+Different test cases are available, successfully validating the Julia implementation of the RTM filling model. Test cases 1 and 2 are so-called numerical permeameter experiments, see e.g. [@Fauster.2019]. The third test case is a filling study of a typical composite part which is manufactured using RTM, see [@barandun]. The testcases are:
 
 1. Validation of the software for radial flow with isotropic in-plane permeablity: The simulated flow front position after 200 s is compared with the calculated flow front position from literature. The preform size is $0.6 \times 0.6 \times 0.003$ m$^3$ with a central injection gate with 0.02 m diameter. The preform has porosity $0.70$ and isotropic permeability $3.0 \cdot 10^{−10}$ m$^2$. Resin with dynamic viscosity 0.06 Pas is injected with 35000 Pa pressure.
 
@@ -75,9 +75,9 @@ Four different test cases are available, successfully validating the Julia imple
 
 3. The filling of a complex annulus filler-like part is simulated with different software tools. The bounding box of the part is approximately $0.4 \times 0.15 \times 0.1$ m$^3$. The flow front positions at different time instances simulated with Ansys Fluent and RTMsim are compared in case 3.1. The filling patterns for same filling degrees simulated with myRTM and RTMsim are compared in case 3.2.
 
-4. Validation with experimental data from a radial flow experiment with two patches with different in-plane permeability and porosity levels. 
- 
-\autoref{fig:pic1} and \autoref{fig:pic2} show the binary filling fraction for cases 1, 2 and 3. For every cell $i$ the fraction function is either $0$ or $1$, depending on the filling fraction being $\leq$ or $>$ than a threshold value. The threshold for the volume-of-fluid method is determined from the permeameter simulation with isotropic permeabilities (case 1). The circular and elliptical flow fronts for cases 1 and 2 are calculated from the simulated flow front with an image processing algorithm [@Fauster.2019]. For case 1 also a comparison with results from an analytical formula [@advani] is shown. The results of validation case 4 and the new physical model for RTM filling will be discussed in a follow-up paper. 
+\autoref{fig:pic1}, \autoref{fig:pic2} and \autoref{fig:pic3} show the binary filling fraction for cases 1, 2 and 3. For every cell $i$ the fraction function is either $0$ or $1$, depending on the filling fraction being $\leq$ or $>$ than a threshold value. The threshold for the volume-of-fluid method is determined from the permeameter simulation with isotropic permeabilities (case 1). The circular and elliptical flow fronts for cases 1 and 2 are calculated from the simulated flow front with an image processing algorithm [@Fauster.2019]. For case 1 also a comparison with results from an analytical formula [@advani] is shown. 
+
+A follow-up paper will the physical modeling in detail and show the results of a validation with experimental data from a radial flow experiment with two patches with different in-plane permeability and porosity levels.
 
 ![Simulated flow front for case 1 after 200 s for a coarse and a fine mesh and flow front positions at different time instances calculated with an analytical formula and calculated from the simulated flow front with an image processing algorithm for a coarse and a fine mesh. The values for the fine mesh agree well with the results from the analytical formula. The values for the coarse mesh show an error of $\leq 15$% which decreases significantly in the course of time but the shape is no smooth circle.\label{fig:pic1}](figures/validation_pic1.png)
 
