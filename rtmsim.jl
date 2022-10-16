@@ -611,8 +611,8 @@ module rtmsim
             for ind in 1:N
                 if celltype[ind]==1  || celltype[ind]==-3; 
                     #Pressure gradient calculation
-                    #dpdx,dpdy=numerical_gradient(1,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);
-                    dpdx,dpdy=numerical_gradient(3,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);
+                    dpdx,dpdy=numerical_gradient(1,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);
+                    #dpdx,dpdy=numerical_gradient(3,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);
                     
                     #FV scheme for rho,u,v,vof conservation laws
                     cellneighboursline=cellneighboursarray[ind,:];
