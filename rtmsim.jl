@@ -27,7 +27,7 @@ module rtmsim
     using JLD2
     using GeometryBasics
     using GLMakie
-    using Makie: PriorityObservable
+    using Makie
     using Random
     using FileIO    
     using ProgressMeter
@@ -728,7 +728,10 @@ module rtmsim
                 else
                     betat2=Float64(0.1);
                 end
-                deltat=(1-weight_deltatnew)*deltat+weight_deltatnew* betat2*minimum( (sqrt.(cellvolume[inds]./cellthickness[inds])) ./ sqrt.(u_new[inds].^2+v_new[inds].^2) );  
+                deltat1=(1-weight_deltatnew)*deltat+weight_deltatnew* betat2*minimum( (sqrt.(cellvolume[inds]./cellthickness[inds])) ./ sqrt.(u_new[inds].^2+v_new[inds].^2) );  
+                deltat=deltat1
+                #deltat2=(1-weight_deltatnew)*deltat+weight_deltatnew* betat2*minimum( (sqrt.(cellvolume[inds]./cellthickness[inds])) ./ 340)  #sqrt.(gamma*p_new[inds]./rho_new[inds]) );  
+                #deltat=min(deltat1,deltat2)  #minimum of convection and wave
                 deltatmax=tmax/(4*n_pics); #at least four steps between writing output
                 deltat=min(deltat,deltatmax);
             end

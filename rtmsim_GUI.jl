@@ -238,7 +238,7 @@ function pf_clicked(w)
     rtmsim.plot_filling(-1,16) 
 end
 function q_clicked(w)
-    GLMakie.destroy!(GLMakie.global_gl_screen())
+    #GLMakie.destroy!(GLMakie.global_gl_screen())
     Gtk.destroy(win)
 end
 function h_clicked(w)
