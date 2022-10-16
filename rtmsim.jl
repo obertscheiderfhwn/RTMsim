@@ -2490,8 +2490,7 @@ module rtmsim
                 C_gamma[2,i]=gamma_plot[ind]/deltagamma;
                 C_gamma[3,i]=gamma_plot[ind]/deltagamma;
             end
-            delete!(ax1.scene,p1)
-            delete!(ax1.scene,p2)
+            empty!(ax1.scene)
             p1=poly!(ax1,connect(xyz, Point{3}), connect(1:length(X), TriangleFace); color=C_gamma[:], strokewidth=1, colorrange=(0,1))
             if N1>0;
                 p2=poly!(ax1,connect(xyz1, Point{3}), connect(1:length(X1), TriangleFace); color=C1_gamma[:], strokewidth=1, colorrange=(0,1),colormap = (:bone))
