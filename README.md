@@ -25,7 +25,7 @@ In order to use RTMsim for filling simulations perform the following steps:
 - Download Julia from https://julialang.org/downloads/
 - Install Julia and add an environment variable such that the Julia terminal can be started from the command line.
 - Open a Julia terminal. 
-- Change to package manager with `]` and `add Gtk GLMakie Makie NativeFileDialog Glob LinearAlgebra JLD2 GeometryBasics Random FileIO ProgressMeter`
+- Change to package manager with `]` and `add Gtk GLMakie Makie NativeFileDialog Glob LinearAlgebra JLD2 GeometryBasics Random FileIO ProgressMeter` and return with the `backspace` key.
 - Download a RTMsim release (https://github.com/obertscheiderfhwn/RTMsim/releases/tag/1.0.1 for the version corresponding to the JOSS paper) and extract.  
 - For Windows operating system: Go to the folder with the RTMsim repository and double click on run_rtmsim_GUI.bat to start the GUI. For all operating systems: One has access to all functions through the Julia terminal. Open a Julia terminal, change to the directory with the RTMsim repository with `cd("path\\to\\working\\directory")` where the path can be absolute or relative and the levels are separated by `\\` and then start either the GUI with `include("rtmsim_GUI.jl")` or call all functions directly after executing `include("rtmsim.jl")`. 
 
