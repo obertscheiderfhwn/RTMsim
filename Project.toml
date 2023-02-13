@@ -1,0 +1,17 @@
+name = "rtmsim"
+uuid = "0823a0f5-0d7f-4277-9a9e-54809b83aaae"
+authors = ["obertscheiderfhwn <christof.obertscheider@fhwn.ac.at>"]
+version = "0.1.0"
+
+[deps]
+FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
+GLMakie = "e9467ef8-e4e7-5192-8a1a-b1aee30e663a"
+GeometryBasics = "5c1252a2-5f33-56bf-86c9-59e7332b4326"
+Glob = "c27321d9-0574-5035-807b-f59d2c89b15c"
+Gtk = "4c0ca9eb-093a-5379-98c5-f87ac0bbbf44"
+JLD2 = "033835bb-8acc-5ee8-8aae-3f567f8a3819"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+Makie = "ee78f7c6-11fb-53f2-987a-cfe4a2b5a57a"
+NativeFileDialog = "e1fe445b-aa65-4df4-81c1-2041507f0fd4"
+ProgressMeter = "92933f4c-e287-5a05-a399-4b506db050ca"
+Random = "9a3f8284-a2c9-5f02-9a11-845980a1fd5c"
