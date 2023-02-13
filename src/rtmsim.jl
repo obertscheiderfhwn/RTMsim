@@ -2589,8 +2589,10 @@ module rtmsim
         r4[3] = RadioButton(r4[2],choices[3]);       push!(f4,r4[3])
         r4[4] = RadioButton(r4[3],choices[4]);       push!(f4,r4[4])
 
-        #define logo
-        im=Gtk.GtkImage("rtmsim_logo1_h200px_grey.png")
+        #define logo or version info or something
+        #im=Gtk.GtkImage("rtmsim_logo1_h200px_grey.png")
+        #im=Gtk.GtkLabel("RTMsim release 1.0.2")
+        im=Gtk.GtkLabel(" ")
 
         #assembly elements in grid pattern
         g = GtkGrid()    #Cartesian coordinates, g[column,row]
@@ -2607,7 +2609,7 @@ module rtmsim
         g[1,14] = par_3; g[2,14] = p0_3; g[3,14] = p1_3; g[4,14] = p2_3; g[5,14] = p3_3; g[6,14] = p4_3; 
                         g[2,15] = p0_4; g[3,15] = p1_4; g[4,15] = p2_4; g[5,15] = p3_4; g[6,15] = p4_4; 
                         g[2,16] = p0_5; g[3,16] = p1_5; g[4,16] = p2_5; g[5,16] = p3_5; g[6,16] = p4_5; 
-                        g[2,17] = p0_6; g[3,17] = p1_6; g[4,17] = p2_6; g[5,17] = p3_6; g[6,17] = p4_6;      g[9,17] = h; 
+                        g[2,17] = p0_6; g[3,17] = p1_6; g[4,17] = p2_6; g[5,17] = p3_6; g[6,17] = p4_6;      #g[9,17] = h; 
                         g[2,18] = p0_7; g[3,18] = p1_7; g[4,18] = p2_7; g[5,18] = p3_7; g[6,18] = p4_7;      g[9,18] = q; 
         push!(win, g)
 
@@ -2730,11 +2732,11 @@ module rtmsim
             #GLMakie.destroy!(GLMakie.global_gl_screen())
             Gtk.destroy(win)
         end
-        function h_clicked(w)
-            i=GtkImage("rtmsim_help.png");
-            w=GtkWindow(i,"Help");
-            show(i);
-        end
+        #function h_clicked(w)
+        #    i=GtkImage("rtmsim_help.png");
+        #    w=GtkWindow(i,"Help");
+        #    show(i);
+        #end
         function in1_clicked(w)
             str = pick_file(pwd(),filterlist="txt");
             set_gtk_property!(in2,:text,str);
@@ -2758,7 +2760,7 @@ module rtmsim
         signal_connect(po_clicked,po,"clicked")
         signal_connect(pf_clicked,pf,"clicked")
         signal_connect(q_clicked,q,"clicked")
-        signal_connect(h_clicked,h,"clicked")
+        #signal_connect(h_clicked,h,"clicked")
         signal_connect(in1_clicked,in1,"clicked")
         signal_connect(in3_clicked,in3,"clicked")
 
