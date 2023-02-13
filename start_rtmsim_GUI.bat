@@ -1,1 +1,1 @@
-julia src\rtmsim_GUI.jl
+julia start_rtmsim_GUI.jl
