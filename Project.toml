@@ -1,7 +1,7 @@
 name = "rtmsim"
 uuid = "0823a0f5-0d7f-4277-9a9e-54809b83aaae"
 authors = ["obertscheiderfhwn <christof.obertscheider@fhwn.ac.at>"]
-version = "1.0.2"
+version = "1.0.3"
 
 [deps]
 FileIO = "5789e2e9-d7fb-5bc7-8068-2c6fae9b9549"
