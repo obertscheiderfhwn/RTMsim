@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    permissions Pkg.add("Documenter"); 
+    permissions:
       contents: write
     runs-on: ubuntu-latest
     steps:
