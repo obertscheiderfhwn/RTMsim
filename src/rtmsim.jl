@@ -26,9 +26,45 @@ module rtmsim
     GLMakie.activate!()    
     #using MAT  #temporary output in Matlab mat-format
             
-    function start_rtmsim(inputfilename)
-        # reads the text input file and calls the solver with the read parameters
-        
+    """
+        start_rtmsim(inputfilename)
+
+    Reads the text input file and calls the solver with the read parameters. The complete set of input parameters can be accessed in the input file. The following paragraph shows an example for such an input file:
+    ```
+        1    #i_model 
+        meshfiles\\mesh_permeameter1_foursets.bdf    #meshfilename 
+        200    #tmax 
+        1.01325e5 1.225 1.4 0.06    #p_ref rho_ref gamma mu_resin_val 
+        1.35e5 1.0e5    #p_a_val p_init_val 
+        3e-3 0.7 3e-10 1 1 0 0    #t_val porosity_val K_val alpha_val refdir1_val refdir2_val refdir3_val 
+        3e-3 0.7 3e-10 1 1 0 0    #t1_val porosity1_val K1_val alpha1_val refdir11_val refdir21_val refdir31_val 
+        3e-3 0.7 3e-10 1 1 0 0    #t2_val porosity2_val K2_val alpha2_val refdir12_val refdir22_val refdir32_val
+        3e-3 0.7 3e-10 1 1 0 0    #t3_val porosity3_val K3_val alpha3_val refdir13_val refdir23_val refdir33_val
+        3e-3 0.7 3e-10 1 1 0 0    #t4_val porosity4_val K4_val alpha4_val refdir14_val refdir24_val refdir34_val 
+        1 0 0 0    #patchtype1val patchtype2val patchtype3val patchtype4val 
+        0 results.jld2    #i_restart restartfilename
+        0 0.01    #i_interactive r_p
+        16    #n_pics
+    ```
+
+    Meaning of the variables:
+    - `i_model`: Identifier for physical model (Default value is 1)
+    - `meshfilename`: Mesh filename.
+    - `tmax`: Maximum simulation time.
+    - `p_ref rho_ref gamma mu_resin_val`: Parameters for the equation of state and dynamic viscosity of resin used in the Darcy term.
+    - `p_a_val p_init_val `: Absolut pressure value for injection port and for initial cavity pressure.
+    - `t_val porosity_val K_val alpha_val refdir1_val refdir2_val refdir3_val`: Properties of the cells in the main preform: The vector `(refdir1_val,refdir2_val,refdir3_val)` is projected onto the cell in order to define the first principal cell direction. The second principal cell direction is perpendicular to the first one in the plane spanned by the cell nodes. The principal cell directions are used as the principal permeabilty directions. The cell properties are defined by the thickness `t_val`, the porosity `porosity_val`, the permeability `K_val` in the first principal cell direction, the permeablity `alpha_val` in the second principal direction.
+    - `t1_val porosity1_val K1_val alpha1_val refdir11_val refdir21_val refdir31_val` etc.: Properties for up to four additional cell regions if preform. 
+    - `patchtype1val patchtype2val patchtype3val patchtype4val`: These regions are used to specify the location of the pressure boundary conditions and to specify regions with different permeability, porosity and thickness properties (e.g. for different part thickness and layup or for race tracking which are regions with very high permeability typically at the boundary of the preforms). Vents need not be specified. Parameters `patchtype1val` define the patch type.
+    - `i_restart restartfilename`: Start with new simulation if `0` or continue previous simulation if `1`.
+    - `i_interactive r_p`: Select the inlet ports graphically if i_interactive equal to `1`.
+    - `n_pics`: Number of intermediate output files. Supposed to be a multiple of `4`.
+    Entries are separated by one blank.
+
+    Unit test:
+    - `rtmsim.start_rtmsim("..\\inputfiles\\input.txt")`
+    """
+    function start_rtmsim(inputfilename)        
         print("Read input file "*string(inputfilename)*"\n")
         if ~isfile(inputfilename);
             errorstring=string("File ",inputfilename," not existing"* "\n"); 
@@ -133,6 +169,47 @@ module rtmsim
             patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_restart,restartfilename,i_interactive,r_p,n_pics);
     end
 
+    """
+        rtmsim_rev1(i_model,meshfilename,tmax,
+                    p_ref,rho_ref,gamma,mu_resin_val,
+                    p_a_val,p_init_val,
+                    t_val,porosity_val,K_val,alpha_val,refdir1_val,refdir2_val,refdir3_val,
+                    t1_val,porosity1_val,K1_val,alpha1_val,refdir11_val,refdir21_val,refdir31_val,
+                    t2_val,porosity2_val,K2_val,alpha2_val,refdir12_val,refdir22_val,refdir32_val,
+                    t3_val,porosity3_val,K3_val,alpha3_val,refdir13_val,refdir23_val,refdir33_val,
+                    t4_val,porosity4_val,K4_val,alpha4_val,refdir14_val,refdir24_val,refdir34_val,
+                    patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_restart,restartfilename,i_interactive,r_p,n_pics)
+    
+    RTMsim solver with main steps
+    - Simulation initialization
+    - Read mesh file and prepare patches  
+    - Find neighbouring cells
+    - Assign parameters to cells
+    - Create local cell coordinate systems
+    - Calculate initial time step
+    - Array initialization
+    - Define simulation time and intermediate output times
+    - Boundary conditions
+    - (Optional initialization if `i_model=2,3,..`)
+    - Time evolution (for loops over all indices inside a while loop for time evolution)
+        - Calculation of correction factors for cell thickness, porosity, permeability, viscosity
+        - Pressure gradient calculation
+        - Numerical flux function calculation
+        - Update of rho, u, v, gamma and p according to conservation laws and equation of state
+        - Boundary conditions
+        - Prepare arrays for next time step
+        - Saving of intermediate data
+        - (Opional time marching etc. for i_model=2,3,...)
+        - Calculation of adaptive time step 
+
+    Unit tests:
+    - `rtmsim.rtmsim_rev1(1,"..\\meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,0,"results.jld2",0,0.01,16)`
+        
+    Addtional unit tests:
+    - `rtmsim.rtmsim_rev1(1,"..\\meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,0,0,0, 0,"results.jld2",0,0.01,16)` for starting a simulation with one pressure inlet port (sets 2, 3 and 4 are not used and consequently the preform parameters are ignored; since set 1 is a pressure inlet, also the parameters for set 1 are ignored and the only relevant parameter for the specified set is the pressure difference between injection and initial cavity pressure)
+    - `rtmsim.rtmsim_rev1(1,"..\\meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2, 0,"results.jld2",0,0.01,16)` for starting a simulation with different patches and race tracking
+    - `rtmsim.rtmsim_rev1(1,"..\\meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2, 1,"results.jld2",0,0.01,16)` for continuing the previous simulation   
+    """
     function rtmsim_rev1(i_model,meshfilename,tmax,
         p_ref,rho_ref,gamma,mu_resin_val,
         p_a_val,p_init_val,
@@ -141,31 +218,8 @@ module rtmsim
         t2_val,porosity2_val,K2_val,alpha2_val,refdir12_val,refdir22_val,refdir32_val,
         t3_val,porosity3_val,K3_val,alpha3_val,refdir13_val,refdir23_val,refdir33_val,
         t4_val,porosity4_val,K4_val,alpha4_val,refdir14_val,refdir24_val,refdir34_val,
-        patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_restart,restartfilename,i_interactive,r_p,n_pics);
-        # RTMsim solver with main steps
-        # - Simulation initialization
-        # - Read mesh file and prepare patches  
-        # - Find neighbouring cells
-        # - Assign parameters to cells
-        # - Create local cell coordinate systems
-        # - Calculate initial time step
-        # - Array initialization
-        # - Define simulation time and intermediate output times
-        # - Boundary conditions
-        # - (Optional initialization if i_model=2,3,..)
-        # - Time evolution (for loops over all indices inside a while loop for time evolution)
-        #     - Calculation of correction factors for cell thickness, porosity, permeability, viscosity
-        #     - Pressure gradient calculation
-        #     - Numerical flux function calculation
-        #     - Update of rho, u, v, gamma and p according to conservation laws and equation of state
-        #     - Boundary conditions
-        #     - Prepare arrays for next time step
-        #     - Saving of intermediate data
-        #     - (Opional time marching etc. for i_model=2,3,...)
-        #     - Calculation of adaptive time step 
-        #
-
-
+        patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_restart,restartfilename,i_interactive,r_p,n_pics)
+        
         #----------------------------------------------------------------------
         # Simulation initialization
         #----------------------------------------------------------------------
@@ -789,7 +843,14 @@ module rtmsim
     end
 
 
+    """
+        function numerical_gradient(i_method,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery)
 
+    Calculates the pressure gradient from the cell values of the neighbouring cells.
+    i_method=1 .. Least square solution to determine gradient
+            =2 .. Least square solution to determine gradient with limiter
+            =3 .. Untime optimized least square solution to determine gradient
+    """
     function numerical_gradient(i_method,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);
         if i_method==1;
             #least square solution to determine gradient
@@ -878,6 +939,12 @@ module rtmsim
         return dpdx,dpdy
     end
 
+    """
+        function numerical_flux_function(i_method,vars_P,vars_A,meshparameters)
+
+    Evaluates the numerical flux functions at the cell boundaries.
+    i_method==1 .. first order upwinding
+    """
     function numerical_flux_function(i_method,vars_P,vars_A,meshparameters);
         if i_method==1;
             #first order upwinding
@@ -920,6 +987,12 @@ module rtmsim
         return F_rho_num_add,F_u_num_add,F_v_num_add,F_gamma_num_add,F_gamma_num1_add
     end
 
+    """
+        function numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,n_dot_u)
+
+    Evaluates the numerical flux functions at the cell boundaries to pressure inlet or outlet.
+    i_method==1 .. first order upwinding
+    """
     function numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,n_dot_u);
         if i_method==1;
             #first order upwinding
@@ -961,20 +1034,28 @@ module rtmsim
         return F_rho_num_add,F_u_num_add,F_v_num_add,F_gamma_num_add,F_gamma_num1_add
     end
 
+    """
+        function delete_files()
+    
+     Deletes the intermediate jld2 output files.
+    """
     function delete_files();
         #delete the intermediate output files
         rm.(glob("output_*.jld2"))
     end
 
+    """
+        function read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
+    
+    Read mesh file and prepare to be used in solver:
+        - number of cells, cell ids start with 1
+        - x,y,z-coordinates of the nodes
+        - x,y,z-coordinates of the cell centers
+        - patch properties
+    Read other mesh files than Nastran bulk data format (bdf) based on extension and calculate the required mesh data or convert to Nastran format prepare with existing function                
+    """
     function read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p);
-        #read mesh file and prepare to be used in solver:
-        # - number of cells, cell ids start with 1
-        # - x,y,z-coordinates of the nodes
-        # - x,y,z-coordinates of the cell centers
-        # - patch properties
-        #
-        #read other mesh files than Nastran bulk data format (bdf) based on extension and calculate the required mesh data or convert to Nastran format prepare with existing function                
-        
+
         #read Nastran mesh
         if meshfilename[end-2:end]=="bdf"
            N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids=
@@ -984,8 +1065,15 @@ module rtmsim
         return N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids
     end
 
+    """
+        function read_nastran_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
+
+    Read file in Nastran format with fixed length (8 digits), nodes (`GRIDS`) defined in global coordinate system.
+
+    Unit test:
+    - `paramset=[0.5,0.3,3e-10,1.0,1.0,0.0,0.0];paramset1=paramset;paramset2=paramset;paramset3=paramset;paramset4=paramset;patchtype1val=-1;patchtype2val=-1;patchtype3val=-1;patchtype4val=-1;i_interactive=0;r_p=0.01; N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids=read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)``
+    """
     function read_nastran_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p);
-        #Nastran format fixed length (8 digits), GRIDS defined in global CS (local CS field empty)
 
         if ~isfile(meshfilename);
             errorstring=string("File ",meshfilename," not existing"* "\n"); 
@@ -1195,10 +1283,12 @@ module rtmsim
     end
 
 
-    function create_faces(cellgridid, N, maxnumberofneighbours);
-        # Find the set with the IDs of the neighbouring cells
-        # and identify wall cells
+    """
+        function create_faces(cellgridid, N, maxnumberofneighbours)
 
+    Find the set with the IDs of the neighbouring cells and identify wall cells
+    """
+    function create_faces(cellgridid, N, maxnumberofneighbours);
         celltype=Vector{Int64}(undef, N);
         for i in 1:N;
             celltype[i]=1;
@@ -1271,9 +1361,12 @@ module rtmsim
         return faces, cellneighboursarray, celltype
     end
 
+    """
+        function assign_parameters(i_interactive,celltype,patchparameters0,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,patchids1,patchids2,patchids3,patchids4,inletpatchids,mu_resin_val,N)
+    
+    Assign properties to cells.
+    """
     function assign_parameters(i_interactive,celltype,patchparameters0,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,patchids1,patchids2,patchids3,patchids4,inletpatchids,mu_resin_val,N);
-        #assign properties to cells
-
         cellthickness=Vector{Float64}(undef, N);
         cellporosity=Vector{Float64}(undef, N);
         cellpermeability=Vector{Float64}(undef, N);
@@ -1415,10 +1508,12 @@ module rtmsim
         return cellthickness, cellporosity, cellpermeability, cellalpha, celldirection, cellviscosity, celltype
     end
 
-    function create_coordinate_systems(N, cellgridid, gridx, gridy, gridz, cellcenterx,cellcentery,cellcenterz, faces, cellneighboursarray, celldirection, cellthickness, maxnumberofneighbours);
-        # define the local cell coordinate system and 
-        # the transformation matrix from the local cell coordinate system from the neighbouring cell to the local cell coordinate system of the considered cell
+    """
+        function create_coordinate_systems(N, cellgridid, gridx, gridy, gridz, cellcenterx,cellcentery,cellcenterz, faces, cellneighboursarray, celldirection, cellthickness, maxnumberofneighbours)
 
+    Define the local cell coordinate system and the transformation matrix from the local cell coordinate system from the neighbouring cell to the local cell coordinate system of the considered cell
+    """
+    function create_coordinate_systems(N, cellgridid, gridx, gridy, gridz, cellcenterx,cellcentery,cellcenterz, faces, cellneighboursarray, celldirection, cellthickness, maxnumberofneighbours);
         cellvolume=Vector{Float64}(undef, N);
         cellcentertocellcenterx=Array{Float64}(undef, N, maxnumberofneighbours);
         cellcentertocellcentery=Array{Float64}(undef, N, maxnumberofneighbours);
@@ -1698,10 +1793,19 @@ module rtmsim
     end
 
 
-    function plot_mesh(meshfilename,i_mode)
-        #create mesh plot with cells with i_mode==1 and
-        #create mesh plots with cell center nodes with i_mode==2 for manual selection of inlet ports
+    """
+        function plot_mesh(meshfilename,i_mode)
 
+    Create mesh plot with cells with `i_mode==1` and create mesh plots with cell center nodes with `i_mode==2` for manual selection of inlet ports.
+
+    Unit test:
+    - `rtmsim.plot_mesh("..\\meshfiles\\mesh_permeameter1_foursets.bdf",1)`
+
+    Additional unit tests:
+    - `rtmsim.plot_mesh("..\\meshfiles\\mesh_annulusfiller1.bdf",2)` for the manual selection of inlet ports with left mouse button click while key p is pressed 
+    - `rtmsim.rtmsim_rev1(1,"..\\meshfiles\\mesh_annulusfiller1.bdf",200, 0.35e5,1.205,1.4,0.06, 0.35e5,0.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 0,0,0,0, 0,"results.jld2",1,0.01,16)` for starting only with the interactively selected inlet ports
+    """
+    function plot_mesh(meshfilename,i_mode)
         #dummy values for calling function read_mesh
         paramset=[0.5,0.3,3e-10,1.0,1.0,0.0,0.0];paramset1=paramset;paramset2=paramset;paramset3=paramset;paramset4=paramset;
         patchtype1val=-1;patchtype2val=-1;patchtype3val=-1;patchtype4val=-1;i_interactive=0;
@@ -1815,9 +1919,15 @@ module rtmsim
     end 
 
 
-    function plot_sets(meshfilename)
-        #create a plot with the up to four cell sets defined in the mesh file
+    """
+        function plot_sets(meshfilename)
+            
+    Create a plot with the up to four cell sets defined in the mesh file.
 
+    Unit test:
+    - `rtmsim.plot_sets("..\\meshfiles\\mesh_permeameter1_foursets.bdf")`
+    """
+    function plot_sets(meshfilename)
         #dummy values for calling function read_nastran_mesh
         paramset=[0.5,0.3,3e-10,1.0,1.0,0.0,0.0];paramset1=paramset;paramset2=paramset;paramset3=paramset;paramset4=paramset;
         patchtype1val=-1;patchtype2val=-1;patchtype3val=-1;patchtype4val=-1;i_interactive=0;
@@ -1972,9 +2082,12 @@ module rtmsim
         display(fig)
     end
 
-    function assign_pset(r_p,N,cellcenterx,cellcentery,cellcenterz)
-        #create the cell set from the manually selected inlet port nodes
+    """
+        function assign_pset(r_p,N,cellcenterx,cellcentery,cellcenterz)
 
+    Create the cell set from the manually selected inlet port nodes
+    """
+    function assign_pset(r_p,N,cellcenterx,cellcentery,cellcenterz)
         filename="inletpostions.jld2"
         @load filename inletpos_xyz
         n_p=size(inletpos_xyz,1)-1;
@@ -2010,6 +2123,14 @@ module rtmsim
         @save psetfilename pset;
     end
 
+    """
+        function plot_results(resultsfilename)
+
+    Create contour plots of the filling factor and the pressure after loading a results file.
+    
+    Unit test: 
+    - `rtmsim.plot_results("../results.jld2")`
+    """
     function plot_results(resultsfilename)
         #create contour plots of the filling factor and the pressure after loading a results file
         #default call: rtmsim.plot_results("results.jld2")
@@ -2031,7 +2152,7 @@ module rtmsim
                 gamma_plot[ind]=0;
             end
         end
-        deltagamma=maximum(gamma_plot)-minimum(gamma_plot);
+        deltagamma=1;  #deltagamma=maximum(gamma_plot)-minimum(gamma_plot);
 
         #for poly plot
         inds0=findall(gamma_out.>-0.5);
@@ -2124,11 +2245,16 @@ module rtmsim
     end 
 
 
+    """
+        function plot_overview(n_out,n_pics)
+
+    Create filling factor contour plots. `n_out` is the index of the last output file, if `n_out==-1` the output file with the highest index is chosen. Consider the last `n_pics` for creating the contour plots at four equidistant time intervals, if `n_pics==-1` all available output files are considered.
+    
+    Unit test: 
+    - `rtmsim.plot_overview(-1,-1)`
+    """
     function plot_overview(n_out,n_pics)
-        #create filling factor contour plots
-        #n_out ist the index of the last output file, if n_out==-1 the output file with the highest index is chosen
-        #consider the last n_pics for creating the contour plots at four equidistant time intervals, if n_pics==-1 all available output files are considered
-        #default call is plot_overview(-1,-1)
+        #
 
         val=0;
 		n_out_start=-1;
@@ -2177,7 +2303,7 @@ module rtmsim
                     gamma_plot[ind]=0;
                 end
             end
-            deltagamma=maximum(gamma_plot)-minimum(gamma_plot);
+            deltagamma=1;  #deltagamma=maximum(gamma_plot)-minimum(gamma_plot);
 
             #for poly plot
             inds0=findall(gamma_out.>-0.5);
@@ -2286,12 +2412,15 @@ module rtmsim
     end 
 
 
-    function plot_filling(n_out,n_pics)
-        #create a window showing the filling factor contour plot at a selected time instance. Selection is with slider bar.
-        #n_out ist the index of the last output file, if n_out==-1 the output file with the highest index is chosen
-        #consider the last n_pics for creating the contour plots at four equidistant time intervals, if n_pics==-1 all available output files are considered
-        #default call is plot_filling(-1,-1)
+    """
+        function plot_filling(n_out,n_pics)
 
+    Create a window showing the filling factor contour plot at a selected time instance. Selection is with slider bar. `n_out` is the index of the last output file, if `n_out==-1` the output file with the highest index is chosen. Consider the last `n_pics` for creating the contour plots at four equidistant time intervals, if `n_pics==-1` all available output files are considered.
+    
+    Unit test:
+    - `rtmsim.plot_filling(-1,-1)` 
+    """
+    function plot_filling(n_out,n_pics)
         val=0;
 		n_out_start=-1;
         if n_out==-1;
@@ -2432,7 +2561,7 @@ module rtmsim
                 gamma_plot[ind]=0;
             end
         end
-        deltagamma=maximum(gamma_plot)-minimum(gamma_plot);
+        deltagamma=1;  #deltagamma=maximum(gamma_plot)-minimum(gamma_plot);
         
         C_gamma=Array{Float32}(undef, 3, N0);
         for i in 1:N0;
@@ -2451,6 +2580,7 @@ module rtmsim
         #end
         hidedecorations!(ax1);
         hidespines!(ax1) 
+        #display(fig)
         #sl_t = Slider(fig[2, 1], range = time_vector[1]:  (time_vector[end]-time_vector[1])/n_pics :time_vector[end], startvalue =  time_vector[end] );
         sl_t = Slider(fig[2, 1], range = time_vector[1]:  (time_vector[end]-time_vector[1])/n_pics :time_vector[end], startvalue =  time_vector[1] );
         point = lift(sl_t.value) do x           
@@ -2478,14 +2608,14 @@ module rtmsim
                     gamma_plot[ind]=0;
                 end
             end
-            deltagamma=maximum(gamma_plot)-minimum(gamma_plot);
+            deltagamma=1;  #maximum(gamma_plot)-minimum(gamma_plot);
             for i in 1:N0;
                 ind=inds0[i];
                 C_gamma[1,i]=gamma_plot[ind]/deltagamma;
                 C_gamma[2,i]=gamma_plot[ind]/deltagamma;
                 C_gamma[3,i]=gamma_plot[ind]/deltagamma;
             end
-            #empty!(ax1.scene)
+            empty!(ax1.scene)
             p1=poly!(ax1,connect(xyz, Makie.Point{3}), connect(1:length(X), TriangleFace); color=C_gamma[:], strokewidth=1, colorrange=(0,1))
             if N1>0;
                 p2=poly!(ax1,connect(xyz1, Makie.Point{3}), connect(1:length(X1), TriangleFace); color=C1_gamma[:], strokewidth=1, colorrange=(0,1),colormap = (:bone))
@@ -2497,6 +2627,11 @@ module rtmsim
         end
     end 
 
+    """
+        function gui()
+    
+    Opens the GUI.
+    """
     function gui()
         #one Gtk window
         win = GtkWindow("RTMsim"); 
