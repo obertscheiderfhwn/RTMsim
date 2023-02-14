@@ -5,5 +5,3 @@ makedocs(sitename="RTMsim documentation",
          modules=[rtmsim],
          pages=["Home" => "index.md"]
         )
-
-        
