@@ -1,33 +1,72 @@
 # RTMsim - A Julia module for filling simulations in Resin Transfer Moulding
 
 
-# Statement of need
+## Mould filling simulations in Resin Transfer Moulding
 Resin Transfer Moulding (RTM) is a manufacturing process for producing thin-walled fiber reinforced polymer composites where dry fibers are placed inside a mould and resin is injected under pressure into the fibrous preform. During mould design, filling simulations can study different manufacturing concepts (i.e. placement of inlet ports and vents) to guarantee complete filling of the part and avoid air entrapment where flow fronts converge. 
 
-In the past, numerous models have been implemented in different software packages to perform filling simulations for RTM. The used simulation packages can be divided into three groups: 
-- General purpose CFD software packages, such as ANSYS Fluent or OpenFOAM
-- Commercially available software packages which are tailored for the simulation of the RTM process, such as PAM-RTM, RTM-Worx or LIMS
-- Easy-to-use simulation tools such as myRTM
+RTMsim is a new software tool for RTM filling simulations. The porous cavity is fully described by a mesh file with triangular cells on the part’s mid-surface and cell set definitions. The latter can be used for specifying the location of the pressure injection ports and regions with different preforms by assigning different thickness, porosity and permeability values. Additional equations (e.g. for modeling the degree-of-cure) can either be added with equations of the same type or modifications of existing equations (e.g. for variable cavity thickness as needed for vacuum assisted resin infusion simulations). Several test cases were used for successfully validating the implemented model.
 
-All packages describe the flow on a macroscopic level. The first group models the flow through the porous cavity using volume-averaged Navier-Stokes equations. The second group makes use of some assumptions and at first solves a Laplace equation for the pressure inside the region which is already filled and in a second step calculates the flow velocity field to propagate the flow front. It has been shown that the first and second group render very similar results. myRTM from the third group is easy-to-use and can predict the filling pattern properly but neither predict the filling time correctly nor consider non-isotropic preform permeability. Solving conservation laws for fluid flow as in the first group requires a volume mesh of the cavity and consequently the solution is more time-consuming. The second and third group can be solved on a shell mesh where the thickness of the cavity is a property of the cell (similar to porosity and permeability) and slip boundary conditions at the top and bottom walls of the cavity are assumed. 
 
-Based on the analysis of existing software tools for RTM filling simulations the following functional requirements for a new software tool were derived:
-- The simulation model shall give correct results for filling pattern and filling time.
-- The simulation tool takes only composite-manufacturing related inputs and the simulation shall be robust independent of numerics-related input.
-- The simulation tool takes a shell model of the geometry as input and the location-dependent properties are assigned directly on the shell elements.
-- New functionalities can be implemented by either adding equations of the same type or modifying existing equations.
+## How to get
 
-RTMsim is a new software tool for RTM filling simulations which fulfills these requirements: Several test cases were used for successfully validating the implemented model. The porous cavity is fully described by a mesh file with triangular cells on the part’s mid-surface and cell set definitions. The latter can be used for specifying the location of the pressure injection ports and regions with different preforms by assigning different thickness, porosity and permeability values. Additional equations (e.g. for modeling the degree-of-cure) can either be added with equations of the same type or modifications of existing equations (e.g. for variable cavity thickness as needed for vacuum assisted resin infusion simulations). 
+### Requirments and installing Julia
+The RTMsim module was developed with Julia version >= 1.8. Julia is a high level open source programming language and it is as easy to use as python or Matlab. 
 
-# Installation instructions
+First of all you need a Julia installation.  Download Julia from \url{https://julialang.org/downloads/}. Install Julia and add an environment variable such that the Julia terminal can be started from the command line.
 
-In order to use RTMsim for filling simulations perform the following steps:
-- Download Julia from https://julialang.org/downloads/
-- Install Julia and add an environment variable such that the Julia terminal can be started from the command line.
-- Open a Julia terminal. 
-- Change to package manager with `]` and `add Gtk GLMakie Makie NativeFileDialog Glob LinearAlgebra JLD2 GeometryBasics Random FileIO ProgressMeter` and return with the `backspace` key.
-- Download a RTMsim release (https://github.com/obertscheiderfhwn/RTMsim/releases/tag/1.0.2 for the version corresponding to the JOSS paper) and extract.  
-- For Windows operating system: Go to the folder with the RTMsim repository and double click on run_rtmsim_GUI.bat to start the GUI. For all operating systems: One has access to all functions through the Julia terminal. Open a Julia terminal, change to the directory with the RTMsim repository with `cd("path\\to\\working\\directory")` where the path can be absolute or relative and the levels are separated by `\\` and then start either the GUI with `include("rtmsim_GUI.jl")` or call all functions directly after executing `include("rtmsim.jl")`. 
+
+### Installing using the Julia Package manager
+Open a Julia terminal. The only thing you have to do is to add the package to your Julia environment with the following commands:
+- `using Pkg`
+- `Pkg.add(url="https://github.com/obertscheiderfhwn/RTMsim")` or `Pkg.add(url="https://github.com/obertscheiderfhwn/RTMsim",rev="1.0.4")` for specific revision `1.0.4`
+- `Pkg.test("rtmsim")`
+Alternatively, one can use the package manager with the following commands:
+- Change to package manager with `]` 
+- `add "https://github.com/obertscheiderfhwn/RTMsim"`
+- Return with the `backspace` key
+
+
+## How to use
+For testing the software create a directory and download mesh- and input-files:
+- Create a working directory
+- Figure out the location of the package with `using rtmsim` and afterwards `pathof(rtmsim)`
+- Copy from the package location the folder with the `meshfiles` and the `inputfiles` into the working directory
+
+Start the GUI in the Julia terminal:
+- In the Julia terminal `cd("my\\workdirectory")` where the separation is a `\\`
+- `using rtmsim
+- Start the GUI with `rtmsim.gui()`
+
+If you are working on a Windows operating system you can avoid working in the Julia terminal: 
+- Copy `start_rtmsim_gui.bat` and `start_rtmsim_gui.jl` from the package folder to the working directory
+- Double click on `start_rtmsim_gui.bat` in the Explorer
+
+You can start a simulation in the GUI:
+- The buttons in the first line on the LHS are used for mesh inspection, i.e. select a mesh file, plot the mesh with bounding box and plot the defined sets. The buttons in the second line on the LHS are used for starting and continuing a filling simulation. Every time the Start or Continue simulation button is pressed, a filling simulation is started. The simulated flow time `tmax`, the patch types and patch properties must be specified before. Every simulation calculates the flow front propagation during the next `tmax` seconds. If started with the Start simulation button, the cavity is empty initially. If started with the Continue simulation button, the results from the previous simulation are taken as initial condition. With the buttons in the third line one can select inlet ports with specified radius interactively in addition to using the defined sets, and start and continue such a simulation. The buttons in the forth line are used for post-processing, i.e. show filling and pressure distribution of a specified output file (final results are saved in results.jld2), plot filling at four equidistant time instances and filling at different time instances which are selected with a slider bar. The buttons in the line on the RHS are used to start the simulation with the parameters from the selected input file.
+<img src="figures/rtmsim_help.png">
+- Additions information (for example the meaning of the parameters) can be found on \url{https://obertscheiderfhwn.github.io/RTMsim/build/functions/} and typical use cases can be found on \url{https://obertscheiderfhwn.github.io/RTMsim/build/tutorials/} for the meaning of the parameters and for typical use cases.
+
+
+
+## How to support and contribute
+Suggestions for functionalities to be implemented and user feedback from case studies with this software are appreciated. Please have a look at the contribution item in the community standards \url{https://github.com/obertscheiderfhwn/RTMsim/community}.
+
+The API is described on  \url{https://obertscheiderfhwn.github.io/RTMsim/build/functions/}
+
+
+## Citation
+If RTMsim is used for research or development, please use the following entry, shown in BiBTeX format:
+```
+@misc{RTMsim,
+  author =       {Obertscheider, Christof and Fauster, Ewald},
+  title =        {RTMsim - A Julia module for filling simulations in Resin Transfer Moulding},
+  howpublished = {\url{https://github.com/obertscheiderfhwn/RTMsim}},
+  year =         {2022}
+}
+```
+
+
+
 
 
 
@@ -232,16 +271,5 @@ end
 ```
 After modifying and compiling the RTMsim module, a simulation can be started in the GUI or from the terminal.
 
-Suggestions for functionalities to be implemented and user feedback from case studies with this software are appreciated (e.g. via email to christof.obertscheider@fhwn.ac.at). 
 
-# Citation
-If RTMsim is used for research or development, please use the following entry, shown in BiBTeX format:
-```
-@misc{RTMsim,
-  author =       {Obertscheider, Christof and Fauster, Ewald},
-  title =        {RTMsim - A Julia module for filling simulations in Resin Transfer Moulding},
-  howpublished = {\url{https://github.com/obertscheiderfhwn/RTMsim}},
-  year =         {2022}
-}
-```
 

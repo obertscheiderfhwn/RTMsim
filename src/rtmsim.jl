@@ -55,7 +55,11 @@ module rtmsim
     - `p_a_val p_init_val `: Absolut pressure value for injection port and for initial cavity pressure.
     - `t_val porosity_val K_val alpha_val refdir1_val refdir2_val refdir3_val`: Properties of the cells in the main preform: The vector `(refdir1_val,refdir2_val,refdir3_val)` is projected onto the cell in order to define the first principal cell direction. The second principal cell direction is perpendicular to the first one in the plane spanned by the cell nodes. The principal cell directions are used as the principal permeabilty directions. The cell properties are defined by the thickness `t_val`, the porosity `porosity_val`, the permeability `K_val` in the first principal cell direction, the permeablity `alpha_val` in the second principal direction.
     - `t1_val porosity1_val K1_val alpha1_val refdir11_val refdir21_val refdir31_val` etc.: Properties for up to four additional cell regions if preform. 
-    - `patchtype1val patchtype2val patchtype3val patchtype4val`: These regions are used to specify the location of the pressure boundary conditions and to specify regions with different permeability, porosity and thickness properties (e.g. for different part thickness and layup or for race tracking which are regions with very high permeability typically at the boundary of the preforms). Vents need not be specified. Parameters `patchtype1val` define the patch type.
+    - `patchtype1val patchtype2val patchtype3val patchtype4val`: These regions are used to specify the location of the pressure boundary conditions and to specify regions with different permeability, porosity and thickness properties (e.g. for different part thickness and layup or for race tracking which are regions with very high permeability typically at the boundary of the preforms). Vents need not be specified. Parameters `patchtype1val` define the patch type. Numerical values 0, 1, 2 and 3 are allowed with the following interpretation:
+        - 0 .. the patch is ignored
+        - 1 .. the patch represents an inlet gate, where the specified injection pressure level applies
+        - 2 .. the patch specifies a preform region
+        - 3 .. the patch represents a vent, where the specified initial pressure level applies
     - `i_restart restartfilename`: Start with new simulation if `0` or continue previous simulation if `1`.
     - `i_interactive r_p`: Select the inlet ports graphically if i_interactive equal to `1`.
     - `n_pics`: Number of intermediate output files. Supposed to be a multiple of `4`.
