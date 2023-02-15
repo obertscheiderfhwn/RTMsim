@@ -12,7 +12,7 @@ RTMsim is a new software tool for RTM filling simulations. The porous cavity is 
 ### Requirments and installing Julia
 The RTMsim module was developed with Julia version >= 1.8. Julia is a high level open source programming language and it is as easy to use as python or Matlab. 
 
-First of all you need a Julia installation.  Download Julia from \url{https://julialang.org/downloads/ }. Install Julia and add an environment variable such that the Julia terminal can be started from the command line.
+First of all you need a Julia installation.  Download Julia from https://julialang.org/downloads/. Install Julia and add an environment variable such that the Julia terminal can be started from the command line.
 
 
 ### Installing using the Julia Package manager
@@ -44,14 +44,14 @@ If you are working on a Windows operating system you can avoid working in the Ju
 You can start a simulation in the GUI:
 - The buttons in the first line on the LHS are used for mesh inspection, i.e. select a mesh file, plot the mesh with bounding box and plot the defined sets. The buttons in the second line on the LHS are used for starting and continuing a filling simulation. Every time the Start or Continue simulation button is pressed, a filling simulation is started. The simulated flow time `tmax`, the patch types and patch properties must be specified before. Every simulation calculates the flow front propagation during the next `tmax` seconds. If started with the Start simulation button, the cavity is empty initially. If started with the Continue simulation button, the results from the previous simulation are taken as initial condition. With the buttons in the third line one can select inlet ports with specified radius interactively in addition to using the defined sets, and start and continue such a simulation. The buttons in the forth line are used for post-processing, i.e. show filling and pressure distribution of a specified output file (final results are saved in results.jld2), plot filling at four equidistant time instances and filling at different time instances which are selected with a slider bar. The buttons in the line on the RHS are used to start the simulation with the parameters from the selected input file.
 <br><img src="figures/rtmsim_help.png"><br>
-- Additional information (for example the meaning of the parameters) can be found on \url{https://obertscheiderfhwn.github.io/RTMsim/build/functions/} and tutorials (with typical use cases) can be found on \url{https://obertscheiderfhwn.github.io/RTMsim/build/tutorials/} for the meaning of the parameters and for typical use cases.
+- Additional information (for example the meaning of the parameters) can be found on https://obertscheiderfhwn.github.io/RTMsim/build/functions/ and tutorials (with typical use cases) can be found on https://obertscheiderfhwn.github.io/RTMsim/build/tutorials/ for the meaning of the parameters and for typical use cases.
 
 
 
 ## How to support and contribute
-Suggestions for functionalities to be implemented and user feedback from case studies with this software are appreciated. Please have a look at the contribution item in the community standards \url{https://github.com/obertscheiderfhwn/RTMsim/community}.
+Suggestions for functionalities to be implemented and user feedback from case studies with this software are appreciated. Please have a look at the contribution item in the community standards https://github.com/obertscheiderfhwn/RTMsim/community.
 
-The API is described on  \url{https://obertscheiderfhwn.github.io/RTMsim/build/functions/}
+The API is described on  https://obertscheiderfhwn.github.io/RTMsim/build/functions/.
 
 
 ## Citation
