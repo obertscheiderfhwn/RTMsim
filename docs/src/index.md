@@ -50,3 +50,8 @@ rtmsim.plot_filling(n_out,n_pics)
 ```@docs
 rtmsim.gui()
 ```
+
+
+```@meta
+EditURL = "https://github.com/obertscheiderfhwn/RTMsim/blob/main/docs/src/index.md"
+```
