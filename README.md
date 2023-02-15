@@ -12,7 +12,7 @@ RTMsim is a new software tool for RTM filling simulations. The porous cavity is 
 ### Requirments and installing Julia
 The RTMsim module was developed with Julia version >= 1.8. Julia is a high level open source programming language and it is as easy to use as python or Matlab. 
 
-First of all you need a Julia installation.  Download Julia from \url{https://julialang.org/downloads/}. Install Julia and add an environment variable such that the Julia terminal can be started from the command line.
+First of all you need a Julia installation.  Download Julia from \url{https://julialang.org/downloads/ }. Install Julia and add an environment variable such that the Julia terminal can be started from the command line.
 
 
 ### Installing using the Julia Package manager
