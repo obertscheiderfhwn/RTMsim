@@ -1,5 +1,8 @@
 # RTMsim
 RTMsim is a new software tool for RTM mould filling simulations.
+```@raw html
+<img src="assets/figures/overview.png"><br>
+```
 
 Resin Transfer Moulding (RTM) is a manufacturing process for producing thin-walled fiber reinforced polymer composites where dry fibers are placed inside a mould and resin is injected under pressure into the fibrous preform. During mould design, filling simulations can study different manufacturing concepts (i.e. placement of inlet ports and vents) to guarantee complete filling of the part and avoid air entrapment where flow fronts converge. 
 
