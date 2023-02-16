@@ -45,15 +45,15 @@ rtmsim.gui()
 ```
 
 ```@docs
-rtmsim.function numerical_gradient(i_method,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery)
+rtmsim.numerical_gradient(i_method,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery)
 ```
 
 ```@docs
-rtmsim.function numerical_flux_function(i_method,vars_P,vars_A,meshparameters)
+rtmsim.numerical_flux_function(i_method,vars_P,vars_A,meshparameters)
 ```
 
 ```@docs
-rtmsim.function numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,n_dot_u)
+rtmsim.numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,n_dot_u)
 ```
 
 
@@ -65,52 +65,7 @@ The source code is prepared for the following extensions:
 - Input parameter `i_model` (for iso-thermal RTM `=1`) is used for adding additional functionalities. E.g. adding temperature and degree-of-cure equations with variable resin viscosity or for VARI with variable porosity, permeability and cavity thickness.
 - Parameter `i_method` in the functions for numerical differentiation and flux functions can be used to implement different numerical schemes. E.g. gradient limiter or second-order upwinding.
 
-E.g. if wiggles (oscillations) are present in the pressure contour plot, a gradient limiter is used in the function `numerical_gradient`. The function is called with i_method=2 as first argument: 
-`dpdx,dpdy=numerical_gradient(2,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);` <br>
-In the function a case selection determines the used method:
-```
-    if i_method==1;
-        #least square solution to determine gradient
-        cellneighboursline=cellneighboursarray[ind,:];
-        cellneighboursline=cellneighboursline[cellneighboursline .> 0]
-        len_cellneighboursline=length(cellneighboursline)
-        bvec=Vector{Float64}(undef,len_cellneighboursline);
-        Amat=Array{Float64}(undef,len_cellneighboursline,2);  
-        for i_neighbour in 1:len_cellneighboursline;
-            i_P=ind;
-            i_A=cellneighboursarray[ind,i_neighbour];  
-            Amat[i_neighbour,1]=cellcentertocellcenterx[ind,i_neighbour]
-            Amat[i_neighbour,2]=cellcentertocellcentery[ind,i_neighbour]
-            bvec[i_neighbour]=p_old[i_A]-p_old[i_P];
-        end
-        xvec=Amat[1:len_cellneighboursline,:]\bvec[1:len_cellneighboursline];
-        dpdx=xvec[1];
-        dpdy=xvec[2];
-    elseif i_method==2;
-        #least square solution to determine gradient with limiter
-        cellneighboursline=cellneighboursarray[ind,:];
-        cellneighboursline=cellneighboursline[cellneighboursline .> 0]
-        len_cellneighboursline=length(cellneighboursline)
-        bvec=Vector{Float64}(undef,len_cellneighboursline);
-        Amat=Array{Float64}(undef,len_cellneighboursline,2);  
-        wi=Vector{Float64}(undef,len_cellneighboursline);
-        for i_neighbour in 1:len_cellneighboursline;
-            i_P=ind;
-            i_A=cellneighboursarray[ind,i_neighbour];  
-            exp_limiter=2;
-            wi[i_neighbour]=1/(sqrt((cellcentertocellcenterx[ind,i_neighbour])^2+(cellcentertocellcentery[ind,i_neighbour])^2))^exp_limiter;
-            Amat[i_neighbour,1]=wi[i_neighbour]*cellcentertocellcenterx[ind,i_neighbour]
-            Amat[i_neighbour,2]=wi[i_neighbour]*cellcentertocellcentery[ind,i_neighbour]
-            bvec[i_neighbour]=wi[i_neighbour]*(p_old[i_A]-p_old[i_P]);
-        end
-        xvec=Amat[1:len_cellneighboursline,:]\bvec[1:len_cellneighboursline];
-        dpdx=xvec[1];
-        dpdy=xvec[2];
-    end
-    return dpdx,dpdy
-end
-```
-After modifying and compiling the RTMsim module, a simulation can be started in the GUI or from the terminal.
+If you are interested, please have a look at the contribution item in the [community standards](https://github.com/obertscheiderfhwn/RTMsim/community).
 
 
 

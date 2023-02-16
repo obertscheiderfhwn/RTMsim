@@ -1,7 +1,5 @@
 # RTMsim - A Julia module for filling simulations in Resin Transfer Moulding
 
-
-## Mould filling simulations
 Resin Transfer Moulding (RTM) is a manufacturing process for producing thin-walled fiber reinforced polymer composites where dry fibers are placed inside a mould and resin is injected under pressure into the fibrous preform. During mould design, filling simulations can study different manufacturing concepts (i.e. placement of inlet ports and vents) to guarantee complete filling of the part and avoid air entrapment where flow fronts converge. 
 
 RTMsim is a new software tool for RTM filling simulations. The porous cavity is fully described by a mesh file with triangular cells on the part’s mid-surface and cell set definitions. The latter can be used for specifying the location of the pressure injection ports and regions with different preforms by assigning different thickness, porosity and permeability values. Additional equations (e.g. for modeling the degree-of-cure) can either be added with equations of the same type or modifications of existing equations (e.g. for variable cavity thickness as needed for vacuum assisted resin infusion simulations). Several test cases were used for successfully validating the implemented model.
@@ -47,21 +45,19 @@ If you are working on a Windows operating system you can start RTMsim by double 
 - Copy `start_rtmsim_gui.bat` and `start_rtmsim_gui.jl` from the package folder to the working directory
 - Double click on `start_rtmsim_gui.bat` in the Explorer
 
-### Running a simulation
+### GUI
 You can start a simulation in the GUI. The buttons in the first line on the LHS are used for mesh inspection, i.e. select a mesh file, plot the mesh with bounding box and plot the defined sets. The buttons in the second line on the LHS are used for starting and continuing a filling simulation. Every time the Start or Continue simulation button is pressed, a filling simulation is started. The simulated flow time `tmax`, the patch types and patch properties must be specified before. Every simulation calculates the flow front propagation during the next `tmax` seconds. If started with the Start simulation button, the cavity is empty initially. If started with the Continue simulation button, the results from the previous simulation are taken as initial condition. With the buttons in the third line one can select inlet ports with specified radius interactively in addition to using the defined sets, and start and continue such a simulation. The buttons in the forth line are used for post-processing, i.e. show filling and pressure distribution of a specified output file (final results are saved in results.jld2), plot filling at four equidistant time instances and filling at different time instances which are selected with a slider bar. The buttons in the line on the RHS are used to start the simulation with the parameters from the selected input file.
 <br><img src="figures/rtmsim_help.png"><br>
 
-Click [here](https://obertscheiderfhwn.github.io/RTMsim/build/) for additional information (for example the meaning of the parameters) and [here](https://obertscheiderfhwn.github.io/RTMsim/build/tutorials/) for tutorials (with typical use cases).
+Click [here](https://obertscheiderfhwn.github.io/RTMsim/build/) for additional information (for example the meaning of the parameters) and [here](https://obertscheiderfhwn.github.io/RTMsim/build/tutorials/) for tutorials (with typical use cases). 
 
 
 
 ## How to support and contribute
-Suggestions for functionalities to be implemented and user feedback from case studies with this software are appreciated. Please have a look at the contribution item in the [community standards](https://github.com/obertscheiderfhwn/RTMsim/community).
-
-Have a look at the [API documentation](https://obertscheiderfhwn.github.io/RTMsim/build/functions/).
+Suggestions for functionalities to be implemented and user feedback from case studies with this software are appreciated. Please have a look at the contribution item in the [community standards](https://github.com/obertscheiderfhwn/RTMsim/community). Click [here](https://obertscheiderfhwn.github.io/RTMsim/build/functions/) to see the API documentation.
 
 
-## Citation
+## How to cite
 If RTMsim is used for research or development, please use the following entry, shown in BiBTeX format:
 ```
 @misc{RTMsim,
