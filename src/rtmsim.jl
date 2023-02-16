@@ -853,7 +853,7 @@ module rtmsim
     Calculates the pressure gradient from the cell values of the neighbouring cells.
     i_method=1 .. Least square solution to determine gradient
             =2 .. Least square solution to determine gradient with limiter
-            =3 .. Untime optimized least square solution to determine gradient
+            =3 .. RUntime optimized least square solution to determine gradient
     """
     function numerical_gradient(i_method,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);
         if i_method==1;

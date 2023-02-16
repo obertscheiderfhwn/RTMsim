@@ -4,9 +4,9 @@ RTMsim is a new software tool for RTM mould filling simulations.
 Resin Transfer Moulding (RTM) is a manufacturing process for producing thin-walled fiber reinforced polymer composites where dry fibers are placed inside a mould and resin is injected under pressure into the fibrous preform. During mould design, filling simulations can study different manufacturing concepts (i.e. placement of inlet ports and vents) to guarantee complete filling of the part and avoid air entrapment where flow fronts converge. 
 
 In the past, numerous models have been implemented in different software packages to perform filling simulations for RTM. The used simulation packages can be divided into three groups: 
-- General purpose CFD software packages, such as ANSYS Fluent or OpenFOAM
-- Commercially available software packages which are tailored for the simulation of the RTM process, such as PAM-RTM, RTM-Worx or LIMS
-- Easy-to-use simulation tools such as myRTM
+- General purpose CFD software packages, such as [ANSYS Fluent](https://www.ansys.com/products/fluids/ansys-fluent) or the various OpenFOAM distributions, for example from [OpenCFD](https://www.openfoam.com/) or [The OpenFOAM Foundation](https://openfoam.org/)
+- Commercially available software packages which are tailored for the simulation of the RTM process, such as [PAM-RTM](https://www.esi.com.au/software/pamrtm/), [RTM-Worx](https://www.polyworx.com/) or [LIMS](https://sites.udel.edu/lims/)
+- Easy-to-use simulation tools such as [myRTM](https://www.myrtm.ch/)
 
 All packages describe the flow on a macroscopic level. The first group models the flow through the porous cavity using volume-averaged Navier-Stokes equations. The second group makes use of some assumptions and at first solves a Laplace equation for the pressure inside the region which is already filled and in a second step calculates the flow velocity field to propagate the flow front. It has been shown that the first and second group render very similar results. myRTM from the third group is easy-to-use and can predict the filling pattern properly but neither predict the filling time correctly nor consider non-isotropic preform permeability. Solving conservation laws for fluid flow as in the first group requires a volume mesh of the cavity and consequently the solution is more time-consuming. The second and third group can be solved on a shell mesh where the thickness of the cavity is a property of the cell (similar to porosity and permeability) and slip boundary conditions at the top and bottom walls of the cavity are assumed. 
 
