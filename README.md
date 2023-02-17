@@ -20,7 +20,7 @@ On a Windows operating systems add an environment variable such that the Julia t
 ### Installing using the Julia Package manager
 Open a Julia terminal. The only thing you have to do is to add the package to your Julia environment with the following commands:
 - `using Pkg`
-- `Pkg.add(url="https://github.com/obertscheiderfhwn/RTMsim")` or `Pkg.add(url="https://github.com/obertscheiderfhwn/RTMsim",rev="1.0.4")` for specific revision `1.0.4`
+- `Pkg.add(url="https://github.com/obertscheiderfhwn/RTMsim")` for the current version  or `Pkg.add(url="https://github.com/obertscheiderfhwn/RTMsim",rev="1.0.4")` for the specific release `1.0.4` corresponding to the [JOSS paper](https://joss.theoj.org/papers/ac97b5f0bc886be23981c56fe9673ca2)
 - `Pkg.test("rtmsim")` for an automated test.
 
 Alternatively, one can use the package manager with the following commands:
