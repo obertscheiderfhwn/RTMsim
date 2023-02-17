@@ -42,9 +42,9 @@ If you are working on a Windows operating system you can start RTMsim by double 
 
 ### GUI
 You can start a simulation in the GUI. 
-#```@raw html
-#<br><img src="../assets/figures/rtmsim_help.png"><br>
-#```
+```@raw html
+<br><img src="../assets/figures/rtmsim_help.png"><br>
+```
 
 The buttons in the line on the RHS are used to start the simulation with the parameters from the selected input file. For example, click on Select input file and select the input.txt in the inputfiles folder from the package installation and click on Run with input file. After the simulation is completed, click on `Plot overview`.
 
