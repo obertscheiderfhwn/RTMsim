@@ -28,11 +28,11 @@ module rtmsim
             
     """
         start_rtmsim(inputfilename)
+        
+    Reads the text input file and calls the solver with the read parameters. 
 
     Arguments:
-        - inputfilename :: String
-
-    Reads the text input file and calls the solver with the read parameters. 
+    - inputfilename :: String
     
     The complete set of input parameters can be accessed in the input file. The following paragraph shows an example for such an input file:
     ```
@@ -189,24 +189,7 @@ module rtmsim
                     t4_val,porosity4_val,K4_val,alpha4_val,refdir14_val,refdir24_val,refdir34_val,
                     patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_restart,restartfilename,i_interactive,r_p,n_pics)
     
-    Arguments:
-    - i_model :: Int
-    - meshfile :: string
-    - tmax :: Float
-    - p_ref, rho_ref, gamma, mu_resin_val :: Float
-    - t_val,porosity_val,K_val,alpha_val,refdir1_val,refdir2_val,refdir3_val :: Float
-    - t1_val,porosity1_val,K1_val,alpha1_val,refdir11_val,refdir21_val,refdir31_val :: Float
-    - t2_val,porosity2_val,K2_val,alpha2_val,refdir12_val,refdir22_val,refdir32_val :: Float
-    - t3_val,porosity3_val,K3_val,alpha3_val,refdir13_val,refdir23_val,refdir33_val :: Float
-    - t4_val,porosity4_val,K4_val,alpha4_val,refdir14_val,refdir24_val,refdir34_val :: Float
-    - patchtype1val,patchtype2val,patchtype3val,patchtype4val :: Int
-    - i_restart :: Int
-    - restartfilename :: string
-    - i_interactive :: Int64
-    - r_p :: Float
-    - n_pics :: Int
-
-    RTMsim solver with main steps
+    RTMsim solver with the following main steps:
     - Simulation initialization
     - Read mesh file and prepare patches  
     - Find neighbouring cells
@@ -227,6 +210,23 @@ module rtmsim
         - Saving of intermediate data
         - (Opional time marching etc. for i_model=2,3,...)
         - Calculation of adaptive time step 
+
+    Arguments:
+    - i_model :: Int
+    - meshfile :: String
+    - tmax :: Float
+    - p_ref, rho_ref, gamma, mu_resin_val :: Float
+    - t_val,porosity_val,K_val,alpha_val,refdir1_val,refdir2_val,refdir3_val :: Float
+    - t1_val,porosity1_val,K1_val,alpha1_val,refdir11_val,refdir21_val,refdir31_val :: Float
+    - t2_val,porosity2_val,K2_val,alpha2_val,refdir12_val,refdir22_val,refdir32_val :: Float
+    - t3_val,porosity3_val,K3_val,alpha3_val,refdir13_val,refdir23_val,refdir33_val :: Float
+    - t4_val,porosity4_val,K4_val,alpha4_val,refdir14_val,refdir24_val,refdir34_val :: Float
+    - patchtype1val,patchtype2val,patchtype3val,patchtype4val :: Int
+    - i_restart :: Int
+    - restartfilename :: String
+    - i_interactive :: Int64
+    - r_p :: Float
+    - n_pics :: Int
 
     Unit tests:
     - `rtmsim.rtmsim_rev1(1,"..\\meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,0,"results.jld2",0,0.01,16)`
@@ -871,6 +871,11 @@ module rtmsim
 
     """
         function numerical_gradient(i_method,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery)
+            
+    Calculates the pressure gradient from the cell values of the neighbouring cells.
+    - i_method=1 .. Least square solution to determine gradient
+    - i_method=2 .. Least square solution to determine gradient with limiter
+    - i_method=3 .. RUntime optimized least square solution to determine gradient
 
     Arguments:
     - i_method :: Int
@@ -879,10 +884,6 @@ module rtmsim
     - cellneighoursarray :: Array{Float,2}
     - cellcentertocellcenterx, cellcentertocellcentery :: Array{Float,2}
 
-    Calculates the pressure gradient from the cell values of the neighbouring cells.
-    i_method=1 .. Least square solution to determine gradient
-            =2 .. Least square solution to determine gradient with limiter
-            =3 .. RUntime optimized least square solution to determine gradient
     """
     function numerical_gradient(i_method,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery);
         if i_method==1;
@@ -975,13 +976,13 @@ module rtmsim
     """
         function numerical_flux_function(i_method,vars_P,vars_A,meshparameters)
 
+    Evaluates the numerical flux functions at the cell boundaries.
+    - i_method==1 .. first order upwinding
+
     Arguments:
     - i_method :: Int
     - vars_P, vars_A :: 4-element Vector{Float}
     - meshparameters :: 3-element Vector{Float}
-
-    Evaluates the numerical flux functions at the cell boundaries.
-    i_method==1 .. first order upwinding
     """
     function numerical_flux_function(i_method,vars_P,vars_A,meshparameters);
         if i_method==1;
@@ -1028,14 +1029,14 @@ module rtmsim
     """
         function numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,n_dot_u)
 
-    Arguments:
-        - i_method :: Int
-        - vars_P, vars_A :: 4-element Vector{Float}
-        - meshparameters :: 3-element Vector{Float}
-        - n_dot_u :: Float
-
     Evaluates the numerical flux functions at the cell boundaries to pressure inlet or outlet.
-    i_method==1 .. first order upwinding
+    - i_method==1 .. first order upwinding
+
+    Arguments:
+    - i_method :: Int
+    - vars_P, vars_A :: 4-element Vector{Float}
+    - meshparameters :: 3-element Vector{Float}
+    - n_dot_u :: Float
     """
     function numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,n_dot_u);
         if i_method==1;
@@ -1112,14 +1113,14 @@ module rtmsim
     """
         function read_nastran_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
 
+    Read file in Nastran format with fixed length (8 digits), nodes (`GRIDS`) defined in global coordinate system.
+
     Arguments:
     - meshfilename :: String
     - paramset, paramset1, paramset2, paramset3, paramset3 :: Vector{Float}
     - patchtype1val,patchtype1val1,patchtype1val2,patchtype1val3,patchtype1val4 :: Int
     - i_interactive :: Int
     - r_p :: Float
-
-    Read file in Nastran format with fixed length (8 digits), nodes (`GRIDS`) defined in global coordinate system.
 
     Unit test:
     - `paramset=[0.5,0.3,3e-10,1.0,1.0,0.0,0.0];paramset1=paramset;paramset2=paramset;paramset3=paramset;paramset4=paramset;patchtype1val=-1;patchtype2val=-1;patchtype3val=-1;patchtype4val=-1;i_interactive=0;r_p=0.01; N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids=read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)``
@@ -1847,11 +1848,11 @@ module rtmsim
     """
         function plot_mesh(meshfilename,i_mode)
 
+    Create mesh plot with cells with `i_mode==1` and create mesh plots with cell center nodes with `i_mode==2` for manual selection of inlet ports.
+
     Arguments:
     - meshfilename :: String
     - i_mode :: Int
-
-    Create mesh plot with cells with `i_mode==1` and create mesh plots with cell center nodes with `i_mode==2` for manual selection of inlet ports.
 
     Unit test:
     - `rtmsim.plot_mesh("..\\meshfiles\\mesh_permeameter1_foursets.bdf",1)`
@@ -2181,10 +2182,10 @@ module rtmsim
     """
         function plot_results(resultsfilename)
 
+    Create contour plots of the filling factor and the pressure after loading a results file.
+
     Arguments:
     - resultsfilename :: String
-
-    Create contour plots of the filling factor and the pressure after loading a results file.
     
     Unit test: 
     - `rtmsim.plot_results("../results.jld2")`
@@ -2306,12 +2307,12 @@ module rtmsim
     """
         function plot_overview(n_out,n_pics)
 
+    Create filling factor contour plots. `n_out` is the index of the last output file, if `n_out==-1` the output file with the highest index is chosen. Consider the last `n_pics` for creating the contour plots at four equidistant time intervals, if `n_pics==-1` all available output files are considered.
+
     Arguments:
     - n_out :: Int
     - n_pics :: Int
 
-    Create filling factor contour plots. `n_out` is the index of the last output file, if `n_out==-1` the output file with the highest index is chosen. Consider the last `n_pics` for creating the contour plots at four equidistant time intervals, if `n_pics==-1` all available output files are considered.
-    
     Unit test: 
     - `rtmsim.plot_overview(-1,-1)`
     """
@@ -2477,12 +2478,12 @@ module rtmsim
     """
         function plot_filling(n_out,n_pics)
 
+    Create a window showing the filling factor contour plot at a selected time instance. Selection is with slider bar. `n_out` is the index of the last output file, if `n_out==-1` the output file with the highest index is chosen. Consider the last `n_pics` for creating the contour plots at four equidistant time intervals, if `n_pics==-1` all available output files are considered.
+    
     Arguments: 
     - n_out :: Int
     - n_pics :: Int
 
-    Create a window showing the filling factor contour plot at a selected time instance. Selection is with slider bar. `n_out` is the index of the last output file, if `n_out==-1` the output file with the highest index is chosen. Consider the last `n_pics` for creating the contour plots at four equidistant time intervals, if `n_pics==-1` all available output files are considered.
-    
     Unit test:
     - `rtmsim.plot_filling(-1,-1)` 
     """
