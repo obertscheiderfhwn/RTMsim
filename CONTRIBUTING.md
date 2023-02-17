@@ -29,3 +29,6 @@ Contributors can propose changes to the code in the repository by creating a pul
   - Existing tests are successful and new tests are added and successful.
   - The changes are properly documented.
   - The changes provide an appropriate and substantial improvement to the repository.
+
+## Testing
+Please verify that the code still produced the expected results for the basic [V&V cases](https://obertscheiderfhwn.github.io/RTMsim/build/tutorials/). The validation and verification cases can be executed in the GUI with the input files input_case1_coarsemesh.txt, input_case1_finemesh.txt, input_case2_coarsemesh.txt, input_case2_finemesh.txt, input_case3_coarsemesh.txt, input_case3_finemesh.txt. The input file names are saved in directory inputfiles.
