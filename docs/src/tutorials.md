@@ -7,7 +7,7 @@ Three different test cases are available, successfully validating the Julia impl
 2. Verification of the software tool for radial flow with tilted orthotropic in-plane permeablity: The simulated tilted elliptical flow front is analysed and the calculated orthotropic permeablity is compared with the simulation input.
 3. Comparison of the simulated flow front position for a complex annulus filler-like part with the simulated flow front position from Ansys Fluent and comparison of the simulated filling pattern with results from a myRTM simulation.
 
-The validation and verification cases can be executed in the GUI and from the Julia terminal. The input files for the validation cases are `input_case1_coarsemesh.txt`, `input_case1_finemesh.txt`, `input_case2_coarsemesh.txt`, `input_case2_finemesh.txt`, `input_case3_coarsemesh.txt`, `input_case3_finemesh.txt`. The input file names are saved in directory `inputfiles`. The filling overview is created with the button `Plot overview` in the GUI or with `rtmsim.plot_overview(-1,-1)` from the Julia terminal. 
+The validation and verification cases can be executed in the GUI. The input files for the validation cases are `input_case1_coarsemesh.txt`, `input_case1_finemesh.txt`, `input_case2_coarsemesh.txt`, `input_case2_finemesh.txt`, `input_case3_coarsemesh.txt`, `input_case3_finemesh.txt`. The input file names are saved in directory `inputfiles` in the package. The filling overview is created with the button `Plot overview` in the GUI. 
 
 The following passages show and explain the simulation results (after rotating the views with LMB) for the test cases.
 
