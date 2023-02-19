@@ -1,26 +1,8 @@
 # RTMsim - A Julia module for filling simulations in Resin Transfer Moulding with the Finite Area Method
 # 
-# In order to use RTMsim follow the following steps:
-# - Download Julia from https://julialang.org/downloads/ and add Julia to path such that can be started from command line.
-# - Open Julia terminal, change to package manager with ] and 
-#   add Gtk GLMakie Makie NativeFileDialog Glob LinearAlgebra JLD2 GeometryBasics Random FileIO ProgressMeter.
-# - One has access to all functions through the Julia terminal. Open a Julia terminal, 
-#   change to the directory with the RTMsim repository with cd("path") and 
-#   call all functions after include("rtmsim.jl"). 
-#   Popular functions are:
-#       rtmsim.plot_mesh("..\\meshfiles\\mesh_permeameter1_foursets.bdf",1) for plotting the mesh defined in the bdf-file
-#       rtmsim.plot_sets("..\\meshfiles\\mesh_permeameter1_foursets.bdf") for plotting the sets specified in the bdf-file
-#       rtmsim.rtmsim_rev1(1,"..\\meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,0,"results.jld2",0,0.01,16) for starting a simulation with different patches and race tracking
-#       rtmsim.rtmsim_rev1(1,"..\\meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,1,"results.jld2",0,0.01,16) for continuing the previous simulation
-#       rtmsim.plot_mesh("..\\meshfiles\\mesh_annulusfiller1.bdf",2) for the manual selection of inlet ports
-#       rtmsim.rtmsim_rev1(1,"..\\meshfiles\\mesh_annulusfiller1.bdf",200, 0.35e5,1.205,1.4,0.06, 0.35e5,0.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 0,0,0,0, 0,"results.jld2",1,0.01,16) for starting only with the interactively selected inlet ports
-#       rtmsim.plot_results("results.jld2") for plotting the final filling and pressure contours
-#       rtmsim.plot_overview(-1,-1) for plotting the filling contours at four equidistant time instances
-#       rtmsim.plot_filling(-1,-1) for plotting the filling at different time instances selected with a slider bar
-#       rtmsim.start_rtmsim("..\\inputfiles\\input.txt") for starting a simulation with the parameters specified in the text file input.txt
-#       rtmsim.rtmsim_rev1(1,"..\\meshfiles\\mesh_permeameter1_meshrefinement.bdf",40, 101325,1000,200,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,0,0,0,0,"results.jld2",0,0.01,16) for nearly incompressible fluid
-
-
+# Documentation: https://obertscheiderfhwn.github.io/RTMsim/build/
+# Repository: https://github.com/obertscheiderfhwn/RTMsim
+#
 module rtmsim
     using Glob, LinearAlgebra, JLD2, GeometryBasics, GLMakie, Makie, Random, FileIO, ProgressMeter, NativeFileDialog, Gtk.ShortNames, Gtk.GConstants, Gtk.Graphics, Gtk
     GLMakie.activate!()    
@@ -71,7 +53,7 @@ module rtmsim
     Entries are separated by one blank.
 
     Unit test:
-    - `rtmsim.start_rtmsim("..\\inputfiles\\input.txt")`
+    - `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; inputfilename=joinpath(MODULE_ROOT,"inputfiles","input.txt"); rtmsim.start_rtmsim(inputfilename);`
     """
     function start_rtmsim(inputfilename)        
         print("Read input file "*string(inputfilename)*"\n")
@@ -229,12 +211,12 @@ module rtmsim
     - n_pics :: Int
 
     Unit tests:
-    - `rtmsim.rtmsim_rev1(1,"..\\meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,0,"results.jld2",0,0.01,16)`
+    - `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; meshfilename=joinpath(MODULE_ROOT,"meshfiles","mesh_permeameter1_foursets.bdf"); rtmsim.rtmsim_rev1(1,meshfilename,200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,0,"results.jld2",0,0.01,16)`
         
     Addtional unit tests:
-    - `rtmsim.rtmsim_rev1(1,"..\\meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,0,0,0, 0,"results.jld2",0,0.01,16)` for starting a simulation with one pressure inlet port (sets 2, 3 and 4 are not used and consequently the preform parameters are ignored; since set 1 is a pressure inlet, also the parameters for set 1 are ignored and the only relevant parameter for the specified set is the pressure difference between injection and initial cavity pressure)
-    - `rtmsim.rtmsim_rev1(1,"..\\meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2, 0,"results.jld2",0,0.01,16)` for starting a simulation with different patches and race tracking
-    - `rtmsim.rtmsim_rev1(1,"..\\meshfiles\\mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2, 1,"results.jld2",0,0.01,16)` for continuing the previous simulation   
+    - `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; meshfilename=joinpath(MODULE_ROOT,"meshfiles","mesh_permeameter1_foursets.bdf"); rtmsim.rtmsim_rev1(1,meshfilename,200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,0,0,0, 0,"results.jld2",0,0.01,16)` for starting a simulation with one pressure inlet port (sets 2, 3 and 4 are not used and consequently the preform parameters are ignored; since set 1 is a pressure inlet, also the parameters for set 1 are ignored and the only relevant parameter for the specified set is the pressure difference between injection and initial cavity pressure)
+    - `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; meshfilename=joinpath(MODULE_ROOT,"meshfiles","mesh_permeameter1_foursets.bdf"); rtmsim.rtmsim_rev1(1,meshfilename,200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2, 0,"results.jld2",0,0.01,16)` for starting a simulation with different patches and race tracking
+    - `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; meshfilename=joinpath(MODULE_ROOT,"meshfiles","mesh_permeameter1_foursets.bdf"); rtmsim.rtmsim_rev1(1,meshfilename,200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2, 1,"results.jld2",0,0.01,16)` for continuing the previous simulation   
     """
     function rtmsim_rev1(i_model,meshfilename,tmax,
         p_ref,rho_ref,gamma,mu_resin_val,
@@ -1123,7 +1105,7 @@ module rtmsim
     - r_p :: Float
 
     Unit test:
-    - `paramset=[0.5,0.3,3e-10,1.0,1.0,0.0,0.0];paramset1=paramset;paramset2=paramset;paramset3=paramset;paramset4=paramset;patchtype1val=-1;patchtype2val=-1;patchtype3val=-1;patchtype4val=-1;i_interactive=0;r_p=0.01; N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids=read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)``
+    - `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; meshfilename=joinpath(MODULE_ROOT,"meshfiles","mesh_permeameter1_foursets.bdf"); paramset=[0.5,0.3,3e-10,1.0,1.0,0.0,0.0];paramset1=paramset;paramset2=paramset;paramset3=paramset;paramset4=paramset;patchtype1val=-1;patchtype2val=-1;patchtype3val=-1;patchtype4val=-1;i_interactive=0;r_p=0.01; N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids=rtmsim.read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p);`
     """
     function read_nastran_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p);
 
@@ -1855,11 +1837,11 @@ module rtmsim
     - i_mode :: Int
 
     Unit test:
-    - `rtmsim.plot_mesh("..\\meshfiles\\mesh_permeameter1_foursets.bdf",1)`
+    - `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; meshfilename=joinpath(MODULE_ROOT,"meshfiles","mesh_permeameter1_foursets.bdf"); rtmsim.plot_mesh(meshfilename,1);`
 
     Additional unit tests:
-    - `rtmsim.plot_mesh("..\\meshfiles\\mesh_annulusfiller1.bdf",2)` for the manual selection of inlet ports with left mouse button click while key p is pressed 
-    - `rtmsim.rtmsim_rev1(1,"..\\meshfiles\\mesh_annulusfiller1.bdf",200, 0.35e5,1.205,1.4,0.06, 0.35e5,0.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 0,0,0,0, 0,"results.jld2",1,0.01,16)` for starting only with the interactively selected inlet ports
+    - `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; meshfilename=joinpath(MODULE_ROOT,"meshfiles","mesh_permeameter1_foursets.bdf"); rtmsim.plot_mesh(meshfilename,2);` for the manual selection of inlet ports with left mouse button click while key p is pressed 
+    - `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; meshfilename=joinpath(MODULE_ROOT,"meshfiles","mesh_permeameter1_foursets.bdf"); rtmsim.rtmsim_rev1(1,meshfilename,200, 0.35e5,1.205,1.4,0.06, 0.35e5,0.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 0,0,0,0, 0,"results.jld2",1,0.01,16);` for starting only with the interactively selected inlet ports
     """
     function plot_mesh(meshfilename,i_mode)
         #dummy values for calling function read_mesh
@@ -1981,7 +1963,7 @@ module rtmsim
     Create a plot with the up to four cell sets defined in the mesh file.
 
     Unit test:
-    - `rtmsim.plot_sets("..\\meshfiles\\mesh_permeameter1_foursets.bdf")`
+    - `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; meshfilename=joinpath(MODULE_ROOT,"meshfiles","mesh_permeameter1_foursets.bdf"); rtmsim.plot_sets(meshfilename);`
     """
     function plot_sets(meshfilename)
         #dummy values for calling function read_nastran_mesh
@@ -2188,7 +2170,7 @@ module rtmsim
     - resultsfilename :: String
     
     Unit test: 
-    - `rtmsim.plot_results("../results.jld2")`
+    - `WORK_DIR=pwd(); resultsfilename=joinpath(WORK_DIR,"results.jld2"); rtmsim.plot_results(resultsfilename);`
     """
     function plot_results(resultsfilename)
         #create contour plots of the filling factor and the pressure after loading a results file
