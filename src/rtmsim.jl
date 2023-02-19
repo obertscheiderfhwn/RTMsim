@@ -2698,8 +2698,10 @@ module rtmsim
         in3=GtkButton("Run with input file")
 
         #define input fields
-        in2=GtkEntry(); set_gtk_property!(in2,:text,"inputfiles\\input.txt");
-        mf=GtkEntry(); set_gtk_property!(mf,:text,"meshfiles\\mesh_permeameter1_foursets.bdf");
+        #in2=GtkEntry(); set_gtk_property!(in2,:text,"inputfiles\\input.txt");
+        #mf=GtkEntry(); set_gtk_property!(mf,:text,"meshfiles\\mesh_permeameter1_foursets.bdf");
+        in2=GtkEntry(); set_gtk_property!(in2,:text,"");
+        mf=GtkEntry(); set_gtk_property!(mf,:text,"");
         t=GtkEntry(); set_gtk_property!(t,:text,"200")
         rf=GtkEntry(); set_gtk_property!(rf,:text,"results.jld2")
         r=GtkEntry(); set_gtk_property!(r,:text,"0.01")
