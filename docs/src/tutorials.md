@@ -131,7 +131,7 @@ Since the GUI for Linux is still under development, the steps of the presented u
 
 ### Use case 1 
 This examples shows how to perform a simulation in the Julia terminal. First, inspect the mesh file and plot the pre-defined sets:
-- `rtmsim.plot_sets("meshfiles/mesh_permeameter1_foursets.bdf");` if file `mesh_permeameter1_foursets.bdf` is included in folder `meshfiles` in the working directory.
+- `rtmsim.plot_sets("meshfiles/mesh_permeameter1_foursets.bdf")` if file `mesh_permeameter1_foursets.bdf` is included in folder `meshfiles` in the working directory.
 ```@raw html
 <br><img src="../assets/figures/example1d.png"><br>
 ```
@@ -143,6 +143,7 @@ Set 1 is the pressure inlet, set 2 and set 3 are reinforcement patches with lowe
 ```
 Continue the simulation for another 100 s simulation time and plot the filling overview:
 - `rtmsim.rtmsim_rev1(1,"meshfiles/mesh_permeameter1_foursets.bdf",100, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,1,"results.jld2",0,0.01,16)`
+- `rtmsim.plot_overview(-1,-1)`
 ```@raw html
 <br><img src="../assets/figures/example1c.png"><br>
 ```
@@ -161,7 +162,7 @@ The filling overview is created:
 <br><img src="../assets/figures/example2c.png"><br>
 ```
 The filling overview without pressure outlet is:
-- `rtmsim.rtmsim_rev1(1,"meshfiles/mesh_annulusfiller1_inletandoutlet.bdf",800, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,3,0,0, 0,"results.jld2",0,0.01,16)`
+- `rtmsim.rtmsim_rev1(1,"meshfiles/mesh_annulusfiller1_inletandoutlet.bdf",800, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,0,0,0, 0,"results.jld2",0,0.01,16)`
 - `rtmsim.plot_overview(-1,-1)`
 ```@raw html
 <br><img src="../assets/figures/example2e.png"><br>
@@ -176,9 +177,6 @@ This example shows a workflow for selecting the inlet ports interactively. First
 ```
 Select the inlet ports in a graphics window:
 - `rtmsim.plot_mesh("meshfiles/mesh_annulusfiller1.bdf",2)`
-```@raw html
-<br><img src="../assets/figures/example3b.png"><br>
-```
 Rotate the view with the nodes with LMB and select an inlet port location with key `p`+LMB. After selection the node is highlighted:
 ```@raw html
 <br><img src="../assets/figures/example3c.png"><br>
