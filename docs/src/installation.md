@@ -32,8 +32,8 @@ For testing the software create a directory and download mesh- and input-files:
 - Copy from the package location the folder with the `meshfiles` and the `inputfiles` into the working directory
 
 Start the GUI in the Julia terminal:
-- In the Julia terminal change to the working directory, for example with `cd("C:\\work\\rtmsim")` where the separation is a `\\`
-- `using rtmsim
+- In the Julia terminal change to the working directory, for example with `cd("C:\\obertscheiderfhwn\\rtmsim")` where the separation is a `\\` on Windows or `cd("/home/obertscheiderfhwn/rtmsim")` on Linux operating system
+- `using rtmsim`
 - Start the GUI with `rtmsim.gui()`
 
 If you are working on a Windows operating system you can start RTMsim by double clicking: 

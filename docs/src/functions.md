@@ -8,6 +8,10 @@ rtmsim.plot_mesh(meshfilename,i_mode)
 ```
 
 ```@docs
+rtmsim.plot_sets(meshfilename)
+```
+
+```@docs
 rtmsim.read_nastran_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
 ```
 

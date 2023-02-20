@@ -55,7 +55,12 @@ module rtmsim
     Unit test:
     - `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; inputfilename=joinpath(MODULE_ROOT,"inputfiles","input.txt"); rtmsim.start_rtmsim(inputfilename);`
     """
-    function start_rtmsim(inputfilename)        
+    function start_rtmsim(inputfilename)     
+        if Sys.iswindows()
+            replace(inputfilename,"/" => "\\")
+        elseif Sys.islinux()
+            replace(inputfilename,"\\" => "/")
+        end        
         print("Read input file "*string(inputfilename)*"\n")
         if ~isfile(inputfilename);
             errorstring=string("File ",inputfilename," not existing"* "\n"); 
@@ -1844,6 +1849,11 @@ module rtmsim
     - `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; meshfilename=joinpath(MODULE_ROOT,"meshfiles","mesh_permeameter1_foursets.bdf"); rtmsim.rtmsim_rev1(1,meshfilename,200, 0.35e5,1.205,1.4,0.06, 0.35e5,0.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 0,0,0,0, 0,"results.jld2",1,0.01,16);` for starting only with the interactively selected inlet ports
     """
     function plot_mesh(meshfilename,i_mode)
+        if Sys.iswindows()
+            replace(meshfilename,"/" => "\\")
+        elseif Sys.islinux()
+            replace(meshfilename,"\\" => "/")
+        end      
         #dummy values for calling function read_mesh
         paramset=[0.5,0.3,3e-10,1.0,1.0,0.0,0.0];paramset1=paramset;paramset2=paramset;paramset3=paramset;paramset4=paramset;
         patchtype1val=-1;patchtype2val=-1;patchtype3val=-1;patchtype4val=-1;i_interactive=0;

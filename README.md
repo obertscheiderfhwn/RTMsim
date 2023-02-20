@@ -30,20 +30,20 @@ Alternatively, one can use the package manager with the following commands:
 - Return with the `backspace` key
 
 
-## How to use
+## How to use - Windows
 
 ### Preparation
 For testing the software create a directory and download mesh- and input-files:
-- Create a working directory
-- Figure out the location of the package with `using rtmsim` and afterwards `pathof(rtmsim)`
-- Copy from the package location the folder with the `meshfiles` and the `inputfiles` into the working directory
+- Create a working directory in the File explorer
+- Figure out the location of the package with `using rtmsim` and afterwards `pathof(rtmsim)` in the Julia terminal
+- Copy from the package location the folder with the `meshfiles` and the `inputfiles` into the working directory in the File explorer
 
 Start the GUI in the Julia terminal:
-- In the Julia terminal change to the working directory, for example with `cd("C:\\obertscheiderfhwn\\rtmsim")` where the separation is a `\\` on Windows or `cd("/home/obertscheiderfhwn/rtmsim")` on Linux operating system
+- Change to the working directory, for example with `cd("C:\\obertscheiderfhwn\\rtmsim")` where the separation is a `\\`
 - `using rtmsim`
 - Start the GUI with `rtmsim.gui()`
 
-If you are working on a Windows operating system you can start RTMsim by double clicking: 
+Start the GUI by double clicking: 
 - Copy `start_rtmsim_gui.bat` and `start_rtmsim_gui.jl` from the package folder to the working directory
 - Double click on `start_rtmsim_gui.bat` in the Explorer
 
@@ -51,11 +51,31 @@ If you are working on a Windows operating system you can start RTMsim by double 
 You can start a simulation in the GUI. 
 <br><img src="figures/rtmsim_help.png"><br>
 
-The buttons in the line on the RHS are used to start the simulation with the parameters from the selected input file. For example, click on `Select input file` and select the input.txt in the inputfiles folder from the package installation and click on `Run with input file`. After the simulation is completed, click on `Plot overview`.
+The buttons in the line on the RHS are used to start the simulation with the parameters from the selected input file. For example, click on `Select input file` and select the input.txt in the inputfiles folder (from the package installation or from the copy in your working directory) and click on `Run with input file`. After the simulation is completed, click on `Plot overview`.
 
 Parameters (fluid properties, patch types and patch properties of cell sets specified in the mesh file) can also be specified in the GUI and a simulation is then started by clicking on `Start simulation`. Also other functionalities are available. The buttons in the first line on the LHS are used for mesh inspection, i.e. `Select mesh file`, `Plot mesh` with bounding box and `Plot sets` for inspecting the defined sets in the mesh file. The buttons `Start simulation` and `Continue simulation` in the second line on the LHS are used for starting and continuing a filling simulation. Every time the Start or Continue simulation button is pressed, a filling simulation is started. The simulated flow time `tmax` is specified in the first field in the second line. Every simulation calculates the flow front propagation during the next `tmax` seconds. If started with the `Start simulation` button, the cavity is empty initially. If started with the `Continue simulation` button, the results from the previous simulation are taken as initial condition. With the buttons `Start interactive` and `Continue interactive` in the third line one can start and continue simulations where manually selected inlet ports are used in addition to sets defined below. The radius of the inlet ports is specified in the first field in the third line and the locations are selected with the mouse after clicking on `Select inlet port`. The buttons `Plot results`, `Plot overview`and `Plot filling` in the forth line are used for creating contour plots, i.e. show filling and pressure distribution of a specified output file (path to the results file in the second cell and can be changed by clicking on `Select results file`; final results are saved in `results.jld2`), plot filling at four equidistant time instances and filling at different time instances which are selected with a slider bar. 
 
 Click [here](https://obertscheiderfhwn.github.io/RTMsim/build/parameters) for additional information (for example the meaning of the parameters) and [here](https://obertscheiderfhwn.github.io/RTMsim/build/tutorials/) for tutorials (with typical use cases). 
+
+
+
+## How to use - Linux
+
+The GUI for Linux operating systems is currently under development. RTMsim can be started from the Julia terminal.
+
+### Preparation
+For testing the software create a directory and download mesh- and input-files:
+- Create a working directory in the File explorer
+- Figure out the location of the package with `using rtmsim` and afterwards `pathof(rtmsim)` in the Julia terminal
+- Copy from the package location the folder with the `meshfiles` and the `inputfiles` into the working directory in the File explorer
+
+Run a simulation in the Julia terminal:
+- In the Julia terminal change to the working directory, for example with `cd("/home/obertscheiderfhwn/rtmsim")`
+- `using rtmsim`
+- Start a simulation with input file if you copied the inputfiles folder to your working directory: `rtmsim.start_rtmsim("inputfiles/input.txt")` or
+- Start a simulation by calling the solver with all arguments: `rtmsim.rtmsim_rev1(1,"meshfiles/mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,0,"results.jld2",0,0.01,16)`
+
+Click [here](https://obertscheiderfhwn.github.io/RTMsim/build/parameters/#Input-file) for a documentation of the input file and the meaning of all the parameters  and [here](https://obertscheiderfhwn.github.io/RTMsim/build/tutorials/) for tutorials (with typical use cases). 
 
 
 
