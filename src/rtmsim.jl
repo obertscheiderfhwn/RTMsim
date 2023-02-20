@@ -2839,11 +2839,21 @@ module rtmsim
 
         #callback functions
         function sm_clicked(w)
-            str = pick_file(pwd(),filterlist="bdf");
+            #str = pick_file(pwd(),filterlist="bdf");
+            if Sys.iswindows()
+                str = pick_file(pwd(),filterlist="bdf");
+            elseif Sys.islinux()
+                str=open_dialog("Pick a file",GtKNullContainer(),("*.bdf",))
+            end
             set_gtk_property!(mf,:text,str);
         end
         function sr_clicked(w)
-            str = pick_file(pwd(),filterlist="jld2");
+            #str = pick_file(pwd(),filterlist="jld2");
+            if Sys.iswindows()
+                str = pick_file(pwd(),filterlist="jld2");
+            elseif Sys.islinux()
+                str=open_dialog("Pick a file",GtKNullContainer(),("*.jld2",))
+            end
             set_gtk_property!(rf,:text,str);
         end
         function pm_clicked(w)
@@ -2962,7 +2972,12 @@ module rtmsim
         #    show(i);
         #end
         function in1_clicked(w)
-            str = pick_file(pwd(),filterlist="txt");
+            #str = pick_file(pwd(),filterlist="txt");
+            if Sys.iswindows()
+                str = pick_file(pwd(),filterlist="txt");
+            elseif Sys.islinux()
+                str=open_dialog("Pick a file",GtKNullContainer(),("*.txt",))
+            end
             set_gtk_property!(in2,:text,str);
         end
         function in3_clicked(w)
