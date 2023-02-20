@@ -57,9 +57,9 @@ module rtmsim
     """
     function start_rtmsim(inputfilename)     
         if Sys.iswindows()
-            replace(inputfilename,"/" => "\\")
+            inputfilename=replace(inputfilename,"/" => "\\")
         elseif Sys.islinux()
-            replace(inputfilename,"\\" => "/")
+            inputfilename=replace(inputfilename,"\\" => "/")
         end        
         print("Read input file "*string(inputfilename)*"\n")
         if ~isfile(inputfilename);
@@ -86,9 +86,9 @@ module rtmsim
                 elseif i_line==2;
                     meshfilename=txt1[1];
                     if Sys.iswindows()
-                        replace(meshfilename,"/" => "\\")
+                        meshfilename=replace(meshfilename,"/" => "\\")
                     elseif Sys.islinux()
-                        replace(meshfilename,"\\" => "/")
+                        meshfilename=replace(meshfilename,"\\" => "/")
                     end  
                 elseif i_line==3;
                     tmax=parse(Float64,txt1[1]);
@@ -239,11 +239,11 @@ module rtmsim
         patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_restart,restartfilename,i_interactive,r_p,n_pics)
         
         if Sys.iswindows()
-            replace(meshfilename,"/" => "\\")
+            meshfilename=replace(meshfilename,"/" => "\\")
         elseif Sys.islinux()
-            replace(meshfilename,"\\" => "/")
+            meshfilename=replace(meshfilename,"\\" => "/")
         end  
-        
+
         #----------------------------------------------------------------------
         # Simulation initialization
         #----------------------------------------------------------------------
@@ -1861,9 +1861,9 @@ module rtmsim
     """
     function plot_mesh(meshfilename,i_mode)
         if Sys.iswindows()
-            replace(meshfilename,"/" => "\\")
+            meshfilename=replace(meshfilename,"/" => "\\")
         elseif Sys.islinux()
-            replace(meshfilename,"\\" => "/")
+            meshfilename=replace(meshfilename,"\\" => "/")
         end      
         #dummy values for calling function read_mesh
         paramset=[0.5,0.3,3e-10,1.0,1.0,0.0,0.0];paramset1=paramset;paramset2=paramset;paramset3=paramset;paramset4=paramset;
