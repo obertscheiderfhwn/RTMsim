@@ -2812,11 +2812,11 @@ module rtmsim
         #callback functions
         function sm_clicked(w)
             str = pick_file(pwd(),filterlist="bdf");
-            set_gtk_property!(mf,:text,str);
+            @async set_gtk_property!(mf,:text,str);
         end
         function sr_clicked(w)
             str = pick_file(pwd(),filterlist="jld2");
-            set_gtk_property!(rf,:text,str);
+            @async set_gtk_property!(rf,:text,str);
         end
         function pm_clicked(w)
             str = get_gtk_property(mf,:text,String)
@@ -2935,7 +2935,7 @@ module rtmsim
         #end
         function in1_clicked(w)
             str = pick_file(pwd(),filterlist="txt");
-            set_gtk_property!(in2,:text,str);
+            @async set_gtk_property!(in2,:text,str);
         end
         function in3_clicked(w)
             str = get_gtk_property(in2,:text,String)

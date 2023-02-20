@@ -9,7 +9,7 @@ Three different test cases are available, successfully validating the Julia impl
 
 The validation and verification cases can be executed in the GUI with the buttons `Run with input file` and `Plot overview` or from the command line with 
 - `rtmsim.start_rtmsim("inputfiles\\input_case1_coarsemesh.txt")` and `rtmsim.plot_overview(-1,-1)` on Windows and
-- `rtmsim.start_rtmsim("inputfiles/input_case1_coarsemesh_linux.txt")` and `rtmsim.plot_overview(-1,-1)` on Linux.
+- `rtmsim.start_rtmsim("inputfiles/input_case1_coarsemesh.txt")` and `rtmsim.plot_overview(-1,-1)` on Linux.
 The input files for the validation cases are `input_case1_coarsemesh.txt`, `input_case1_finemesh.txt`, `input_case2_coarsemesh.txt`, `input_case2_finemesh.txt`, `input_case3_coarsemesh.txt`, `input_case3_finemesh.txt`. The input files are saved in directory `inputfiles` in the package folder. The appropriate file must be selected in GUI or in the function call.
 
 The following passages show and explain the simulation results (after rotating the views with LMB) for the test cases.
