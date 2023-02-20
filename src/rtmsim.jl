@@ -85,6 +85,11 @@ module rtmsim
                     i_model=parse(Int64,txt1[1]);
                 elseif i_line==2;
                     meshfilename=txt1[1];
+                    if Sys.iswindows()
+                        replace(meshfilename,"/" => "\\")
+                    elseif Sys.islinux()
+                        replace(meshfilename,"\\" => "/")
+                    end  
                 elseif i_line==3;
                     tmax=parse(Float64,txt1[1]);
                 elseif i_line==4;
@@ -232,6 +237,12 @@ module rtmsim
         t3_val,porosity3_val,K3_val,alpha3_val,refdir13_val,refdir23_val,refdir33_val,
         t4_val,porosity4_val,K4_val,alpha4_val,refdir14_val,refdir24_val,refdir34_val,
         patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_restart,restartfilename,i_interactive,r_p,n_pics)
+        
+        if Sys.iswindows()
+            replace(meshfilename,"/" => "\\")
+        elseif Sys.islinux()
+            replace(meshfilename,"\\" => "/")
+        end  
         
         #----------------------------------------------------------------------
         # Simulation initialization
