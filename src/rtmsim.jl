@@ -2843,7 +2843,7 @@ module rtmsim
             if Sys.iswindows()
                 str = pick_file(pwd(),filterlist="bdf");
             elseif Sys.islinux()
-                str=open_dialog("Pick a file",GtKNullContainer(),("*.bdf",))
+                str=open_dialog("Pick a file",GtkNullContainer(),("*.bdf",))
             end
             set_gtk_property!(mf,:text,str);
         end
@@ -2852,7 +2852,7 @@ module rtmsim
             if Sys.iswindows()
                 str = pick_file(pwd(),filterlist="jld2");
             elseif Sys.islinux()
-                str=open_dialog("Pick a file",GtKNullContainer(),("*.jld2",))
+                str=open_dialog("Pick a file",GtkNullContainer(),("*.jld2",))
             end
             set_gtk_property!(rf,:text,str);
         end
@@ -2976,7 +2976,7 @@ module rtmsim
             if Sys.iswindows()
                 str = pick_file(pwd(),filterlist="txt");
             elseif Sys.islinux()
-                str=open_dialog("Pick a file",GtKNullContainer(),("*.txt",))
+                str=open_dialog("Pick a file",GtkNullContainer(),("*.txt",))
             end
             set_gtk_property!(in2,:text,str);
         end
