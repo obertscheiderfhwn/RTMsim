@@ -22,7 +22,7 @@ bibliography: paper.bib
 ---
 
 # Summary
-RTMsim is a robust, easy-to-use and simple-to-extend software tool, implemented in Julia [@doi:10.1137/141000671] for resin transfer moulding (RTM) filling simulations. A shell mesh, injection pressure, resin viscosity and the parameters describing the preform are required input. The software was validated with results from literature [rudd1997liquid] and compared with results from well-established RTM filling simulation tools [@myrtm],[@fluent].
+RTMsim is a robust, easy-to-use and simple-to-extend software tool, implemented in Julia [@doi:10.1137/141000671] for resin transfer moulding (RTM) filling simulations. A shell mesh, injection pressure, resin viscosity and the parameters describing the preform are required input. The software was validated with results from literature [@rudd1997liquid] and compared with results from well-established RTM filling simulation tools [@myrtm],[@fluent].
 
 # Statement of need
 Resin Transfer Moulding (RTM) is a manufacturing process for producing thin-walled fiber reinforced polymer composites where dry fibers are placed inside a mould and resin is injected under pressure into the fibrous preform. The thickness of the part is much smaller than the overall dimensions $$L \gg H$$ as depicted in \autoref{fig:rtm_pic1}. During mould design, filling simulations can study different manufacturing concepts (i.e. placement of inlet ports and vents) to guarantee complete filling of the part and avoid air entrapment where flow fronts converge. 
