@@ -25,7 +25,7 @@ bibliography: paper.bib
 RTMsim is a robust, easy-to-use and simple-to-extend software tool, implemented in Julia [@doi:10.1137/141000671] for resin transfer moulding (RTM) filling simulations. A shell mesh, injection pressure, resin viscosity and the parameters describing the preform are required input. The software was validated with results from literature [@rudd1997liquid] and compared with results from well-established RTM filling simulation tools [@myrtm],[@fluent].
 
 # Statement of need
-Resin Transfer Moulding (RTM) is a manufacturing process for producing thin-walled fiber reinforced polymer composites where dry fibers are placed inside a mould and resin is injected under pressure into the fibrous preform. The thickness of the part is much smaller than the overall dimensions $$L \gg H$$ as depicted in \autoref{fig:rtm_pic1}. During mould design, filling simulations can study different manufacturing concepts (i.e. placement of inlet ports and vents) to guarantee complete filling of the part and avoid air entrapment where flow fronts converge. 
+Resin Transfer Moulding (RTM) is a manufacturing process for producing thin-walled fiber reinforced polymer composites where dry fibers are placed inside a mould and resin is injected under pressure into the fibrous preform. The thickness of the part is much smaller than the overall dimensions $$H \ll L$$ as depicted in \autoref{fig:rtm_pic1}. During mould design, filling simulations can study different manufacturing concepts (i.e. placement of inlet ports and vents) to guarantee complete filling of the part and avoid air entrapment where flow fronts converge. 
 
 ![Schematic of a thin-shell RTM geometry for manufacturing a flat plate with linear (a) and radial (b) flow.\label{fig:rtm_pic1}](figures/rtm_pic1.png)
 
@@ -61,30 +61,42 @@ $$ \frac{\partial \rho \mathbf{u}}{\partial t} + \nabla \cdot \left( \rho \mathb
 $$ \frac{\partial \varepsilon c}{\partial t} + \mathbf{u} \cdot \left( \nabla c \right) = 0 $$
 $$ p = \kappa \rho^\gamma $$
 where
+
 - $\rho$ is the mass density of the fluid, 
+
 - $\mathbf{u}$ is the superficial velocity which is related to the physical velocity via the porosity $\varepsilon$ given by the stationary fibrous media, 
+
 - $\mathbf{u}\mathbf{u}$ is the dyadic product, 
+
 - $p$ is the pressure, 
+
 - $-\mu \mathsf{K}^{-1} \mathbf{u}$ is the pressure loss from flow through a porous medium according to Darcy's law with dynamic viscosity $\mu$ and permeability tensor $\mathsf{K}$, 
+
 - $c$ is the continuous fraction function with $0 \leq c \leq 1$, $c=0$ if empty and $c=1$ if completely filled, 
+
 - $\gamma$ is the adiabatic index, and 
+
 - $\kappa=p_{\rm ref}/\rho_{\rm ref}^\gamma$ is a constant determined from pressure and mass density reference values.
 
+Since the filling is a result of the pressure difference between injection pressure and initial cavity pressure, gauge pressures are used for the simulation. The initial pressure in the cavity is set equal to zero and the injection pressure is set equal to the pressure difference. This normalization results in a filling which is independent of the pressure level and only depends on the pressure difference. 
+
 It is assumed that no cross-thickness flow takes place. Consequently, the fluid domain can be meshed with only one cell through the thickness or with a shell mesh on the mid-surface, see \autoref{fig:theory_001}(a) and (b). The red inlet and optional outlet ports are also part of the mesh, see \autoref{fig:theory_001}&#40;c). 
+
 ![Volume mesh (a) and shell mesh (b) and domain with highlighted inlet region &#40;c) for the simulation of a radial flow experiment. \label{fig:theory_001}](figures/theory_001.png)
 
+In general, flow through curved cavity with junctions must be solved, see \autoref{fig:theory_002}(a). The discretized versions of the continuum, momentum and volume-of-fluid equations are solved on the flattened geometry. The neighbouring cells are rotated about the common edge to lie in a plane, see \autoref{fig:theory_002}(b) and &#40;c).
 
-In general, flow through curved cavity with junctions must be solved, see autoref{fig:theory_002}(a). The discretized versions of the continuum, momentum and volume-of-fluid equations are solved on the flattened geometry. The neighbouring cells are rotated about the common edge to lie in a plane, see autoref{fig:theory_002}(b) and &#40;c).
 ![Annulus filler mesh with T-sections and curved regions. \label{fig:theory_002}](figures/theory_002.png)
 
 Since the flow is described on the mid-surface, the velocity vector has only two non-zero components u and v described in a local coordinate system. The local coordinate system is the result of a projection of a reference vector. The reference vector is chosen such that the local x- and y-directions correspond with the first and second principal permeability directions. 
 
-The four conservation laws for mass density, velocity components u and v in the local cell coordinate system and the fluid fraction describe the flow in the locally flattened geometry, see autoref{fig:theory_003}(a). A coordinate transformation for the velocity components must be performed for every neighbouring cell, see autoref{fig:theory_003}(b).
+The four conservation laws for mass density, velocity components u and v in the local cell coordinate system and the fluid fraction describe the flow in the locally flattened geometry, see \autoref{fig:theory_003}(a). A coordinate transformation for the velocity components must be performed for every neighbouring cell, see \autoref{fig:theory_003}(b).
+
 ![Sketches illustrating the flattened mesh. \label{fig:theory_005}](figures/theory_005.png)
 
 All partial differential equations can be discretized using the same method. Discretization of the governing equations on an unstructured mesh follows the ideas presented in [@Versteeg]. For every cell, the numerical flux functions and source terms are evaluated in the flattended geometry and advanced in time.
 
-Since the filling is a result of the pressure difference between injection pressure and initial cavity pressure, gauge pressures are used for the simulation. The initial pressure in the cavity is set equal to zero and the injection pressure is set equal to the pressure difference. This normalization results in a filling which is independent of the pressure level and only depends on the pressure difference. 
+
 
 In order to numerically solve the flow model the computational domain (time and space) is discretized. The temporal domain (i.e. the simulation time) is split into a finite number of time steps where values for the physical quantities on the spatial domain are calculated in a time-marching manner. The spatial domain (i.e. the flow volume) is split into wedge-type cells. Since the walls are assumed to be slip boundaries only one cell is used through the thickness and the cells are bounded by three control surfaces only. Therefore, the spatial domain is defined on the part’s mid-surface and the local thickness of the flow volume is a property of the cell. The mid-surface model can be curved and cells can have edges where more than two cells are connected to each other such as for handling T-junctions. The mid-surface model is divided into a finite number of triangular control areas. The control areas cover the spatial domain completely without overlapping. The cell-centered method where the nodes are placed at the centroid of the control volume is used. 
 
