@@ -57,7 +57,7 @@ From a flow physics point of view the filling process is described by an incompr
 
 The physical quantities in the governing equations are functions of space $\mathbf{x}$ and time $t$ where $\mathbf{x} \in \Omega \subset \mathbb{R}^3$ and $\Omega$ is the fluid body also called the fluid cavity. The governing equations are
 $$ \frac{\partial  \rho}{\partial t} + \nabla  \cdot  \left( \rho  \mathbf{u} \right) = 0 $$
-$$ \frac{\partial \rho \mathbf{u}}{\partial t} + \nabla \cdot \left( \rho \mathbf{u} \mathbf{u}  \right) = - \nabla p -\mu \mathsf{K}^{-1} \mathbf{u}$ $$
+$$ \frac{\partial \rho \mathbf{u}}{\partial t} + \nabla \cdot \left( \rho \mathbf{u} \mathbf{u}  \right) = - \nabla p -\mu \mathsf{K}^{-1} \mathbf{u} $$
 $$ \frac{\partial \varepsilon c}{\partial t} + \mathbf{u} \cdot \left( \nabla c \right) = 0 $$
 $$ p = \kappa \rho^\gamma $$
 where
