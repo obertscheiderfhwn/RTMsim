@@ -1000,7 +1000,7 @@ module rtmsim
 
     Unit tests:
     - `rtmsim.numerical_flux_function(1,[1.0; 1.2; 0.0; 0.0],[1.0; 1.2; 0.0; 0.0],[1.0;0.0;1.0])` with return `(1.2, 1.44, 0.0, 0.0, 1.2)`
-    - `rtmsim.numerical_flux_function(1,[1.225 1.2 0.4 0.9],[1.0 0.4 1.2 0.1],[1/sqrt(2);1/sqrt(2);1.0])` with solution `(1.2586500705120547, 1.5103800846144655, 0.5034600282048219, 1.0182337649086284, 1.131370849898476)`
+    - `rtmsim.numerical_flux_function(1,[1.225 1.2 0.4 0.9],[1.0 0.4 1.2 0.1],[1/sqrt(2);1/sqrt(2);1.0])` with return `(1.2586500705120547, 1.5103800846144655, 0.5034600282048219, 1.0182337649086284, 1.131370849898476)`
     """
     function numerical_flux_function(i_method,vars_P,vars_A,meshparameters);
         if i_method==1;
@@ -1061,7 +1061,7 @@ module rtmsim
 
     Unit tests:
     - `rtmsim.numerical_flux_function_boundary(1,[1.0; 1.2; 0.0; 0.0],[1.0; 1.2; 0.0; 0.0],[1.0;0.0;1.0],-1.0)` with return `(-1.0, -1.2, -0.0, -0.0, -1.0)`
-    - `rtmsim.numerical_flux_function_boundary(1,[1.225 1.2 0.4 0.9],[1.0 0.4 1.2 0.1],[1/sqrt(2);1/sqrt(2);1.0],-0.8)` with solution `(-0.8900000000000001, -0.3560000000000001, -1.068, -0.08000000000000002, -0.8)`
+    - `rtmsim.numerical_flux_function_boundary(1,[1.225 1.2 0.4 0.9],[1.0 0.4 1.2 0.1],[1/sqrt(2);1/sqrt(2);1.0],-0.8)` with return `(-0.8900000000000001, -0.3560000000000001, -1.068, -0.08000000000000002, -0.8)`
     """
     function numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,n_dot_u);
         if i_method==1;
