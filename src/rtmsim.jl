@@ -301,6 +301,11 @@ module rtmsim
                 errorstring=string("Only iso-thermal RTM implemented, i.e. i_model must be =1 instead of =",string(i_model)*"\n"); 
                 error(errorstring);
             end
+        if Sys.iswindows()
+            meshfilename=replace(meshfilename,"/" => "\\")
+        elseif Sys.islinux()
+            meshfilename=replace(meshfilename,"\\" => "/")
+        end  
         print("meshfilename=",meshfilename,"\n")
             if ~isfile(meshfilename);
                 errorstring=string("File ",meshfilename," not existing"* "\n"); 
