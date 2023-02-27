@@ -52,6 +52,19 @@ rtmsim.numerical_flux_function(i_method,vars_P,vars_A,meshparameters)
 rtmsim.numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,n_dot_u)
 ```
 
+```@docs
+rtmsim.create_coordinate_systems(N, cellgridid, gridx, gridy, gridz, cellcenterx,cellcentery,cellcenterz, faces, cellneighboursarray, celldirection, cellthickness, maxnumberofneighbours)
+```
+
+```@docs
+rtmsim.assign_parameters(i_interactive,celltype,patchparameters0,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,patchids1,patchids2,patchids3,patchids4,inletpatchids,mu_resin_val,N)
+```
+
+```@docs
+rtmsim.create_faces(cellgridid, N, maxnumberofneighbours)
+```
+
+
 
 
 ## Additional features

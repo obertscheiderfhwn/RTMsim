@@ -1468,10 +1468,10 @@ module rtmsim
     - `celltype[i]`: Describes cell type. -1..pressure inlet, -2..pressure outlet, -3..cell with wall boundary, 1..interior cell
     - `patchparameters0`,`patchparameters1`,`patchparameters2`,`patchparameters3`,`patchparameters4` :: 7-element vector with parameters for the main preform and the four sets if used as patch. The seven elements are cellporosity,cellthickness,cellpermeability,cellalpha,celldirection[1],celldirection[2],celldirection[3].
     - `patchtype1val`,`patchtype2val`,`patchtype3val`,`patchtype4val` :: Type of patch. 1..
-    - `patchids1`,`patchids2`,`patchids3`,`patchids4` :: Type of set. 0..ignored,1..pressure inlet,2..patch,3..pressure outlet
+    - `patchids1`,`patchids2`,`patchids3`,`patchids4` :: Type of set. 0..ignored, 1..pressure inlet, 2..patch, 3..pressure outlet
     - `inletpatchids` :: Vector with the IDs of the cells which are inlet cells.
     - `mu_resin_val` :: Kinematic viscosity value.
-    - `N`´: Number of cells.
+    - `N`: Number of cells.
     """
     function assign_parameters(i_interactive,celltype,patchparameters0,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,patchids1,patchids2,patchids3,patchids4,inletpatchids,mu_resin_val,N);
         cellthickness=Vector{Float64}(undef, N);
@@ -1638,7 +1638,7 @@ module rtmsim
     - `cellcenterx`,`cellcentery`,`cellcenterz`: i-th component of these vectors contain the x, y and z coordinates of geometric cell centers of cell with ID i
     - `faces`: Array with three columns. The three entries n1, n2, c1 in a cell are indices and describe a line between nodes with IDs n1 and n2 and this boundary belongs to cell with ID c1. 
     - `cellneighboursarray`: The i-th line contains the indices of the neighbouring cells of cell with ID i. Number of columns is given by maxnumberofneighbours. Array is initialized with -9 and only the positive entries are considered.
-    - `celldirection`: The i-th line contains the x, y and z coordinates of the unit normal vector which is projected on the cell to define the cell coordinate system for cell with ID 1.
+    - `celldirection`: The i-th line contains the x, y and z coordinates of the unit normal vector which is projected on the cell to define the cell coordinate system for cell with ID i.
     - `cellthickness`: The i-th line contains the thickness of cell with ID i.
     - `maxnumberofneighbours`: Number of columns of array `cellneighboursarray`. Default value is `10`. If more cell neighbours in the mesh, an error occurs and this value must be increased. 
     """
