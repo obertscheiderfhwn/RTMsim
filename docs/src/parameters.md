@@ -15,7 +15,7 @@ Parameters (fluid properties, patch types and patch properties of cell sets spec
 The complete set of input parameters can be accessed in the input file. The following paragraph shows an example for such an input file:
 ```
 1    #i_model 
-meshfiles\\mesh_permeameter1_foursets.bdf    #meshfilename 
+meshfiles/mesh_permeameter1_foursets.bdf    #meshfilename 
 200    #tmax 
 1.01325e5 1.225 1.4 0.06    #p_ref rho_ref gamma mu_resin_val 
 1.35e5 1.0e5    #p_a_val p_init_val 

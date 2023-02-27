@@ -54,7 +54,7 @@ Click [here](https://obertscheiderfhwn.github.io/RTMsim/build/parameters) for ad
 
 ## How to use - Linux
 
-The GUI for Linux operating systems is currently under development. RTMsim can be started from the Julia terminal.
+The GUI for Linux operating systems is still experimental. RTMsim can be started from the Julia terminal.
 
 ### Preparation
 For testing the software create a directory and download mesh- and input-files:

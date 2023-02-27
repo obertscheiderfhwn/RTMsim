@@ -4,9 +4,65 @@
 # Repository: https://github.com/obertscheiderfhwn/RTMsim
 #
 module rtmsim
-    using Glob, LinearAlgebra, JLD2, GeometryBasics, GLMakie, Makie, Random, FileIO, ProgressMeter, NativeFileDialog, Gtk.ShortNames, Gtk.GConstants, Gtk.Graphics, Gtk
+    using Glob, LinearAlgebra, JLD2, GeometryBasics, GLMakie, Makie, Random, FileIO, ProgressMeter, NativeFileDialog, Gtk.ShortNames, Gtk.GConstants, Gtk.Graphics, Gtk, DelimitedFiles
     GLMakie.activate!()    
     #using MAT  #temporary output in Matlab mat-format
+
+    Base.@kwdef mutable struct input_vals
+        i_model :: Int64 =1
+        meshfilename :: String ="input.txt"
+        tmax :: Float64 =200
+        p_ref :: Float64 =1.01325e5
+        rho_ref :: Float64 =1.225
+        gamma :: Float64 =1.4
+        mu_resin_val :: Float64 =0.06
+        p_a_val :: Float64 =1.35e5
+        p_init_val :: Float64 =1.0e5      
+        t_val :: Float64 =3e-3
+        porosity_val :: Float64 =0.7
+        K_val :: Float64 =3e-10
+        alpha_val :: Float64 =1.0
+        refdir1_val :: Float64 =1.0
+        refdir2_val :: Float64 =0.0
+        refdir3_val :: Float64 =0.0
+        t1_val :: Float64 =3e-3
+        porosity1_val :: Float64 =0.7
+        K1_val :: Float64 =3e-10
+        alpha1_val :: Float64 =1.0
+        refdir11_val :: Float64 =1.0
+        refdir21_val :: Float64 =0.0
+        refdir31_val :: Float64 =0.0
+        t2_val :: Float64 =3e-3
+        porosity2_val :: Float64 =0.7
+        K2_val :: Float64 =3e-10
+        alpha2_val :: Float64 =1.0
+        refdir12_val :: Float64 =1.0
+        refdir22_val :: Float64 =0.0
+        refdir32_val :: Float64 =0.0
+        t3_val :: Float64 =3e-3
+        porosity3_val :: Float64 =0.7
+        K3_val :: Float64 =3e-10
+        alpha3_val :: Float64 =1.0
+        refdir13_val :: Float64 =0.0
+        refdir23_val :: Float64 =0.0
+        refdir33_val :: Float64 =0.0
+        t4_val :: Float64 =3e-3
+        porosity4_val :: Float64 =0.7
+        K4_val :: Float64 =3e-10
+        alpha4_val :: Float64 =1.0
+        refdir14_val :: Float64 =1.0
+        refdir24_val :: Float64 =0.0
+        refdir34_val :: Float64 =0.0
+        patchtype1val :: Int64 =1
+        patchtype2val :: Int64 =0
+        patchtype3val :: Int64 =0
+        patchtype4val :: Int64 =0
+        i_restart :: Int64 =0
+        restartfilename :: String ="results.jld2"
+        i_interactive :: Int64 =0
+        r_p :: Float64 =0.01
+        n_pics :: Int64 =16
+    end
             
     """
         start_rtmsim(inputfilename)
@@ -19,7 +75,7 @@ module rtmsim
     The complete set of input parameters can be accessed in the input file. The following paragraph shows an example for such an input file:
     ```
         1    #i_model 
-        meshfiles\\mesh_permeameter1_foursets.bdf    #meshfilename 
+        meshfiles/mesh_permeameter1_foursets.bdf    #meshfilename 
         200    #tmax 
         1.01325e5 1.225 1.4 0.06    #p_ref rho_ref gamma mu_resin_val 
         1.35e5 1.0e5    #p_a_val p_init_val 
@@ -66,120 +122,32 @@ module rtmsim
             errorstring=string("File ",inputfilename," not existing"* "\n"); 
             error(errorstring);
         end
-        i_model=[]; meshfilename=[]; tmax=[]; 
-        p_ref=[]; rho_ref=[]; gamma=[]; mu_resin_val=[]; p_a_val=[]; p_init_val=[]; 
-        t_val=[]; porosity_val=[]; K_val=[]; alpha_val=[]; refdir1_val=[]; refdir2_val=[]; refdir3_val=[]; 
-        t1_val=[]; porosity1_val=[]; K1_val=[]; alpha1_val=[]; refdir11_val=[]; refdir21_val=[]; refdir31_val=[]; 
-        t2_val=[]; porosity2_val=[]; K2_val=[]; alpha2_val=[]; refdir12_val=[]; refdir22_val=[]; refdir32_val=[]; 
-        t3_val=[]; porosity3_val=[]; K3_val=[]; alpha3_val=[]; refdir13_val=[]; refdir23_val=[]; refdir33_val=[]; 
-        t4_val=[]; porosity4_val=[]; K4_val=[]; alpha4_val=[]; refdir14_val=[]; refdir24_val=[]; refdir34_val=[];
-        patchtype1val=[]; patchtype2val=[]; patchtype3val=[]; patchtype4val=[]; 
-        i_restart=[]; restartfilename=[]; i_interactive=[]; r_p=[]; n_pics=[];
-        open(inputfilename, "r") do fid
-            i_line=1;
-            while !eof(fid)
-                thisline=readline(fid)
-                print(string(thisline)*"\n")
-                txt1=split(thisline," ")
-                if i_line==1;            
-                    i_model=parse(Int64,txt1[1]);
-                elseif i_line==2;
-                    meshfilename=txt1[1];
-                    if Sys.iswindows()
-                        meshfilename=replace(meshfilename,"/" => "\\")
-                    elseif Sys.islinux()
-                        meshfilename=replace(meshfilename,"\\" => "/")
-                    end  
-                elseif i_line==3;
-                    tmax=parse(Float64,txt1[1]);
-                elseif i_line==4;
-                    p_ref=parse(Float64,txt1[1]);
-                    rho_ref=parse(Float64,txt1[2]);
-                    gamma=parse(Float64,txt1[3]);
-                    mu_resin_val=parse(Float64,txt1[4]);
-                elseif i_line==5;
-                    p_a_val=parse(Float64,txt1[1]);
-                    p_init_val=parse(Float64,txt1[2]);
-                elseif i_line==6;
-                    t_val=parse(Float64,txt1[1]);
-                    porosity_val=parse(Float64,txt1[2]);
-                    K_val=parse(Float64,txt1[3]);
-                    alpha_val=parse(Float64,txt1[4]);
-                    refdir1_val=parse(Float64,txt1[5]);
-                    refdir2_val=parse(Float64,txt1[6]);
-                    refdir3_val=parse(Float64,txt1[7]);
-                elseif i_line==7;
-                    t1_val=parse(Float64,txt1[1]);
-                    porosity1_val=parse(Float64,txt1[2]);
-                    K1_val=parse(Float64,txt1[3]);
-                    alpha1_val=parse(Float64,txt1[4]);
-                    refdir11_val=parse(Float64,txt1[5]);
-                    refdir21_val=parse(Float64,txt1[6]);
-                    refdir31_val=parse(Float64,txt1[7]);
-                elseif i_line==8;
-                    t2_val=parse(Float64,txt1[1]);
-                    porosity2_val=parse(Float64,txt1[2]);
-                    K2_val=parse(Float64,txt1[3]);
-                    alpha2_val=parse(Float64,txt1[4]);
-                    refdir12_val=parse(Float64,txt1[5]);
-                    refdir22_val=parse(Float64,txt1[6]);
-                    refdir32_val=parse(Float64,txt1[7]);
-                elseif i_line==9;            
-                    t3_val=parse(Float64,txt1[1]);
-                    porosity3_val=parse(Float64,txt1[2]);
-                    K3_val=parse(Float64,txt1[3]);
-                    alpha3_val=parse(Float64,txt1[4]);
-                    refdir13_val=parse(Float64,txt1[5]);
-                    refdir23_val=parse(Float64,txt1[6]);
-                    refdir33_val=parse(Float64,txt1[7]);
-                elseif i_line==10;
-                    t4_val=parse(Float64,txt1[1]);
-                    porosity4_val=parse(Float64,txt1[2]);
-                    K4_val=parse(Float64,txt1[3]);
-                    alpha4_val=parse(Float64,txt1[4]);
-                    refdir14_val=parse(Float64,txt1[5]);
-                    refdir24_val=parse(Float64,txt1[6]);
-                    refdir34_val=parse(Float64,txt1[7]);
-                elseif i_line==11;
-                    patchtype1val=parse(Int64,txt1[1]);
-                    patchtype2val=parse(Int64,txt1[2]);
-                    patchtype3val=parse(Int64,txt1[3]);
-                    patchtype4val=parse(Int64,txt1[4]);
-                elseif i_line==12;
-                    i_restart=parse(Int64,txt1[1]);
-                    restartfilename=txt1[2];
-                elseif i_line==13;
-                    i_interactive=parse(Int64,txt1[1]);
-                    r_p= parse(Float64,txt1[2]);
-                elseif i_line==14;
-                    n_pics=parse(Int64,txt1[1]);
-                end
-                i_line=i_line+1;
-                if i_line==15;break;end
-            end
-        end        
+
+
+        A_input=readdlm("inputfiles\\input1.txt",' ');
+        param=rtmsim.input_vals(A_input[1,1],
+                                A_input[2,1],
+                                A_input[3,1],
+                                A_input[4,1],A_input[4,2],A_input[4,3],A_input[4,4],
+                                A_input[5,1],A_input[5,2],
+                                A_input[6,1],A_input[6,2],A_input[6,3],A_input[6,4],A_input[6,5],A_input[6,6],A_input[6,7],
+                                A_input[7,1],A_input[7,2],A_input[7,3],A_input[7,4],A_input[7,5],A_input[7,6],A_input[7,7],
+                                A_input[8,1],A_input[8,2],A_input[8,3],A_input[8,4],A_input[8,5],A_input[8,6],A_input[8,7],
+                                A_input[9,1],A_input[9,2],A_input[9,3],A_input[9,4],A_input[9,5],A_input[9,6],A_input[9,7],
+                                A_input[10,1],A_input[10,2],A_input[10,3],A_input[10,4],A_input[10,5],A_input[10,6],A_input[10,7],
+                                A_input[11,1],A_input[11,2],A_input[11,3],A_input[11,4],
+                                A_input[12,1],A_input[12,2],
+                                A_input[13,1],A_input[13,2],
+                                A_input[14,1]);
+        #print("param=",param,"\n")
+
         print(" "*"\n")
-        rtmsim_rev1(i_model,meshfilename,tmax,
-            p_ref,rho_ref,gamma,mu_resin_val,
-            p_a_val,p_init_val,
-            t_val,porosity_val,K_val,alpha_val,refdir1_val,refdir2_val,refdir3_val,
-            t1_val,porosity1_val,K1_val,alpha1_val,refdir11_val,refdir21_val,refdir31_val,
-            t2_val,porosity2_val,K2_val,alpha2_val,refdir12_val,refdir22_val,refdir32_val,
-            t3_val,porosity3_val,K3_val,alpha3_val,refdir13_val,refdir23_val,refdir33_val,
-            t4_val,porosity4_val,K4_val,alpha4_val,refdir14_val,refdir24_val,refdir34_val,
-            patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_restart,restartfilename,i_interactive,r_p,n_pics);
+        rtmsim_rev1(param);
+
     end
 
     """
-        rtmsim_rev1(i_model,meshfilename,tmax,
-                    p_ref,rho_ref,gamma,mu_resin_val,
-                    p_a_val,p_init_val,
-                    t_val,porosity_val,K_val,alpha_val,refdir1_val,refdir2_val,refdir3_val,
-                    t1_val,porosity1_val,K1_val,alpha1_val,refdir11_val,refdir21_val,refdir31_val,
-                    t2_val,porosity2_val,K2_val,alpha2_val,refdir12_val,refdir22_val,refdir32_val,
-                    t3_val,porosity3_val,K3_val,alpha3_val,refdir13_val,refdir23_val,refdir33_val,
-                    t4_val,porosity4_val,K4_val,alpha4_val,refdir14_val,refdir24_val,refdir34_val,
-                    patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_restart,restartfilename,i_interactive,r_p,n_pics)
+        rtmsim_rev1(param)
     
     RTMsim solver with the following main steps:
     - Simulation initialization
@@ -202,23 +170,61 @@ module rtmsim
         - Saving of intermediate data
         - (Opional time marching etc. for i_model=2,3,...)
         - Calculation of adaptive time step 
-
-    Arguments:
-    - i_model :: Int
-    - meshfile :: String
-    - tmax :: Float
-    - p_ref, rho_ref, gamma, mu_resin_val :: Float
-    - t_val,porosity_val,K_val,alpha_val,refdir1_val,refdir2_val,refdir3_val :: Float
-    - t1_val,porosity1_val,K1_val,alpha1_val,refdir11_val,refdir21_val,refdir31_val :: Float
-    - t2_val,porosity2_val,K2_val,alpha2_val,refdir12_val,refdir22_val,refdir32_val :: Float
-    - t3_val,porosity3_val,K3_val,alpha3_val,refdir13_val,refdir23_val,refdir33_val :: Float
-    - t4_val,porosity4_val,K4_val,alpha4_val,refdir14_val,refdir24_val,refdir34_val :: Float
-    - patchtype1val,patchtype2val,patchtype3val,patchtype4val :: Int
-    - i_restart :: Int
-    - restartfilename :: String
-    - i_interactive :: Int64
-    - r_p :: Float
-    - n_pics :: Int
+    
+    Data structure `param` with arguments:
+    - i_model :: Int64 =1
+    - meshfilename :: String ="input.txt"
+    - tmax :: Float64 =200
+    - p_ref :: Float64 =1.01325e5
+    - rho_ref :: Float64 =1.225
+    - gamma :: Float64 =1.4
+    - mu_resin_val :: Float64 =0.06
+    - p_a_val :: Float64 =1.35e5
+    - p_init_val :: Float64 =1.0e5      
+    - t_val :: Float64 =3e-3
+    - porosity_val :: Float64 =0.7
+    - K_val :: Float64 =3e-10
+    - alpha_val :: Float64 =1.0
+    - refdir1_val :: Float64 =1.0
+    - refdir2_val :: Float64 =0.0
+    - refdir3_val :: Float64 =0.0
+    - t1_val :: Float64 =3e-3
+    - porosity1_val :: Float64 =0.7
+    - K1_val :: Float64 =3e-10
+    - alpha1_val :: Float64 =1.0
+    - refdir11_val :: Float64 =1.0
+    - refdir21_val :: Float64 =0.0
+    - refdir31_val :: Float64 =0.0
+    - t2_val :: Float64 =3e-3
+    - porosity2_val :: Float64 =0.7
+    - K2_val :: Float64 =3e-10
+    - alpha2_val :: Float64 =1.0
+    - refdir12_val :: Float64 =1.0
+    - refdir22_val :: Float64 =0.0
+    - refdir32_val :: Float64 =0.0
+    - t3_val :: Float64 =3e-3
+    - porosity3_val :: Float64 =0.7
+    - K3_val :: Float64 =3e-10
+    - alpha3_val :: Float64 =1.0
+    - refdir13_val :: Float64 =0.0
+    - refdir23_val :: Float64 =0.0
+    - refdir33_val :: Float64 =0.0
+    - t4_val :: Float64 =3e-3
+    - porosity4_val :: Float64 =0.7
+    - K4_val :: Float64 =3e-10
+    - alpha4_val :: Float64 =1.0
+    - refdir14_val :: Float64 =1.0
+    - refdir24_val :: Float64 =0.0
+    - refdir34_val :: Float64 =0.0
+    - patchtype1val :: Int64 =1
+    - patchtype2val :: Int64 =0
+    - patchtype3val :: Int64 =0
+    - patchtype4val :: Int64 =0
+    - i_restart :: Int64 =0
+    - restartfilename :: String ="results.jld2"
+    - i_interactive :: Int64 =0
+    - r_p :: Float64 =0.01
+    - n_pics :: Int64 =16
 
     Meaning of the variables:
     - `i_model`: Identifier for physical model (Default value is 1)
@@ -245,20 +251,12 @@ module rtmsim
     - `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; meshfilename=joinpath(MODULE_ROOT,"meshfiles","mesh_permeameter1_foursets.bdf"); rtmsim.rtmsim_rev1(1,meshfilename,200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2, 0,"results.jld2",0,0.01,16)` for starting a simulation with different patches and race tracking
     - `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; meshfilename=joinpath(MODULE_ROOT,"meshfiles","mesh_permeameter1_foursets.bdf"); rtmsim.rtmsim_rev1(1,meshfilename,200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2, 1,"results.jld2",0,0.01,16)` for continuing the previous simulation   
     """
-    function rtmsim_rev1(i_model,meshfilename,tmax,
-        p_ref,rho_ref,gamma,mu_resin_val,
-        p_a_val,p_init_val,
-        t_val,porosity_val,K_val,alpha_val,refdir1_val,refdir2_val,refdir3_val,
-        t1_val,porosity1_val,K1_val,alpha1_val,refdir11_val,refdir21_val,refdir31_val,
-        t2_val,porosity2_val,K2_val,alpha2_val,refdir12_val,refdir22_val,refdir32_val,
-        t3_val,porosity3_val,K3_val,alpha3_val,refdir13_val,refdir23_val,refdir33_val,
-        t4_val,porosity4_val,K4_val,alpha4_val,refdir14_val,refdir24_val,refdir34_val,
-        patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_restart,restartfilename,i_interactive,r_p,n_pics)
+    function rtmsim_rev1(param)
         
         if Sys.iswindows()
-            meshfilename=replace(meshfilename,"/" => "\\")
+            meshfilename=replace(param.meshfilename,"/" => "\\")
         elseif Sys.islinux()
-            meshfilename=replace(meshfilename,"\\" => "/")
+            meshfilename=replace(param.meshfilename,"\\" => "/")
         end  
 
         #----------------------------------------------------------------------
@@ -266,16 +264,17 @@ module rtmsim
         #----------------------------------------------------------------------
         
         # Well defined variable types, except for strings meshfilename,restartfilename
-        tmax=Float64(tmax);
-        p_ref=Float64(p_ref);rho_ref=Float64(rho_ref);gamma=Float64(gamma);mu_resin_val=Float64(mu_resin_val);
-        p_a_val=Float64(p_a_val);p_init_val=Float64(p_init_val);
-        t_val=Float64(t_val);porosity_val=Float64(porosity_val);K_val=Float64(K_val);alpha_val=Float64(alpha_val);refdir1_val=Float64(refdir1_val);refdir2_val=Float64(refdir2_val);refdir3_val=Float64(refdir3_val);
-        t1_val=Float64(t1_val);porosity1_val=Float64(porosity1_val);K1_val=Float64(K1_val);alpha1_val=Float64(alpha1_val);refdir11_val=Float64(refdir11_val);refdir21_val=Float64(refdir21_val);refdir31_val=Float64(refdir31_val);
-        t2_val=Float64(t2_val);porosity2_val=Float64(porosity2_val);K2_val=Float64(K2_val);alpha2_val=Float64(alpha2_val);refdir12_val=Float64(refdir12_val);refdir22_val=Float64(refdir22_val);refdir32_val=Float64(refdir32_val);
-        t3_val=Float64(t3_val);porosity3_val=Float64(porosity3_val);K3_val=Float64(K3_val);alpha3_val=Float64(alpha3_val);refdir13_val=Float64(refdir13_val);refdir23_val=Float64(refdir23_val);refdir33_val=Float64(refdir33_val);
-        t4_val=Float64(t4_val);porosity4_val=Float64(porosity4_val);K4_val=Float64(K4_val);alpha4_val=Float64(alpha4_val);refdir14_val=Float64(refdir14_val);refdir24_val=Float64(refdir24_val);refdir34_val=Float64(refdir34_val);
-        patchtype1val=Int64(patchtype1val);patchtype2val=Int64(patchtype2val);patchtype3val=Int64(patchtype3val);patchtype4val=Int64(patchtype4val);
-        i_restart=Int64(i_restart);i_interactive=Int64(i_interactive);n_pics=Int64(n_pics);
+        i_model=param.i_model;
+        tmax=param.tmax;
+        p_ref=param.p_ref;rho_ref=param.rho_ref;gamma=param.gamma;mu_resin_val=param.mu_resin_val;
+        p_a_val=param.p_a_val;p_init_val=param.p_init_val;
+        t_val=param.t_val;porosity_val=param.porosity_val;K_val=param.K_val;alpha_val=param.alpha_val;refdir1_val=param.refdir1_val;refdir2_val=param.refdir2_val;refdir3_val=param.refdir3_val;
+        t1_val=param.t1_val;porosity1_val=param.porosity1_val;K1_val=param.K1_val;alpha1_val=param.alpha1_val;refdir11_val=param.refdir11_val;refdir21_val=param.refdir21_val;refdir31_val=param.refdir31_val;
+        t2_val=param.t2_val;porosity2_val=param.porosity2_val;K2_val=param.K2_val;alpha2_val=param.alpha2_val;refdir12_val=param.refdir12_val;refdir22_val=param.refdir22_val;refdir32_val=param.refdir32_val;
+        t3_val=param.t3_val;porosity3_val=param.porosity3_val;K3_val=param.K3_val;alpha3_val=param.alpha3_val;refdir13_val=param.refdir13_val;refdir23_val=param.refdir23_val;refdir33_val=param.refdir33_val;
+        t4_val=param.t4_val;porosity4_val=param.porosity4_val;K4_val=param.K4_val;alpha4_val=param.alpha4_val;refdir14_val=param.refdir14_val;refdir24_val=param.refdir24_val;refdir34_val=param.refdir34_val;
+        patchtype1val=param.patchtype1val;patchtype2val=param.patchtype2val;patchtype3val=param.patchtype3val;patchtype4val=param.patchtype4val;
+        i_restart=param.i_restart;i_interactive=param.i_interactive;n_pics=param.n_pics;r_p=param.r_p;restartfilename=param.restartfilename;
  
         #License statement
         print("\n")
@@ -998,6 +997,10 @@ module rtmsim
     - i_method :: Int
     - vars_P, vars_A :: 4-element Vector{Float}
     - meshparameters :: 3-element Vector{Float}
+
+    Unit tests:
+    - `rtmsim.numerical_flux_function(1,[1.0; 1.2; 0.0; 0.0],[1.0; 1.2; 0.0; 0.0],[1.0;0.0;1.0])` with return `(1.2, 1.44, 0.0, 0.0, 1.2)`
+    - `rtmsim.numerical_flux_function(1,[1.225 1.2 0.4 0.9],[1.0 0.4 1.2 0.1],[1/sqrt(2);1/sqrt(2);1.0])` with solution `(1.2586500705120547, 1.5103800846144655, 0.5034600282048219, 1.0182337649086284, 1.131370849898476)`
     """
     function numerical_flux_function(i_method,vars_P,vars_A,meshparameters);
         if i_method==1;
@@ -1037,6 +1040,9 @@ module rtmsim
             F_gamma_num_add=n_dot_u*phi*A;
             phi=1;
             F_gamma_num1_add=n_dot_u*phi*A;
+        else
+            errorstring=string("i_method=",string(i_method)," not implemented"* "\n"); 
+            error(errorstring);
         end
         return F_rho_num_add,F_u_num_add,F_v_num_add,F_gamma_num_add,F_gamma_num1_add
     end
@@ -1052,6 +1058,10 @@ module rtmsim
     - vars_P, vars_A :: 4-element Vector{Float}
     - meshparameters :: 3-element Vector{Float}
     - n_dot_u :: Float
+
+    Unit tests:
+    - `rtmsim.numerical_flux_function_boundary(1,[1.0; 1.2; 0.0; 0.0],[1.0; 1.2; 0.0; 0.0],[1.0;0.0;1.0],-1.0)` with return `(-1.0, -1.2, -0.0, -0.0, -1.0)`
+    - `rtmsim.numerical_flux_function_boundary(1,[1.225 1.2 0.4 0.9],[1.0 0.4 1.2 0.1],[1/sqrt(2);1/sqrt(2);1.0],-0.8)` with solution `(-0.8900000000000001, -0.3560000000000001, -1.068, -0.08000000000000002, -0.8)`
     """
     function numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,n_dot_u);
         if i_method==1;
@@ -1353,7 +1363,17 @@ module rtmsim
     """
         function create_faces(cellgridid, N, maxnumberofneighbours)
 
-    Find the set with the IDs of the neighbouring cells and identify wall cells
+    Find the set with the IDs of the neighbouring cells and identify wall cells.
+
+    Arguments:
+    - cellgridid :: Array{Int,2}
+    - N :: Int
+    - maxnumberofneighbours :: Int
+
+    Meaning of the arguments:
+    - `cellgridid`: The i-th line contains the three IDs of the nodes which form the cell
+    - `N`: Number of cells.
+    - `maxnumberofneighbours`: Number of columns of array `cellneighboursarray`. Default value is `10`. If more cell neighbours in the mesh, an error occurs and this value must be increased. 
     """
     function create_faces(cellgridid, N, maxnumberofneighbours);
         celltype=Vector{Int64}(undef, N);
@@ -1432,6 +1452,26 @@ module rtmsim
         function assign_parameters(i_interactive,celltype,patchparameters0,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,patchids1,patchids2,patchids3,patchids4,inletpatchids,mu_resin_val,N)
     
     Assign properties to cells.
+
+    Arguments:
+    - i_interactive :: Int
+    - celltype :: Vector{Int}
+    - patchparameters0,patchparameters1,patchparameters2,patchparameters3,patchparameters4 :: Vector{Float}
+    - patchtype1val,patchtype2val,patchtype3val,patchtype4val :: 
+    - patchids1,patchids2,patchids3,patchids4 :: Int
+    - inletpatchids :: Vector{Int}
+    - mu_resin_val :: Float
+    - N :: Int
+
+    Meaning of the arguments:
+    - `i_interactive`: 1..if pressure inlet cells are selected manually, 0..else
+    - `celltype[i]`: Describes cell type. -1..pressure inlet, -2..pressure outlet, -3..cell with wall boundary, 1..interior cell
+    - `patchparameters0`,`patchparameters1`,`patchparameters2`,`patchparameters3`,`patchparameters4` :: 7-element vector with parameters for the main preform and the four sets if used as patch. The seven elements are cellporosity,cellthickness,cellpermeability,cellalpha,celldirection[1],celldirection[2],celldirection[3].
+    - `patchtype1val`,`patchtype2val`,`patchtype3val`,`patchtype4val` :: Type of patch. 1..
+    - `patchids1`,`patchids2`,`patchids3`,`patchids4` :: Type of set. 0..ignored,1..pressure inlet,2..patch,3..pressure outlet
+    - `inletpatchids` :: Vector with the IDs of the cells which are inlet cells.
+    - `mu_resin_val` :: Kinematic viscosity value.
+    - `N`´: Number of cells.
     """
     function assign_parameters(i_interactive,celltype,patchparameters0,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,patchids1,patchids2,patchids3,patchids4,inletpatchids,mu_resin_val,N);
         cellthickness=Vector{Float64}(undef, N);
@@ -1578,7 +1618,29 @@ module rtmsim
     """
         function create_coordinate_systems(N, cellgridid, gridx, gridy, gridz, cellcenterx,cellcentery,cellcenterz, faces, cellneighboursarray, celldirection, cellthickness, maxnumberofneighbours)
 
-    Define the local cell coordinate system and the transformation matrix from the local cell coordinate system from the neighbouring cell to the local cell coordinate system of the considered cell
+    Define the local cell coordinate system and the transformation matrix from the local cell coordinate system from the neighbouring cell to the local cell coordinate system of the considered cell.
+
+    Arguments:
+    - N :: Int64
+    - cellgridid :: Array{Float,2}
+    - gridx,gridy,gridz :: Vector{Float}
+    - cellcenterx,cellcentery,cellcenterz :: Vector{Float}
+    - faces :: Array{Int,2} 
+    - cellneighboursarray :: Array{Float,2}
+    - celldirection :: Array{Float,2}
+    - cellthickness :: Vector{Float}
+    - maxnumberofneighbours :: Int
+
+    Meaning of the arguments:
+    - `N`: Number of cells
+    - `cellgridid`: The i-th line contains the three IDs of the nodes which form the cell
+    - `gridx`,`gridy`,`gridz`: i-th component of these vectors contain the x, y and z coordinates of node with ID i
+    - `cellcenterx`,`cellcentery`,`cellcenterz`: i-th component of these vectors contain the x, y and z coordinates of geometric cell centers of cell with ID i
+    - `faces`: Array with three columns. The three entries n1, n2, c1 in a cell are indices and describe a line between nodes with IDs n1 and n2 and this boundary belongs to cell with ID c1. 
+    - `cellneighboursarray`: The i-th line contains the indices of the neighbouring cells of cell with ID i. Number of columns is given by maxnumberofneighbours. Array is initialized with -9 and only the positive entries are considered.
+    - `celldirection`: The i-th line contains the x, y and z coordinates of the unit normal vector which is projected on the cell to define the cell coordinate system for cell with ID 1.
+    - `cellthickness`: The i-th line contains the thickness of cell with ID i.
+    - `maxnumberofneighbours`: Number of columns of array `cellneighboursarray`. Default value is `10`. If more cell neighbours in the mesh, an error occurs and this value must be increased. 
     """
     function create_coordinate_systems(N, cellgridid, gridx, gridy, gridz, cellcenterx,cellcentery,cellcenterz, faces, cellneighboursarray, celldirection, cellthickness, maxnumberofneighbours);
         cellvolume=Vector{Float64}(undef, N);
@@ -1608,7 +1670,7 @@ module rtmsim
         b1=Array{Float64}(undef, N, 3);
         b2=Array{Float64}(undef, N, 3);
         b3=Array{Float64}(undef, N, 3);
-        gridxlocal=Array{Float64}(undef, N, 3);
+        gridxlocal=Array{Float64}(undef, N, 3);00
         gridylocal=Array{Float64}(undef, N, 3);
         gridzlocal=Array{Float64}(undef, N, 3);
         theta=Vector{Float64}(undef, N);
@@ -2718,6 +2780,11 @@ module rtmsim
         function gui()
     
     Opens the GUI.
+
+    No arguments.
+
+    Unit test:
+    - `rtmsim.gui();` to open the GUI.
     """
     function gui()
         #one Gtk window
@@ -2881,13 +2948,30 @@ module rtmsim
             if [get_gtk_property(b,:active,Bool) for b in r4] == [true, false, false, false]; patchtype4val=Int64(0);    elseif [get_gtk_property(b,:active,Bool) for b in r4] == [false, true, false, false]; patchtype4val=Int64(1);    elseif [get_gtk_property(b,:active,Bool) for b in r4] == [false, false, true, false]; patchtype4val=Int64(3);    elseif [get_gtk_property(b,:active,Bool) for b in r4] == [false, false, false, true]; patchtype4val=Int64(2); end;
             str61="0.01"; #str61 = get_gtk_property(r,:text,String)
             restartval=Int64(0); interactiveval=Int64(0); noutval=Int64(16); 
-            rtmsim.rtmsim_rev1(1,str1,parse(Float64,str2), 1.01325e5,1.225,1.4,parse(Float64,str3), parse(Float64,str4),parse(Float64,str5), parse(Float64,str11),
-            parse(Float64,str12),parse(Float64,str13),parse(Float64,str14),parse(Float64,str15),parse(Float64,str16),parse(Float64,str17),
-            parse(Float64,str21),parse(Float64,str22),parse(Float64,str23),parse(Float64,str24),parse(Float64,str25),parse(Float64,str26),parse(Float64,str27), 
-            parse(Float64,str31),parse(Float64,str32),parse(Float64,str33),parse(Float64,str34),parse(Float64,str35),parse(Float64,str36),parse(Float64,str37),
-            parse(Float64,str41),parse(Float64,str42),parse(Float64,str43),parse(Float64,str44),parse(Float64,str45),parse(Float64,str46),parse(Float64,str47),
-            parse(Float64,str51),parse(Float64,str52),parse(Float64,str53),parse(Float64,str54),parse(Float64,str55),parse(Float64,str56),parse(Float64,str57),
-            patchtype1val,patchtype2val,patchtype3val,patchtype4val, restartval,"results.jld2", interactiveval,parse(Float64,str61), noutval);
+
+            param=rtmsim.input_vals(1,
+                                    str1,
+                                    parse(Float64,str2),
+                                    1.01325e5,1.225,1.4,parse(Float64,str3),
+                                    parse(Float64,str4),parse(Float64,str5),
+                                    parse(Float64,str11),parse(Float64,str12),parse(Float64,str13),parse(Float64,str14),parse(Float64,str15),parse(Float64,str16),parse(Float64,str17),
+                                    parse(Float64,str21),parse(Float64,str22),parse(Float64,str23),parse(Float64,str24),parse(Float64,str25),parse(Float64,str26),parse(Float64,str27),
+                                    parse(Float64,str31),parse(Float64,str32),parse(Float64,str33),parse(Float64,str34),parse(Float64,str35),parse(Float64,str36),parse(Float64,str37),
+                                    parse(Float64,str41),parse(Float64,str42),parse(Float64,str43),parse(Float64,str44),parse(Float64,str45),parse(Float64,str46),parse(Float64,str47),
+                                    parse(Float64,str51),parse(Float64,str52),parse(Float64,str53),parse(Float64,str54),parse(Float64,str55),parse(Float64,str56),parse(Float64,str57),
+                                    patchtype1val,patchtype2val,patchtype3val,patchtype4val,
+                                    restartval,"results.jld2",
+                                    interactiveval,parse(Float64,str61),
+                                    noutval);
+            rtmsim.rtmsim_rev1(param);
+
+            #rtmsim.rtmsim_rev1(1,str1,parse(Float64,str2), 1.01325e5,1.225,1.4,parse(Float64,str3), parse(Float64,str4),parse(Float64,str5), parse(Float64,str11),
+            #parse(Float64,str12),parse(Float64,str13),parse(Float64,str14),parse(Float64,str15),parse(Float64,str16),parse(Float64,str17),
+            #parse(Float64,str21),parse(Float64,str22),parse(Float64,str23),parse(Float64,str24),parse(Float64,str25),parse(Float64,str26),parse(Float64,str27), 
+            #parse(Float64,str31),parse(Float64,str32),parse(Float64,str33),parse(Float64,str34),parse(Float64,str35),parse(Float64,str36),parse(Float64,str37),
+            #parse(Float64,str41),parse(Float64,str42),parse(Float64,str43),parse(Float64,str44),parse(Float64,str45),parse(Float64,str46),parse(Float64,str47),
+            #parse(Float64,str51),parse(Float64,str52),parse(Float64,str53),parse(Float64,str54),parse(Float64,str55),parse(Float64,str56),parse(Float64,str57),
+            #patchtype1val,patchtype2val,patchtype3val,patchtype4val, restartval,"results.jld2", interactiveval,parse(Float64,str61), noutval);
         end
         function cs_clicked(w)
             str1 = get_gtk_property(mf,:text,String); str2 = get_gtk_property(t,:text,String); str3 = get_gtk_property(par_3,:text,String); str4 = get_gtk_property(par_1,:text,String); str5 = get_gtk_property(par_2,:text,String);
@@ -2902,13 +2986,30 @@ module rtmsim
             if [get_gtk_property(b,:active,Bool) for b in r4] == [true, false, false, false]; patchtype4val=Int64(0);    elseif [get_gtk_property(b,:active,Bool) for b in r4] == [false, true, false, false]; patchtype4val=Int64(1);    elseif [get_gtk_property(b,:active,Bool) for b in r4] == [false, false, true, false]; patchtype4val=Int64(3);    elseif [get_gtk_property(b,:active,Bool) for b in r4] == [false, false, false, true]; patchtype4val=Int64(2); end;
             str61="0.01"; #str61 = get_gtk_property(r,:text,String)
             restartval=Int64(1); interactiveval=Int64(0); noutval=Int64(16); 
-            rtmsim.rtmsim_rev1(1,str1,parse(Float64,str2), 1.01325e5,1.225,1.4,parse(Float64,str3), parse(Float64,str4),parse(Float64,str5), parse(Float64,str11),
-            parse(Float64,str12),parse(Float64,str13),parse(Float64,str14),parse(Float64,str15),parse(Float64,str16),parse(Float64,str17),
-            parse(Float64,str21),parse(Float64,str22),parse(Float64,str23),parse(Float64,str24),parse(Float64,str25),parse(Float64,str26),parse(Float64,str27), 
-            parse(Float64,str31),parse(Float64,str32),parse(Float64,str33),parse(Float64,str34),parse(Float64,str35),parse(Float64,str36),parse(Float64,str37),
-            parse(Float64,str41),parse(Float64,str42),parse(Float64,str43),parse(Float64,str44),parse(Float64,str45),parse(Float64,str46),parse(Float64,str47),
-            parse(Float64,str51),parse(Float64,str52),parse(Float64,str53),parse(Float64,str54),parse(Float64,str55),parse(Float64,str56),parse(Float64,str57),
-            patchtype1val,patchtype2val,patchtype3val,patchtype4val, restartval,"results.jld2", interactiveval,parse(Float64,str61), noutval);
+            
+            param=rtmsim.input_vals(1,
+                                    str1,
+                                    parse(Float64,str2),
+                                    1.01325e5,1.225,1.4,parse(Float64,str3),
+                                    parse(Float64,str4),parse(Float64,str5),
+                                    parse(Float64,str11),parse(Float64,str12),parse(Float64,str13),parse(Float64,str14),parse(Float64,str15),parse(Float64,str16),parse(Float64,str17),
+                                    parse(Float64,str21),parse(Float64,str22),parse(Float64,str23),parse(Float64,str24),parse(Float64,str25),parse(Float64,str26),parse(Float64,str27),
+                                    parse(Float64,str31),parse(Float64,str32),parse(Float64,str33),parse(Float64,str34),parse(Float64,str35),parse(Float64,str36),parse(Float64,str37),
+                                    parse(Float64,str41),parse(Float64,str42),parse(Float64,str43),parse(Float64,str44),parse(Float64,str45),parse(Float64,str46),parse(Float64,str47),
+                                    parse(Float64,str51),parse(Float64,str52),parse(Float64,str53),parse(Float64,str54),parse(Float64,str55),parse(Float64,str56),parse(Float64,str57),
+                                    patchtype1val,patchtype2val,patchtype3val,patchtype4val,
+                                    restartval,"results.jld2",
+                                    interactiveval,parse(Float64,str61),
+                                    noutval);
+            rtmsim.rtmsim_rev1(param);
+
+            #rtmsim.rtmsim_rev1(1,str1,parse(Float64,str2), 1.01325e5,1.225,1.4,parse(Float64,str3), parse(Float64,str4),parse(Float64,str5), parse(Float64,str11),
+            #parse(Float64,str12),parse(Float64,str13),parse(Float64,str14),parse(Float64,str15),parse(Float64,str16),parse(Float64,str17),
+            #parse(Float64,str21),parse(Float64,str22),parse(Float64,str23),parse(Float64,str24),parse(Float64,str25),parse(Float64,str26),parse(Float64,str27), 
+            #parse(Float64,str31),parse(Float64,str32),parse(Float64,str33),parse(Float64,str34),parse(Float64,str35),parse(Float64,str36),parse(Float64,str37),
+            #parse(Float64,str41),parse(Float64,str42),parse(Float64,str43),parse(Float64,str44),parse(Float64,str45),parse(Float64,str46),parse(Float64,str47),
+            #parse(Float64,str51),parse(Float64,str52),parse(Float64,str53),parse(Float64,str54),parse(Float64,str55),parse(Float64,str56),parse(Float64,str57),
+            #patchtype1val,patchtype2val,patchtype3val,patchtype4val, restartval,"results.jld2", interactiveval,parse(Float64,str61), noutval);
         end
         function si_clicked(w)
             str1 = get_gtk_property(mf,:text,String); str2 = get_gtk_property(t,:text,String); str3 = get_gtk_property(par_3,:text,String); str4 = get_gtk_property(par_1,:text,String); str5 = get_gtk_property(par_2,:text,String);
@@ -2923,13 +3024,30 @@ module rtmsim
             if [get_gtk_property(b,:active,Bool) for b in r4] == [true, false, false, false]; patchtype4val=Int64(0);    elseif [get_gtk_property(b,:active,Bool) for b in r4] == [false, true, false, false]; patchtype4val=Int64(1);    elseif [get_gtk_property(b,:active,Bool) for b in r4] == [false, false, true, false]; patchtype4val=Int64(3);    elseif [get_gtk_property(b,:active,Bool) for b in r4] == [false, false, false, true]; patchtype4val=Int64(2); end;
             str61 = get_gtk_property(r,:text,String)
             restartval=Int64(0); interactiveval=Int64(2); noutval=Int64(16); 
-            rtmsim.rtmsim_rev1(1,str1,parse(Float64,str2), 1.01325e5,1.225,1.4,parse(Float64,str3), parse(Float64,str4),parse(Float64,str5), parse(Float64,str11),
-            parse(Float64,str12),parse(Float64,str13),parse(Float64,str14),parse(Float64,str15),parse(Float64,str16),parse(Float64,str17),
-            parse(Float64,str21),parse(Float64,str22),parse(Float64,str23),parse(Float64,str24),parse(Float64,str25),parse(Float64,str26),parse(Float64,str27), 
-            parse(Float64,str31),parse(Float64,str32),parse(Float64,str33),parse(Float64,str34),parse(Float64,str35),parse(Float64,str36),parse(Float64,str37),
-            parse(Float64,str41),parse(Float64,str42),parse(Float64,str43),parse(Float64,str44),parse(Float64,str45),parse(Float64,str46),parse(Float64,str47),
-            parse(Float64,str51),parse(Float64,str52),parse(Float64,str53),parse(Float64,str54),parse(Float64,str55),parse(Float64,str56),parse(Float64,str57),
-            patchtype1val,patchtype2val,patchtype3val,patchtype4val, restartval,"results.jld2", interactiveval,parse(Float64,str61), noutval);
+            
+            param=rtmsim.input_vals(1,
+                                    str1,
+                                    parse(Float64,str2),
+                                    1.01325e5,1.225,1.4,parse(Float64,str3),
+                                    parse(Float64,str4),parse(Float64,str5),
+                                    parse(Float64,str11),parse(Float64,str12),parse(Float64,str13),parse(Float64,str14),parse(Float64,str15),parse(Float64,str16),parse(Float64,str17),
+                                    parse(Float64,str21),parse(Float64,str22),parse(Float64,str23),parse(Float64,str24),parse(Float64,str25),parse(Float64,str26),parse(Float64,str27),
+                                    parse(Float64,str31),parse(Float64,str32),parse(Float64,str33),parse(Float64,str34),parse(Float64,str35),parse(Float64,str36),parse(Float64,str37),
+                                    parse(Float64,str41),parse(Float64,str42),parse(Float64,str43),parse(Float64,str44),parse(Float64,str45),parse(Float64,str46),parse(Float64,str47),
+                                    parse(Float64,str51),parse(Float64,str52),parse(Float64,str53),parse(Float64,str54),parse(Float64,str55),parse(Float64,str56),parse(Float64,str57),
+                                    patchtype1val,patchtype2val,patchtype3val,patchtype4val,
+                                    restartval,"results.jld2",
+                                    interactiveval,parse(Float64,str61),
+                                    noutval);
+            rtmsim.rtmsim_rev1(param);
+            
+            #rtmsim.rtmsim_rev1(1,str1,parse(Float64,str2), 1.01325e5,1.225,1.4,parse(Float64,str3), parse(Float64,str4),parse(Float64,str5), parse(Float64,str11),
+            #parse(Float64,str12),parse(Float64,str13),parse(Float64,str14),parse(Float64,str15),parse(Float64,str16),parse(Float64,str17),
+            #parse(Float64,str21),parse(Float64,str22),parse(Float64,str23),parse(Float64,str24),parse(Float64,str25),parse(Float64,str26),parse(Float64,str27), 
+            #parse(Float64,str31),parse(Float64,str32),parse(Float64,str33),parse(Float64,str34),parse(Float64,str35),parse(Float64,str36),parse(Float64,str37),
+            #parse(Float64,str41),parse(Float64,str42),parse(Float64,str43),parse(Float64,str44),parse(Float64,str45),parse(Float64,str46),parse(Float64,str47),
+            #parse(Float64,str51),parse(Float64,str52),parse(Float64,str53),parse(Float64,str54),parse(Float64,str55),parse(Float64,str56),parse(Float64,str57),
+            #patchtype1val,patchtype2val,patchtype3val,patchtype4val, restartval,"results.jld2", interactiveval,parse(Float64,str61), noutval);
         end
         function ci_clicked(w)
             str1 = get_gtk_property(mf,:text,String); str2 = get_gtk_property(t,:text,String); str3 = get_gtk_property(par_3,:text,String); str4 = get_gtk_property(par_1,:text,String); str5 = get_gtk_property(par_2,:text,String);
@@ -2944,13 +3062,30 @@ module rtmsim
             if [get_gtk_property(b,:active,Bool) for b in r4] == [true, false, false, false]; patchtype4val=Int64(0);    elseif [get_gtk_property(b,:active,Bool) for b in r4] == [false, true, false, false]; patchtype4val=Int64(1);    elseif [get_gtk_property(b,:active,Bool) for b in r4] == [false, false, true, false]; patchtype4val=Int64(3);    elseif [get_gtk_property(b,:active,Bool) for b in r4] == [false, false, false, true]; patchtype4val=Int64(2); end;
             str61 = get_gtk_property(r,:text,String)
             restartval=Int64(1); interactiveval=Int64(2); noutval=Int64(16); 
-            rtmsim.rtmsim_rev1(1,str1,parse(Float64,str2), 1.01325e5,1.225,1.4,parse(Float64,str3), parse(Float64,str4),parse(Float64,str5), parse(Float64,str11),
-            parse(Float64,str12),parse(Float64,str13),parse(Float64,str14),parse(Float64,str15),parse(Float64,str16),parse(Float64,str17),
-            parse(Float64,str21),parse(Float64,str22),parse(Float64,str23),parse(Float64,str24),parse(Float64,str25),parse(Float64,str26),parse(Float64,str27), 
-            parse(Float64,str31),parse(Float64,str32),parse(Float64,str33),parse(Float64,str34),parse(Float64,str35),parse(Float64,str36),parse(Float64,str37),
-            parse(Float64,str41),parse(Float64,str42),parse(Float64,str43),parse(Float64,str44),parse(Float64,str45),parse(Float64,str46),parse(Float64,str47),
-            parse(Float64,str51),parse(Float64,str52),parse(Float64,str53),parse(Float64,str54),parse(Float64,str55),parse(Float64,str56),parse(Float64,str57),
-            patchtype1val,patchtype2val,patchtype3val,patchtype4val, restartval,"results.jld2", interactiveval,parse(Float64,str61), noutval);
+
+            param=rtmsim.input_vals(1,
+                                    str1,
+                                    parse(Float64,str2),
+                                    1.01325e5,1.225,1.4,parse(Float64,str3),
+                                    parse(Float64,str4),parse(Float64,str5),
+                                    parse(Float64,str11),parse(Float64,str12),parse(Float64,str13),parse(Float64,str14),parse(Float64,str15),parse(Float64,str16),parse(Float64,str17),
+                                    parse(Float64,str21),parse(Float64,str22),parse(Float64,str23),parse(Float64,str24),parse(Float64,str25),parse(Float64,str26),parse(Float64,str27),
+                                    parse(Float64,str31),parse(Float64,str32),parse(Float64,str33),parse(Float64,str34),parse(Float64,str35),parse(Float64,str36),parse(Float64,str37),
+                                    parse(Float64,str41),parse(Float64,str42),parse(Float64,str43),parse(Float64,str44),parse(Float64,str45),parse(Float64,str46),parse(Float64,str47),
+                                    parse(Float64,str51),parse(Float64,str52),parse(Float64,str53),parse(Float64,str54),parse(Float64,str55),parse(Float64,str56),parse(Float64,str57),
+                                    patchtype1val,patchtype2val,patchtype3val,patchtype4val,
+                                    restartval,"results.jld2",
+                                    interactiveval,parse(Float64,str61),
+                                    noutval);
+            rtmsim.rtmsim_rev1(param);
+
+            #rtmsim.rtmsim_rev1(1,str1,parse(Float64,str2), 1.01325e5,1.225,1.4,parse(Float64,str3), parse(Float64,str4),parse(Float64,str5), parse(Float64,str11),
+            #parse(Float64,str12),parse(Float64,str13),parse(Float64,str14),parse(Float64,str15),parse(Float64,str16),parse(Float64,str17),
+            #parse(Float64,str21),parse(Float64,str22),parse(Float64,str23),parse(Float64,str24),parse(Float64,str25),parse(Float64,str26),parse(Float64,str27), 
+            #parse(Float64,str31),parse(Float64,str32),parse(Float64,str33),parse(Float64,str34),parse(Float64,str35),parse(Float64,str36),parse(Float64,str37),
+            #parse(Float64,str41),parse(Float64,str42),parse(Float64,str43),parse(Float64,str44),parse(Float64,str45),parse(Float64,str46),parse(Float64,str47),
+            #parse(Float64,str51),parse(Float64,str52),parse(Float64,str53),parse(Float64,str54),parse(Float64,str55),parse(Float64,str56),parse(Float64,str57),
+            #patchtype1val,patchtype2val,patchtype3val,patchtype4val, restartval,"results.jld2", interactiveval,parse(Float64,str61), noutval);
         end
         function pr_clicked(w)
             str = get_gtk_property(rf,:text,String)

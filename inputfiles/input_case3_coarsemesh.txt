@@ -1,5 +1,5 @@
 1    #i_model 
-meshfiles\\mesh_annulusfiller1.bdf    #meshfilename 
+meshfiles/mesh_annulusfiller1.bdf    #meshfilename 
 250    #tmax
 1.01325e5 1.225 1.4 0.06    #p_ref rho_ref gamma mu_resin_val 
 1.35e5 1.0e5    #p_a_val p_init_val 
