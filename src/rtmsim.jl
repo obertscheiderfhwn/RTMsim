@@ -124,7 +124,7 @@ module rtmsim
         end
 
 
-        A_input=readdlm("inputfiles\\input1.txt",' ');
+        A_input=readdlm(inputfilename,' ');
         param=rtmsim.input_vals(A_input[1,1],
                                 A_input[2,1],
                                 A_input[3,1],
