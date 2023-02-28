@@ -400,7 +400,8 @@ module rtmsim
         #Normalization for Delta p: p->p-p_init
             p_eps=Float64(0.001e5); #Float64(0.000e5);  #
             p_a=p_a-p_init+p_eps;
-            p_init=p_init-p_init+p_eps;
+            # p_init=p_init-p_init+p_eps;
+	    p_init=p_eps;
             p_b=p_a-p_init+p_eps;
             p_ref=p_ref;  #p_ref-p_init+p_eps;
         kappa=p_ref/(rho_ref^gamma);
