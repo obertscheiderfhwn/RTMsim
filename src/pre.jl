@@ -81,7 +81,7 @@ end
 
 
 """
-    function read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
+    function read_mesh(input_struct)
 
 Read mesh file and prepare to be used in solver:
 - number of cells, cell ids start with 1
@@ -90,20 +90,19 @@ Read mesh file and prepare to be used in solver:
 - patch properties
 Read other mesh files than Nastran bulk data format (bdf) based on extension and calculate the required mesh data or convert to Nastran format prepare with existing function                
 """
-function read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
+function read_mesh(input_struct)
+    meshfilename=input_struct.meshfilename
     #read Nastran mesh
     if meshfilename[end-2:end]=="bdf"
-    N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids=
-            read_nastran_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
+        return_struct=read_nastran_mesh(input_struct)      
     end
-
-    return N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids
+    return return_struct
 end
 
 
 """
-    function read_nastran_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
-
+    function read_nastran_mesh(input_struct)
+        
 Read file in Nastran format with fixed length (8 digits), nodes (`GRIDS`) defined in global coordinate system.
 
 Arguments:
@@ -114,9 +113,21 @@ Arguments:
 - r_p :: Float
 
 Unit test:
-- `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; meshfilename=joinpath(MODULE_ROOT,"meshfiles","mesh_permeameter1_foursets.bdf"); paramset=[0.5,0.3,3e-10,1.0,1.0,0.0,0.0];paramset1=paramset;paramset2=paramset;paramset3=paramset;paramset4=paramset;patchtype1val=-1;patchtype2val=-1;patchtype3val=-1;patchtype4val=-1;i_interactive=0;r_p=0.01; N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids=rtmsim.read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p);`
+- `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; meshfilename=joinpath(MODULE_ROOT,"meshfiles","mesh_permeameter1_foursets.bdf"); paramset=[0.5,0.3,3e-10,1.0,1.0,0.0,0.0];paramset1=paramset;paramset2=paramset;paramset3=paramset;paramset4=paramset;patchtype1val=-1;patchtype2val=-1;patchtype3val=-1;patchtype4val=-1;i_interactive=0;r_p=0.01; input_struct=rtmsim.input_args_read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p); return_struct=rtmsim.read_mesh(input_struct);`
 """
-function read_nastran_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
+function read_nastran_mesh(input_struct)
+    meshfilename=input_struct.meshfilename
+    paramset=input_struct.paramset
+    paramset1=input_struct.paramset1
+    paramset2=input_struct.paramset2
+    paramset3=input_struct.paramset3
+    paramset4=input_struct.paramset4
+    patchtype1val=input_struct.patchtype1val
+    patchtype2val=input_struct.patchtype2val
+    patchtype3val=input_struct.patchtype3val
+    patchtype4val=input_struct.patchtype4val
+    i_interactive=input_struct.i_interactive
+    r_p=input_struct.r_p
     if ~isfile(meshfilename)
         errorstring=string("File ",meshfilename," not existing"* "\n") 
         error(errorstring)
@@ -228,7 +239,8 @@ function read_nastran_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,p
     end
 
     if i_interactive==1
-        assign_pset(r_p,N,cellcenterx,cellcentery,cellcenterz)
+        input_pset=rtmsim.input_args_assign_pset(r_p,N,cellcenterx,cellcentery,cellcenterz)
+        assign_pset(input_pset)
         psetfilename="pset.jld2"
         if ~isfile(psetfilename)
             errorstring=string("File ",psetfilename," not existing"* "\n") 
@@ -271,7 +283,8 @@ function read_nastran_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,p
             patchids4=vcat(patchids4,i1)
         end
         if i_interactive==2
-            assign_pset(r_p,N,cellcenterx,cellcentery,cellcenterz)
+            input_pset=rtmsim.input_args_assign_pset(r_p,N,cellcenterx,cellcentery,cellcenterz)
+            assign_pset(input_pset)
             psetfilename="pset.jld2"
             if ~isfile(psetfilename)
                 errorstring=string("File ",psetfilename," not existing"* "\n") 
@@ -321,7 +334,8 @@ function read_nastran_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,p
         end
     end
     
-    return N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids
+    return_struct=rtmsim.return_args_read_mesh(N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids)
+    return return_struct
 end
 
 
@@ -351,8 +365,26 @@ function plot_mesh(meshfilename,i_mode)
     paramset=[0.5,0.3,3e-10,1.0,1.0,0.0,0.0];paramset1=paramset;paramset2=paramset;paramset3=paramset;paramset4=paramset
     patchtype1val=-1;patchtype2val=-1;patchtype3val=-1;patchtype4val=-1;i_interactive=0
     r_p=0.01
-    N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids=
-        read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
+    input_mesh=rtmsim.input_args_read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
+    return_mesh=read_mesh(input_mesh)
+    N=return_mesh.N
+    cellgridid=return_mesh.cellgridid
+    gridx=return_mesh.gridx
+    gridy=return_mesh.gridy
+    gridz=return_mesh.gridz
+    cellcenterx=return_mesh.cellcenterx
+    cellcentery=return_mesh.cellcentery
+    cellcenterz=return_mesh.cellcenterz
+    patchparameters=return_mesh.patchparameters
+    patchparameters1=return_mesh.patchparameters1
+    patchparameters2=return_mesh.patchparameters2
+    patchparameters3=return_mesh.patchparameters3
+    patchparameters4=return_mesh.patchparameters4
+    patchids1=return_mesh.patchids1
+    patchids2=return_mesh.patchids2
+    patchids3=return_mesh.patchids3
+    patchids4=return_mesh.patchids4
+    inletpatchids=return_mesh.inletpatchids
 
     #for poly plot
     X=Array{Float64}(undef, 3, N)
@@ -473,8 +505,26 @@ function plot_sets(meshfilename)
     paramset=[0.5,0.3,3e-10,1.0,1.0,0.0,0.0];paramset1=paramset;paramset2=paramset;paramset3=paramset;paramset4=paramset
     patchtype1val=-1;patchtype2val=-1;patchtype3val=-1;patchtype4val=-1;i_interactive=0
     r_p=0.01
-    N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids=
-        read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
+    input_mesh=rtmsim.input_args_read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
+    return_mesh=read_mesh(input_mesh)
+    N=return_mesh.N
+    cellgridid=return_mesh.cellgridid
+    gridx=return_mesh.gridx
+    gridy=return_mesh.gridy
+    gridz=return_mesh.gridz
+    cellcenterx=return_mesh.cellcenterx
+    cellcentery=return_mesh.cellcentery
+    cellcenterz=return_mesh.cellcenterz
+    patchparameters=return_mesh.patchparameters
+    patchparameters1=return_mesh.patchparameters1
+    patchparameters2=return_mesh.patchparameters2
+    patchparameters3=return_mesh.patchparameters3
+    patchparameters4=return_mesh.patchparameters4
+    patchids1=return_mesh.patchids1
+    patchids2=return_mesh.patchids2
+    patchids3=return_mesh.patchids3
+    patchids4=return_mesh.patchids4
+    inletpatchids=return_mesh.inletpatchids
 
     if isempty(patchids1)
         n_patch=0
@@ -629,7 +679,12 @@ end
 
 Create the cell set from the manually selected inlet port nodes
 """
-function assign_pset(r_p,N,cellcenterx,cellcentery,cellcenterz)
+function assign_pset(input_struct)
+    r_p=input_struct.r_p
+    N=input_struct.N
+    cellcenterx=input_struct.cellcenterx
+    cellcentery=input_struct.cellcentery
+    cellcenterz=input_struct.cellcenterz
     filename="inletpostions.jld2"
     @load filename inletpos_xyz
     n_p=size(inletpos_xyz,1)-1

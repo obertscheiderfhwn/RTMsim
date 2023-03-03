@@ -1,20 +1,30 @@
 """
-    function numerical_gradient(i_method,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery)
+    function numerical_gradient(input_struct)
         
 Calculates the pressure gradient from the cell values of the neighbouring cells.
-- i_method=1 .. Least square solution to determine gradient
-- i_method=2 .. Least square solution to determine gradient with limiter
-- i_method=3 .. RUntime optimized least square solution to determine gradient
+- `i_method=1` .. Least square solution to determine gradient
+- `i_method=2` .. Least square solution to determine gradient with limiter
+- `i_method=3` .. RUntime optimized least square solution to determine gradient
 
-Arguments:
-- i_method :: Int
-- ind :: Int
-- p_old :: Vector{Float}
-- cellneighoursarray :: Array{Float,2}
-- cellcentertocellcenterx, cellcentertocellcentery :: Array{Float,2}
+Arguments: Data structure with
+- `i_method :: Int`
+- `ind :: Int`
+- `p_old :: Vector{Float}`
+- `cellneighoursarray :: Array{Float,2}`
+- `cellcentertocellcenterx, cellcentertocellcentery :: Array{Float,2}`
 
+Return: Data structure with
+- `dpdx :: Float`
+- `dpdy :: Float`
 """
-function numerical_gradient(i_method,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery)
+function numerical_gradient(input_struct)
+    i_method=input_struct.i_method
+    ind=input_struct.ind
+    p_old=input_struct.p_old
+    cellneighboursarray=input_struct.cellneighboursarray
+    cellcentertocellcenterx=input_struct.cellcentertocellcenterx
+    cellcentertocellcentery=input_struct.cellcentertocellcentery
+
     if i_method==1
         #least square solution to determine gradient
         cellneighboursline=cellneighboursarray[ind,:]
@@ -99,26 +109,38 @@ function numerical_gradient(i_method,ind,p_old,cellneighboursarray,cellcentertoc
         end
 
     end
-    return dpdx,dpdy
+    return_struct=rtmsim.return_args_gradient(dpdx,dpdy)
+    return return_struct
 end
 
 
 """
-    function numerical_flux_function(i_method,vars_P,vars_A,meshparameters)
+    function numerical_flux_function(input_struct)
 
 Evaluates the numerical flux functions at the cell boundaries.
-- i_method==1 .. first order upwinding
+-` i_method==1` .. first order upwinding
 
-Arguments:
-- i_method :: Int
-- vars_P, vars_A :: 4-element Vector{Float}
-- meshparameters :: 3-element Vector{Float}
+Arguments: Data structure with
+- `i_method :: Int`
+- `vars_P, vars_A :: 4-element Vector{Float}`
+- `meshparameters :: 3-element Vector{Float}`
+
+Return: Data structure with
+- `F_rho_num_add :: Float`
+- `F_u_num_add :: Float`
+- `F_v_num_add :: Float`
+- `F_gamma_num_add :: Float`
+- `F_gamma_num1_add :: Float`
 
 Unit tests:
-- `rtmsim.numerical_flux_function(1,[1.0; 1.2; 0.0; 0.0],[1.0; 1.2; 0.0; 0.0],[1.0;0.0;1.0])` with return `(1.2, 1.44, 0.0, 0.0, 1.2)`
-- `rtmsim.numerical_flux_function(1,[1.225 1.2 0.4 0.9],[1.0 0.4 1.2 0.1],[1/sqrt(2);1/sqrt(2);1.0])` with return `(1.2586500705120547, 1.5103800846144655, 0.5034600282048219, 1.0182337649086284, 1.131370849898476)`
+- `input_struct=rtmsim.input_args_flux(1,[1.0; 1.2; 0.0; 0.0],[1.0; 1.2; 0.0; 0.0],[1.0;0.0;1.0]);rtmsim.numerical_flux_function(input_struct)` with return `(1.2, 1.44, 0.0, 0.0, 1.2)`
+- `input_struct=rtmsim.input_args_flux(1,[1.225; 1.2; 0.4; 0.9],[1.0; 0.4; 1.2; 0.1],[1/sqrt(2);1/sqrt(2);1.0]);rtmsim.numerical_flux_function(input_struct)` with return `(1.2586500705120547, 1.5103800846144655, 0.5034600282048219, 1.0182337649086284, 1.131370849898476)`
 """
-function numerical_flux_function(i_method,vars_P,vars_A,meshparameters)
+function numerical_flux_function(input_struct)
+    i_method=input_struct.i_method
+    vars_P=input_struct.vars_P
+    vars_A=input_struct.vars_A
+    meshparameters=input_struct.meshparameters
     if i_method==1
         #first order upwinding
         rho_P=vars_P[1]
@@ -160,27 +182,40 @@ function numerical_flux_function(i_method,vars_P,vars_A,meshparameters)
         errorstring=string("i_method=",string(i_method)," not implemented"* "\n") 
         error(errorstring)
     end
-    return F_rho_num_add,F_u_num_add,F_v_num_add,F_gamma_num_add,F_gamma_num1_add
+    return_struct=rtmsim.return_args_flux(F_rho_num_add,F_u_num_add,F_v_num_add,F_gamma_num_add,F_gamma_num1_add)
+    return return_struct
 end
 
 
 """
-    function numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,n_dot_u)
+    numerical_flux_function_boundary(input_struct)
 
 Evaluates the numerical flux functions at the cell boundaries to pressure inlet or outlet.
-- i_method==1 .. first order upwinding
+- `i_method==1` .. first order upwinding
 
-Arguments:
-- i_method :: Int
-- vars_P, vars_A :: 4-element Vector{Float}
-- meshparameters :: 3-element Vector{Float}
-- n_dot_u :: Float
+Arguments: Data structure with
+- `i_method :: Int`
+- `vars_P, vars_A :: ` 4-element ` Vector{Float}`
+- `meshparameters :: ` 3-element ` Vector{Float}`
+- `n_dot_u :: Float`
+
+Return: Data structure with
+- `F_rho_num_add :: Float`
+- `F_u_num_add :: Float`
+- `F_v_num_add :: Float`
+- `F_gamma_num_add :: Float`
+- `F_gamma_num1_add :: Float` 
 
 Unit tests:
-- `rtmsim.numerical_flux_function_boundary(1,[1.0; 1.2; 0.0; 0.0],[1.0; 1.2; 0.0; 0.0],[1.0;0.0;1.0],-1.0)` with return `(-1.0, -1.2, -0.0, -0.0, -1.0)`
-- `rtmsim.numerical_flux_function_boundary(1,[1.225 1.2 0.4 0.9],[1.0 0.4 1.2 0.1],[1/sqrt(2);1/sqrt(2);1.0],-0.8)` with return `(-0.8900000000000001, -0.3560000000000001, -1.068, -0.08000000000000002, -0.8)`
+- `input_struct=rtmsim.input_args_flux_boundary(1,[1.0; 1.2; 0.0; 0.0],[1.0; 1.2; 0.0; 0.0],[1.0;0.0;1.0],-1.0);rtmsim.numerical_flux_function_boundary(input_struct)` with return `(-1.0, -1.2, -0.0, -0.0, -1.0)`
+- `input_struct=rtmsim.input_args_flux_boundary(1,[1.225; 1.2; 0.4; 0.9],[1.0; 0.4; 1.2; 0.1],[1/sqrt(2);1/sqrt(2);1.0],-0.8);rtmsim.numerical_flux_function_boundary(input_struct)` with return `-0.8900000000000001, -0.3560000000000001, -1.068, -0.08000000000000002, -0.8)`
 """
-function numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,n_dot_u)
+function numerical_flux_function_boundary(input_struct)
+    i_method=input_struct.i_method
+    vars_P=input_struct.vars_P
+    vars_A=input_struct.vars_A
+    meshparameters=input_struct.meshparameters
+    n_dot_u=input_struct.n_dot_u
     if i_method==1
         #first order upwinding
         rho_P=vars_P[1]
@@ -218,5 +253,6 @@ function numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,
         phi=1
         F_gamma_num1_add=n_dot_u*phi*A
     end
-    return F_rho_num_add,F_u_num_add,F_v_num_add,F_gamma_num_add,F_gamma_num1_add
+    return_struct=rtmsim.return_args_flux(F_rho_num_add,F_u_num_add,F_v_num_add,F_gamma_num_add,F_gamma_num1_add)
+    return return_struct
 end

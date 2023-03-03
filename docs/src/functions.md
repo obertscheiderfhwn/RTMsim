@@ -4,6 +4,14 @@ Alternatively to using the GUI, one has access to all the functions after instal
 
 ## API Functions
 ```@docs
+rtmsim.start_rtmsim(inputfilename)
+```
+
+```@docs
+rtmsim.rtmsim_rev1(param)
+```
+
+```@docs
 rtmsim.plot_mesh(meshfilename,i_mode)
 ```
 
@@ -12,17 +20,8 @@ rtmsim.plot_sets(meshfilename)
 ```
 
 ```@docs
-rtmsim.read_nastran_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
+rtmsim.read_nastran_mesh(input_struct)
 ```
-
-```@docs
-rtmsim.start_rtmsim(inputfilename)
-```
-
-```@docs
-rtmsim.rtmsim_rev1(param)
-```
-
 
 ```@docs
 rtmsim.plot_results(resultsfilename)
@@ -41,27 +40,27 @@ rtmsim.gui()
 ```
 
 ```@docs
-rtmsim.numerical_gradient(i_method,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery)
+rtmsim.numerical_gradient(input_struct)
 ```
 
 ```@docs
-rtmsim.numerical_flux_function(i_method,vars_P,vars_A,meshparameters)
+rtmsim.numerical_flux_function(input_struct)
 ```
 
 ```@docs
-rtmsim.numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,n_dot_u)
+rtmsim.numerical_flux_function_boundary(input_struct)
 ```
 
 ```@docs
-rtmsim.create_coordinate_systems(N, cellgridid, gridx, gridy, gridz, cellcenterx,cellcentery,cellcenterz, faces, cellneighboursarray, celldirection, cellthickness, maxnumberofneighbours)
+rtmsim.create_coordinate_systems(input_struct)
 ```
 
 ```@docs
-rtmsim.assign_parameters(i_interactive,celltype,patchparameters0,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,patchids1,patchids2,patchids3,patchids4,inletpatchids,mu_resin_val,N)
+rtmsim.assign_parameters(input_struct)
 ```
 
 ```@docs
-rtmsim.create_faces(cellgridid, N, maxnumberofneighbours)
+rtmsim.create_faces(input_struct)
 ```
 
 

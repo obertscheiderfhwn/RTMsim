@@ -1,19 +1,27 @@
 """
-    function create_faces(cellgridid, N, maxnumberofneighbours)
+    function create_faces(input_struct)
 
 Find the set with the IDs of the neighbouring cells and identify wall cells.
 
-Arguments:
-- cellgridid :: Array{Int,2}
-- N :: Int
-- maxnumberofneighbours :: Int
+Arguments: Data structure with
+- `cellgridid :: Array{Int,2}`
+- `N :: Int`
+- `maxnumberofneighbours :: Int`
 
 Meaning of the arguments:
 - `cellgridid`: The i-th line contains the three IDs of the nodes which form the cell
 - `N`: Number of cells.
 - `maxnumberofneighbours`: Number of columns of array `cellneighboursarray`. Default value is `10`. If more cell neighbours in the mesh, an error occurs and this value must be increased. 
+
+Return: Data structure with
+- `faces :: Array{Int,2}`
+- `cellneighboursarray :: Array{Int,2}`
+- `celltype :: Vector{Int}`
 """
-function create_faces(cellgridid, N, maxnumberofneighbours)
+function create_faces(input_struct)
+    cellgridid=input_struct.cellgridid
+    N=input_struct.N
+    maxnumberofneighbours=input_struct.maxnumberofneighbours
     celltype=Vector{Int64}(undef, N)
     for i in 1:N
         celltype[i]=1
@@ -83,7 +91,8 @@ function create_faces(cellgridid, N, maxnumberofneighbours)
         end
     end
 
-    return faces, cellneighboursarray, celltype
+    return_struct=rtmsim.return_args_create_faces(faces, cellneighboursarray, celltype)
+    return return_struct
 end
 
 
@@ -99,19 +108,29 @@ end
 
 
 """
-    function assign_parameters(i_interactive,celltype,patchparameters0,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,patchids1,patchids2,patchids3,patchids4,inletpatchids,mu_resin_val,N)
+    function assign_parameters(input_struct)
 
 Assign properties to cells.
 
-Arguments:
-- i_interactive :: Int
-- celltype :: Vector{Int}
-- patchparameters0,patchparameters1,patchparameters2,patchparameters3,patchparameters4 :: Vector{Float}
-- patchtype1val,patchtype2val,patchtype3val,patchtype4val :: 
-- patchids1,patchids2,patchids3,patchids4 :: Int
-- inletpatchids :: Vector{Int}
-- mu_resin_val :: Float
-- N :: Int
+Arguments: Data structure with
+- `i_interactive :: Int`
+- `celltype :: Vector{Int}`
+- `patchparameters0 :: Vector{Float}`
+- `patchparameters1 :: Vector{Float}`
+- `patchparameters2 :: Vector{Float}`
+- `patchparameters3 :: Vector{Float}`
+- `patchparameters4 :: Vector{Float}`
+- `patchtype1val :: Int`
+- `patchtype2val :: Int`
+- `patchtype3val :: Int`
+- `patchtype4val :: Int`
+- `patchids1 :: Vector{Int}`
+- `patchids2 :: Vector{Int}`
+- `patchids3 :: Vector{Int}`
+- `patchids4 :: Vector{Int}`
+- `inletpatchids :: Vector{Int}`
+- `mu_resin_val :: Float`
+- `N :: Int`
 
 Meaning of the arguments:
 - `i_interactive`: 1..if pressure inlet cells are selected manually, 0..else
@@ -122,8 +141,36 @@ Meaning of the arguments:
 - `inletpatchids` :: Vector with the IDs of the cells which are inlet cells.
 - `mu_resin_val` :: Kinematic viscosity value.
 - `N`: Number of cells.
+
+Return: Data structure with
+- `cellthickness :: Vector{Float64}`
+- `cellporosity :: Vector{Float64}`
+- `cellpermeability :: Vector{Float64}`
+- `cellalpha :: Vector{Float64}`
+- `celldirection :: Array{Float64,2}`
+- `cellviscosity :: Vector{Float64}`
+- `celltype :: Vector{Int64}`
 """
-function assign_parameters(i_interactive,celltype,patchparameters0,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,patchids1,patchids2,patchids3,patchids4,inletpatchids,mu_resin_val,N)
+function assign_parameters(input_struct)
+    i_interactive=input_struct.i_interactive
+    celltype=input_struct.celltype
+    patchparameters0=input_struct.patchparameters0
+    patchparameters1=input_struct.patchparameters1
+    patchparameters2=input_struct.patchparameters2
+    patchparameters3=input_struct.patchparameters3
+    patchparameters4=input_struct.patchparameters4
+    patchtype1val=input_struct.patchtype1val
+    patchtype2val=input_struct.patchtype2val
+    patchtype3val=input_struct.patchtype3val
+    patchtype4val=input_struct.patchtype4val
+    patchids1=input_struct.patchids1
+    patchids2=input_struct.patchids2
+    patchids3=input_struct.patchids3
+    patchids4=input_struct.patchids4
+    inletpatchids=input_struct.inletpatchids
+    mu_resin_val=input_struct.mu_resin_val
+    N=input_struct.N
+
     cellthickness=Vector{Float64}(undef, N)
     cellporosity=Vector{Float64}(undef, N)
     cellpermeability=Vector{Float64}(undef, N)
@@ -262,24 +309,29 @@ function assign_parameters(i_interactive,celltype,patchparameters0,patchparamete
         end
     end
 
-    return cellthickness, cellporosity, cellpermeability, cellalpha, celldirection, cellviscosity, celltype
+    return_struct=rtmsim.return_args_assign_parameters(cellthickness, cellporosity, cellpermeability, cellalpha, celldirection, cellviscosity, celltype)
+    return return_struct
 end
 
 """
-    function create_coordinate_systems(N, cellgridid, gridx, gridy, gridz, cellcenterx,cellcentery,cellcenterz, faces, cellneighboursarray, celldirection, cellthickness, maxnumberofneighbours)
+    function create_coordinate_systems(input_struct)
 
 Define the local cell coordinate system and the transformation matrix from the local cell coordinate system from the neighbouring cell to the local cell coordinate system of the considered cell.
 
-Arguments:
-- N :: Int64
-- cellgridid :: Array{Float,2}
-- gridx,gridy,gridz :: Vector{Float}
-- cellcenterx,cellcentery,cellcenterz :: Vector{Float}
-- faces :: Array{Int,2} 
-- cellneighboursarray :: Array{Float,2}
-- celldirection :: Array{Float,2}
-- cellthickness :: Vector{Float}
-- maxnumberofneighbours :: Int
+Arguments: Data structure with
+- `N :: Int`
+- `cellgridid :: Array{Int,2}`
+- `gridx :: Vector{Float}`
+- `gridy :: Vector{Float}`
+- `gridz :: Vector{Float}`
+- `cellcenterx :: Vector{Float}`
+- `cellcentery :: Vector{Float}`
+- `cellcenterz :: Vector{Float}`
+- `faces :: Array{Int,2}`
+- `cellneighboursarray :: Array{Int,2}`
+- `celldirection :: Array{Float,2}`
+- `cellthickness :: Vector{Float}`
+- `maxnumberofneighbours :: Int`
 
 Meaning of the arguments:
 - `N`: Number of cells
@@ -291,8 +343,34 @@ Meaning of the arguments:
 - `celldirection`: The i-th line contains the x, y and z coordinates of the unit normal vector which is projected on the cell to define the cell coordinate system for cell with ID i.
 - `cellthickness`: The i-th line contains the thickness of cell with ID i.
 - `maxnumberofneighbours`: Number of columns of array `cellneighboursarray`. Default value is `10`. If more cell neighbours in the mesh, an error occurs and this value must be increased. 
+
+Return: Data structure with
+- `cellvolume :: Vector{Float}`
+- `cellcentertocellcenterx :: Array{Float,2}`
+- `cellcentertocellcentery :: Array{Float,2}` 
+- `T11 :: Array{Float,2}`
+- `T12 :: Array{Float,2}`
+- `T21 :: Array{Float,2}`
+- `T22 :: Array{Float,2}`
+- `cellfacenormalx :: Array{Float,2}`
+- `cellfacenormaly :: Array{Float,2}`
+- `cellfacearea :: Array{Float,2}`
 """
-function create_coordinate_systems(N, cellgridid, gridx, gridy, gridz, cellcenterx,cellcentery,cellcenterz, faces, cellneighboursarray, celldirection, cellthickness, maxnumberofneighbours)
+function create_coordinate_systems(input_struct)
+    N=input_struct.N
+    cellgridid=input_struct.cellgridid
+    gridx=input_struct.gridx
+    gridy=input_struct.gridy
+    gridz=input_struct.gridz
+    cellcenterx=input_struct.cellcenterx
+    cellcentery=input_struct.cellcentery
+    cellcenterz=input_struct.cellcenterz
+    faces=input_struct.faces
+    cellneighboursarray=input_struct.cellneighboursarray
+    celldirection=input_struct.celldirection
+    cellthickness=input_struct.cellthickness
+    maxnumberofneighbours=input_struct.maxnumberofneighbours
+
     cellvolume=Vector{Float64}(undef, N)
     cellcentertocellcenterx=Array{Float64}(undef, N, maxnumberofneighbours)
     cellcentertocellcentery=Array{Float64}(undef, N, maxnumberofneighbours)
@@ -568,7 +646,8 @@ function create_coordinate_systems(N, cellgridid, gridx, gridy, gridz, cellcente
         cellvolume[ind]=cellthickness[ind]*0.5*sqrt(dot(vec3,vec3))
     end  
 
-    return cellvolume, cellcentertocellcenterx, cellcentertocellcentery, T11, T12, T21, T22, cellfacenormalx, cellfacenormaly, cellfacearea
+    return_struct=rtmsim.return_args_create_cs(cellvolume, cellcentertocellcenterx, cellcentertocellcentery, T11, T12, T21, T22, cellfacenormalx, cellfacenormaly, cellfacearea)
+    return return_struct
 end
 
 

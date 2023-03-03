@@ -136,21 +136,21 @@ This examples shows how to perform a simulation in the Julia terminal. First, in
 <br><img src="../assets/figures/example1d.png"><br>
 ```
 Set 1 is the pressure inlet, set 2 and set 3 are reinforcement patches with lower permeability and set 4 is a racetracking channel between the main preform and set 3 with same porosity but a factor 10 higher permeability than the main preform (racetracking with higher permeablity=higher flow speed takes place in thin regions between different patches or at the preform boundary). Then start the simulation and plot the filling overview after 200 s simulation time:
-- `rtmsim.rtmsim_rev1(1,"meshfiles/mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,0,"results.jld2",0,0.01,16)`
+- `param=rtmsim.input_vals(1,"meshfiles/mesh_permeameter1_foursets.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,0,"results.jld2",0,0.01,16); rtmsim.rtmsim_rev1(param);`
 - `rtmsim.plot_overview(-1,-1)`
 ```@raw html
 <br><img src="../assets/figures/example1b.png"><br>
 ```
 Continue the simulation for another 100 s simulation time and plot the filling overview:
-- `rtmsim.rtmsim_rev1(1,"meshfiles/mesh_permeameter1_foursets.bdf",100, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,1,"results.jld2",0,0.01,16)`
-- `rtmsim.plot_overview(-1,-1)`
+- `param=rtmsim.input_vals(1,"meshfiles/mesh_permeameter1_foursets.bdf",100, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,2,2,2,1,"results.jld2",0,0.01,16); rtmsim.rtmsim_rev1(param);`
+- `rtmsim.plot_overview(-1,-1);`
 ```@raw html
 <br><img src="../assets/figures/example1c.png"><br>
 ```
 
 ### Use case 2
 This example shows how to use outlet ports. If outlet ports are defined, the outlet ports are connected to the catch pot (typically at ambient pressure or evacuated). If no outlet ports are defined, the hoses to the catch pot are clamped. The simulation is started with the following settings:
-- `rtmsim.rtmsim_rev1(1,"meshfiles/mesh_annulusfiller1_inletandoutlet.bdf",800, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,3,0,0, 0,"results.jld2",0,0.01,16)`
+- `param=rtmsim.input_vals(1,"meshfiles/mesh_annulusfiller1_inletandoutlet.bdf",800, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,3,0,0, 0,"results.jld2",0,0.01,16); rtmsim.rtmsim_rev1(param);`
 The result plot shows the completely filled part with the grey inlet and outlet ports and the pressure contour are created:
 - `rtmsim.plot_results("results.jld2")`
 ```@raw html
@@ -162,7 +162,7 @@ The filling overview is created:
 <br><img src="../assets/figures/example2c.png"><br>
 ```
 The filling overview without pressure outlet is:
-- `rtmsim.rtmsim_rev1(1,"meshfiles/mesh_annulusfiller1_inletandoutlet.bdf",800, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,0,0,0, 0,"results.jld2",0,0.01,16)`
+- `param=rtmsim.input_vals(1,"meshfiles/mesh_annulusfiller1_inletandoutlet.bdf",800, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 1,0,0,0, 0,"results.jld2",0,0.01,16); rtmsim.rtmsim_rev1(param);`
 - `rtmsim.plot_overview(-1,-1)`
 ```@raw html
 <br><img src="../assets/figures/example2e.png"><br>
@@ -182,7 +182,7 @@ Rotate the view with the nodes with LMB and select an inlet port location with k
 <br><img src="../assets/figures/example3c.png"><br>
 ```
 Selection of multiple nodes is possible. Then close the graphics window and start the simulation with the following settings:
-- `rtmsim.rtmsim_rev1(1,"meshfiles/mesh_annulusfiller1_inletandoutlet.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 0,0,0,0, 0,"results.jld2",1,0.01,16)`
+- `param=rtmsim.input_vals(1,"meshfiles/mesh_annulusfiller1_inletandoutlet.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 0,0,0,0, 0,"results.jld2",1,0.01,16); rtmsim.rtmsim_rev1(param);`
 Plot the filling overview:
 - `rtmsim.plot_overview(-1,-1)`
 ```@raw html
@@ -194,7 +194,7 @@ If cascade injection is planned (additional inlet port which is activated just a
 <br><img src="../assets/figures/example3e.png"><br>
 ```
 Close the graphics window and continue the simulation with the button Continue interactive. 
-- `rtmsim.rtmsim_rev1(1,"meshfiles/mesh_annulusfiller1_inletandoutlet.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 0,0,0,0, 1,"results.jld2",1,0.01,16)`
+- `param=rtmsim.input_vals(1,"meshfiles/mesh_annulusfiller1_inletandoutlet.bdf",200, 101325,1.225,1.4,0.06, 1.35e5,1.00e5, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-10,1,1,0,0, 3e-3,0.7,3e-11,1,1,0,0, 3e-3,0.7,3e-9,1,1,0,0, 0,0,0,0, 1,"results.jld2",1,0.01,16); rtmsim.rtmsim_rev1(param);`
 The filling and the final pressure contour are:
 - `rtmsim.plot_overview(-1,-1)`
 ```@raw html

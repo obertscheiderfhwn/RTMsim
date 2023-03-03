@@ -23,60 +23,60 @@ RTMsim solver with the following main steps:
     - (Opional time marching etc. for i_model=2,3,...)
     - Calculation of adaptive time step 
 
-Data structure `param` with arguments:
-- i_model :: Int64 =1
-- meshfilename :: String ="input.txt"
-- tmax :: Float64 =200
-- p_ref :: Float64 =1.01325e5
-- rho_ref :: Float64 =1.225
-- gamma :: Float64 =1.4
-- mu_resin_val :: Float64 =0.06
-- p_a_val :: Float64 =1.35e5
-- p_init_val :: Float64 =1.0e5      
-- t_val :: Float64 =3e-3
-- porosity_val :: Float64 =0.7
-- K_val :: Float64 =3e-10
-- alpha_val :: Float64 =1.0
-- refdir1_val :: Float64 =1.0
-- refdir2_val :: Float64 =0.0
-- refdir3_val :: Float64 =0.0
-- t1_val :: Float64 =3e-3
-- porosity1_val :: Float64 =0.7
-- K1_val :: Float64 =3e-10
-- alpha1_val :: Float64 =1.0
-- refdir11_val :: Float64 =1.0
-- refdir21_val :: Float64 =0.0
-- refdir31_val :: Float64 =0.0
-- t2_val :: Float64 =3e-3
-- porosity2_val :: Float64 =0.7
-- K2_val :: Float64 =3e-10
-- alpha2_val :: Float64 =1.0
-- refdir12_val :: Float64 =1.0
-- refdir22_val :: Float64 =0.0
-- refdir32_val :: Float64 =0.0
-- t3_val :: Float64 =3e-3
-- porosity3_val :: Float64 =0.7
-- K3_val :: Float64 =3e-10
-- alpha3_val :: Float64 =1.0
-- refdir13_val :: Float64 =0.0
-- refdir23_val :: Float64 =0.0
-- refdir33_val :: Float64 =0.0
-- t4_val :: Float64 =3e-3
-- porosity4_val :: Float64 =0.7
-- K4_val :: Float64 =3e-10
-- alpha4_val :: Float64 =1.0
-- refdir14_val :: Float64 =1.0
-- refdir24_val :: Float64 =0.0
-- refdir34_val :: Float64 =0.0
-- patchtype1val :: Int64 =1
-- patchtype2val :: Int64 =0
-- patchtype3val :: Int64 =0
-- patchtype4val :: Int64 =0
-- i_restart :: Int64 =0
-- restartfilename :: String ="results.jld2"
-- i_interactive :: Int64 =0
-- r_p :: Float64 =0.01
-- n_pics :: Int64 =16
+Arguments: Data structure `param` with
+- `i_model :: Int64 =1`
+- `meshfilename :: String ="input.txt"`
+- `tmax :: Float64 =200`
+- `p_ref :: Float64 =1.01325e5`
+- `rho_ref :: Float64 =1.225`
+- `gamma :: Float64 =1.4`
+- `mu_resin_val :: Float64 =0.06`
+- `p_a_val :: Float64 =1.35e5`
+- `p_init_val :: Float64 =1.0e5`  
+- `t_val :: Float64 =3e-3`
+- `porosity_val :: Float64 =0.7`
+- `K_val :: Float64 =3e-10`
+- `alpha_val :: Float64 =1.0`
+- `refdir1_val :: Float64 =1.0`
+- `refdir2_val :: Float64 =0.0`
+- `refdir3_val :: Float64 =0.0`
+- `t1_val :: Float64 =3e-3`
+- `porosity1_val :: Float64 =0.7`
+- `K1_val :: Float64 =3e-10`
+- `alpha1_val :: Float64 =1.0`
+- `refdir11_val :: Float64 =1.0`
+- `refdir21_val :: Float64 =0.0`
+- `refdir31_val :: Float64 =0.0`
+- `t2_val :: Float64 =3e-3`
+- `porosity2_val :: Float64 =0.7`
+- `K2_val :: Float64 =3e-10`
+- `alpha2_val :: Float64 =1.0`
+- `refdir12_val :: Float64 =1.0`
+- `refdir22_val :: Float64 =0.0`
+- `refdir32_val :: Float64 =0.0`
+- `t3_val :: Float64 =3e-3`
+- `porosity3_val :: Float64 =0.7`
+- `K3_val :: Float64 =3e-10`
+- `alpha3_val :: Float64 =1.0`
+- `refdir13_val :: Float64 =0.0`
+- `refdir23_val :: Float64 =0.0`
+- `refdir33_val :: Float64 =0.0`
+- `t4_val :: Float64 =3e-3`
+- `porosity4_val :: Float64 =0.7`
+- `K4_val :: Float64 =3e-10`
+- `alpha4_val :: Float64 =1.0`
+- `refdir14_val :: Float64 =1.0`
+- `refdir24_val :: Float64 =0.0`
+- `refdir34_val :: Float64 =0.0`
+- `patchtype1val :: Int64 =1`
+- `patchtype2val :: Int64 =0`
+- `patchtype3val :: Int64 =0`
+- `patchtype4val :: Int64 =0`
+- `i_restart :: Int64 =0`
+- `restartfilename :: String ="results.jld2"`
+- `i_interactive :: Int64 =0`
+- `r_p :: Float64 =0.01`
+- `n_pics :: Int64 =16`
 
 Meaning of the variables:
 - `i_model`: Identifier for physical model (Default value is 1)
@@ -329,9 +329,26 @@ function rtmsim_rev1(param)
     #--------------------------------------------------------------------------
     # Read mesh file and prepare patches     
     #--------------------------------------------------------------------------
-    N,cellgridid,gridx,gridy,gridz,cellcenterx,cellcentery,cellcenterz,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchids1,patchids2,patchids3,patchids4,inletpatchids=
-        read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
-
+    input_mesh=rtmsim.input_args_read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p)
+    return_mesh=read_mesh(input_mesh)
+    N=return_mesh.N
+    cellgridid=return_mesh.cellgridid
+    gridx=return_mesh.gridx
+    gridy=return_mesh.gridy
+    gridz=return_mesh.gridz
+    cellcenterx=return_mesh.cellcenterx
+    cellcentery=return_mesh.cellcentery
+    cellcenterz=return_mesh.cellcenterz
+    patchparameters=return_mesh.patchparameters
+    patchparameters1=return_mesh.patchparameters1
+    patchparameters2=return_mesh.patchparameters2
+    patchparameters3=return_mesh.patchparameters3
+    patchparameters4=return_mesh.patchparameters4
+    patchids1=return_mesh.patchids1
+    patchids2=return_mesh.patchids2
+    patchids3=return_mesh.patchids3
+    patchids4=return_mesh.patchids4
+    inletpatchids=return_mesh.inletpatchids
     println(string("parameters for main preform: ",string(patchparameters) ) )
     if patchparameters[1]<=0.0 || patchparameters[1]>1.0 || patchparameters[2]<=0.0 || patchparameters[3]<=0 || patchparameters[4]<=0
         errorstring="Wrong value for porosity,thickness,permeability,alpha (must be between >0 and <=1,>0.0,>0.0,>0.0)"
@@ -400,23 +417,40 @@ function rtmsim_rev1(param)
     #--------------------------------------------------------------------------
     #  Find neighbouring cells
     #--------------------------------------------------------------------------    
-    faces,cellneighboursarray,celltype = 
-        create_faces(cellgridid, N, maxnumberofneighbours)
-
+    input_faces=rtmsim.input_args_create_faces(cellgridid, N, maxnumberofneighbours);
+    return_faces=create_faces(input_faces)
+    faces=return_faces.faces
+    cellneighboursarray=return_faces.cellneighboursarray
+    celltype=return_faces.celltype
 
     #--------------------------------------------------------------------------
     #  Assign parameters to cells
     #--------------------------------------------------------------------------             
-    cellthickness, cellporosity, cellpermeability, cellalpha, celldirection, cellviscosity, celltype = 
-        assign_parameters(i_interactive,celltype,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,patchids1,patchids2,patchids3,patchids4,inletpatchids,mu_resin_val,N)
-
-
+    input_parameters=rtmsim.input_args_assign_parameters(i_interactive,celltype,patchparameters,patchparameters1,patchparameters2,patchparameters3,patchparameters4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,patchids1,patchids2,patchids3,patchids4,inletpatchids,mu_resin_val,N)
+    return_parameters=assign_parameters(input_parameters)
+    cellthickness=return_parameters.cellthickness
+    cellporosity=return_parameters.cellporosity
+    cellpermeability=return_parameters.cellpermeability
+    cellalpha=return_parameters.cellalpha
+    celldirection=return_parameters.celldirection
+    cellviscosity=return_parameters.cellviscosity
+    celltype=return_parameters.celltype
+    
     #--------------------------------------------------------------------------    
     #  Create local cell coordinate systems
     #--------------------------------------------------------------------------    
-    cellvolume, cellcentertocellcenterx, cellcentertocellcentery, T11, T12, T21, T22, cellfacenormalx, cellfacenormaly, cellfacearea = 
-        create_coordinate_systems(N, cellgridid, gridx, gridy, gridz, cellcenterx,cellcentery,cellcenterz, faces, cellneighboursarray, celldirection, cellthickness,maxnumberofneighbours)
-
+    input_cs=rtmsim.input_args_create_cs(N, cellgridid, gridx, gridy, gridz, cellcenterx,cellcentery,cellcenterz, faces, cellneighboursarray, celldirection, cellthickness,maxnumberofneighbours)
+    return_cs=create_coordinate_systems(input_cs)
+    cellvolume=return_cs.cellvolume
+    cellcentertocellcenterx=return_cs.cellcentertocellcenterx
+    cellcentertocellcentery=return_cs.cellcentertocellcentery
+    T11=return_cs.T11
+    T12=return_cs.T12
+    T21=return_cs.T21
+    T22=return_cs.T22
+    cellfacenormalx=return_cs.cellfacenormalx
+    cellfacenormaly=return_cs.cellfacenormaly
+    cellfacearea=return_cs.cellfacearea
 
     #----------------------------------------------------------------------
     # Initial time step calculation
@@ -554,8 +588,10 @@ function rtmsim_rev1(param)
         for ind in 1:N
             if celltype[ind]==1  || celltype[ind]==-3 
                 #Pressure gradient calculation
-                #dpdx,dpdy=numerical_gradient(1,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery)
-                dpdx,dpdy=numerical_gradient(3,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery)
+                input_gradient=rtmsim.input_args_gradient(3,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery)
+                return_gradient=numerical_gradient(input_gradient)
+                dpdx=return_gradient.dpdx
+                dpdy=return_gradient.dpdy
                 
                 #FV scheme for rho,u,v,vof conservation laws
                 cellneighboursline=cellneighboursarray[ind,:]
@@ -585,7 +621,14 @@ function rtmsim_rev1(param)
                     vars_A=[rho_A,u_A,v_A,gamma_A]
                     if i_A>0 && (celltype[i_A]==1 || celltype[i_A]==-3)  #neighbour is inner or wall cell                            
                         meshparameters=[n_x,n_y,A]
-                        F_rho_num_add,F_u_num_add,F_v_num_add,F_gamma_num_add,F_gamma_num1_add=numerical_flux_function(1,vars_P,vars_A,meshparameters)
+                        input_flux=rtmsim.input_args_flux(1,vars_P,vars_A,meshparameters)
+                        return_flux=numerical_flux_function(input_flux)
+                        F_rho_num_add=return_flux.F_rho_num_add
+                        F_u_num_add=return_flux.F_u_num_add
+                        F_v_num_add=return_flux.F_v_num_add
+                        F_gamma_num_add=return_flux.F_gamma_num_add
+                        F_gamma_num1_add=return_flux.F_gamma_num1_add
+
                         F_rho_num=F_rho_num+F_rho_num_add
                         F_u_num=F_u_num+F_u_num_add
                         F_v_num=F_v_num+F_v_num_add
@@ -600,7 +643,13 @@ function rtmsim_rev1(param)
                         elseif celltype[i_A]==-1  #pressure inlet
                             n_dot_u=min(0,-1/(cellviscosity[i_P]*viscosity_factor[i_P])*dot([cellpermeability[i_P]*permeability_factor[i_P] 0; 0 cellalpha[i_P]*cellpermeability[i_P]*permeability_factor[ind]]*[dpdx;dpdy],[cellfacenormalx[i_P,i_neighbour];cellfacenormaly[i_P,i_neighbour]]))  #inflow according to Darcy's law and no backflow possible
                         end
-                        F_rho_num_add,F_u_num_add,F_v_num_add,F_gamma_num_add,F_gamma_num1_add=numerical_flux_function_boundary(1,vars_P,vars_A,meshparameters,n_dot_u)
+                        input_flux_boundary=rtmsim.input_args_flux_boundary(1,vars_P,vars_A,meshparameters,n_dot_u)
+                        return_flux_boundary=numerical_flux_function_boundary(input_flux_boundary)
+                        F_rho_num_add=return_flux_boundary.F_rho_num_add
+                        F_u_num_add=return_flux_boundary.F_u_num_add
+                        F_v_num_add=return_flux_boundary.F_v_num_add
+                        F_gamma_num_add=return_flux_boundary.F_gamma_num_add
+                        F_gamma_num1_add=return_flux_boundary.F_gamma_num1_add
                         F_rho_num=F_rho_num+F_rho_num_add
                         F_u_num=F_u_num+F_u_num_add
                         F_v_num=F_v_num+F_v_num_add
