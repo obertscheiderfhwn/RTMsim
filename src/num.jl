@@ -1,0 +1,222 @@
+"""
+    function numerical_gradient(i_method,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery)
+        
+Calculates the pressure gradient from the cell values of the neighbouring cells.
+- i_method=1 .. Least square solution to determine gradient
+- i_method=2 .. Least square solution to determine gradient with limiter
+- i_method=3 .. RUntime optimized least square solution to determine gradient
+
+Arguments:
+- i_method :: Int
+- ind :: Int
+- p_old :: Vector{Float}
+- cellneighoursarray :: Array{Float,2}
+- cellcentertocellcenterx, cellcentertocellcentery :: Array{Float,2}
+
+"""
+function numerical_gradient(i_method,ind,p_old,cellneighboursarray,cellcentertocellcenterx,cellcentertocellcentery)
+    if i_method==1
+        #least square solution to determine gradient
+        cellneighboursline=cellneighboursarray[ind,:]
+        cellneighboursline=cellneighboursline[cellneighboursline .> 0]
+        len_cellneighboursline=length(cellneighboursline)
+        bvec=Vector{Float64}(undef,len_cellneighboursline)
+        Amat=Array{Float64}(undef,len_cellneighboursline,2)  
+        for i_neighbour in 1:len_cellneighboursline
+            i_P=ind
+            i_A=cellneighboursarray[ind,i_neighbour]  
+            Amat[i_neighbour,1]=cellcentertocellcenterx[ind,i_neighbour]
+            Amat[i_neighbour,2]=cellcentertocellcentery[ind,i_neighbour]
+            bvec[i_neighbour]=p_old[i_A]-p_old[i_P]
+        end
+
+        if len_cellneighboursline>1
+            xvec=Amat[1:len_cellneighboursline,:]\bvec[1:len_cellneighboursline]
+            dpdx=xvec[1]
+            dpdy=xvec[2]        
+        else
+            dpdx=0
+            dpdy=0
+        end
+    elseif i_method==2
+        #least square solution to determine gradient with limiter
+        cellneighboursline=cellneighboursarray[ind,:]
+        cellneighboursline=cellneighboursline[cellneighboursline .> 0]
+        len_cellneighboursline=length(cellneighboursline)
+        bvec=Vector{Float64}(undef,len_cellneighboursline)
+        Amat=Array{Float64}(undef,len_cellneighboursline,2)  
+        wi=Vector{Float64}(undef,len_cellneighboursline)
+        for i_neighbour in 1:len_cellneighboursline
+            i_P=ind
+            i_A=cellneighboursarray[ind,i_neighbour]  
+            exp_limiter=2
+            wi[i_neighbour]=1/(sqrt((cellcentertocellcenterx[ind,i_neighbour])^2+(cellcentertocellcentery[ind,i_neighbour])^2))^exp_limiter
+            Amat[i_neighbour,1]=wi[i_neighbour]*cellcentertocellcenterx[ind,i_neighbour]
+            Amat[i_neighbour,2]=wi[i_neighbour]*cellcentertocellcentery[ind,i_neighbour]
+            bvec[i_neighbour]=wi[i_neighbour]*(p_old[i_A]-p_old[i_P])
+        end
+
+        if len_cellneighboursline>1
+            xvec=Amat[1:len_cellneighboursline,:]\bvec[1:len_cellneighboursline]
+            dpdx=xvec[1]
+            dpdy=xvec[2]            
+        else
+            dpdx=0
+            dpdy=0
+        end
+    elseif i_method==3
+        #least square solution to determine gradient - runtime optimized
+        cellneighboursline=cellneighboursarray[ind,:]
+        cellneighboursline=cellneighboursline[cellneighboursline .> 0]
+        len_cellneighboursline=length(cellneighboursline)
+        bvec=Vector{Float64}(undef,len_cellneighboursline)
+        Amat=Array{Float64}(undef,len_cellneighboursline,2)  
+        for i_neighbour in 1:len_cellneighboursline
+            i_P=ind
+            i_A=cellneighboursarray[ind,i_neighbour]  
+            Amat[i_neighbour,1]=cellcentertocellcenterx[ind,i_neighbour]
+            Amat[i_neighbour,2]=cellcentertocellcentery[ind,i_neighbour]
+            bvec[i_neighbour]=p_old[i_A]-p_old[i_P]
+        end
+        #xvec=Amat[1:len_cellneighboursline,:]\bvec[1:len_cellneighboursline]
+        #dpdx=xvec[1]
+        #dpdy=xvec[2]
+
+        if len_cellneighboursline>1
+            Aplus=transpose(Amat)*Amat
+            a=Aplus[1,1]
+            b=Aplus[1,2]
+            c=Aplus[2,1]
+            d=Aplus[2,2] 
+            bvec_mod=transpose(Amat)*bvec
+            inv = 1/(a * d - b * c)
+            # 1 / (ad -bc) * [d -b; -c a]
+            dpdx = inv * d * bvec_mod[1] - inv * b * bvec_mod[2]
+            dpdy = -inv * c * bvec_mod[1] + inv * a * bvec_mod[2]
+        else
+            dpdx=0
+            dpdy=0
+        end
+
+    end
+    return dpdx,dpdy
+end
+
+
+"""
+    function numerical_flux_function(i_method,vars_P,vars_A,meshparameters)
+
+Evaluates the numerical flux functions at the cell boundaries.
+- i_method==1 .. first order upwinding
+
+Arguments:
+- i_method :: Int
+- vars_P, vars_A :: 4-element Vector{Float}
+- meshparameters :: 3-element Vector{Float}
+
+Unit tests:
+- `rtmsim.numerical_flux_function(1,[1.0; 1.2; 0.0; 0.0],[1.0; 1.2; 0.0; 0.0],[1.0;0.0;1.0])` with return `(1.2, 1.44, 0.0, 0.0, 1.2)`
+- `rtmsim.numerical_flux_function(1,[1.225 1.2 0.4 0.9],[1.0 0.4 1.2 0.1],[1/sqrt(2);1/sqrt(2);1.0])` with return `(1.2586500705120547, 1.5103800846144655, 0.5034600282048219, 1.0182337649086284, 1.131370849898476)`
+"""
+function numerical_flux_function(i_method,vars_P,vars_A,meshparameters)
+    if i_method==1
+        #first order upwinding
+        rho_P=vars_P[1]
+        u_P=vars_P[2]
+        v_P=vars_P[3]
+        gamma_P=vars_P[4]
+        rho_A=vars_A[1]
+        u_A=vars_A[2]
+        v_A=vars_A[3]
+        gamma_A=vars_A[4]
+        n_x=meshparameters[1]
+        n_y=meshparameters[2]
+        A=meshparameters[3]
+        n_dot_rhou=dot([n_x; n_y],0.5*(rho_P+rho_A)*[0.5*(u_P+u_A); 0.5*(v_P+v_A)])
+        phi=1
+        F_rho_num_add=n_dot_rhou*phi*A
+        if n_dot_rhou>=0
+            phi=u_P                                
+        else
+            phi=u_A
+        end
+        F_u_num_add=n_dot_rhou*phi*A     
+        if n_dot_rhou>=0
+            phi=v_P  
+        else
+            phi=v_A
+        end
+        F_v_num_add=n_dot_rhou*phi*A 
+        n_dot_u=dot([n_x; n_y],[0.5*(u_P+u_A); 0.5*(v_P+v_A)])
+        if n_dot_u>=0 
+            phi=gamma_P  
+        else
+            phi=gamma_A
+        end  
+        F_gamma_num_add=n_dot_u*phi*A
+        phi=1
+        F_gamma_num1_add=n_dot_u*phi*A
+    else
+        errorstring=string("i_method=",string(i_method)," not implemented"* "\n") 
+        error(errorstring)
+    end
+    return F_rho_num_add,F_u_num_add,F_v_num_add,F_gamma_num_add,F_gamma_num1_add
+end
+
+
+"""
+    function numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,n_dot_u)
+
+Evaluates the numerical flux functions at the cell boundaries to pressure inlet or outlet.
+- i_method==1 .. first order upwinding
+
+Arguments:
+- i_method :: Int
+- vars_P, vars_A :: 4-element Vector{Float}
+- meshparameters :: 3-element Vector{Float}
+- n_dot_u :: Float
+
+Unit tests:
+- `rtmsim.numerical_flux_function_boundary(1,[1.0; 1.2; 0.0; 0.0],[1.0; 1.2; 0.0; 0.0],[1.0;0.0;1.0],-1.0)` with return `(-1.0, -1.2, -0.0, -0.0, -1.0)`
+- `rtmsim.numerical_flux_function_boundary(1,[1.225 1.2 0.4 0.9],[1.0 0.4 1.2 0.1],[1/sqrt(2);1/sqrt(2);1.0],-0.8)` with return `(-0.8900000000000001, -0.3560000000000001, -1.068, -0.08000000000000002, -0.8)`
+"""
+function numerical_flux_function_boundary(i_method,vars_P,vars_A,meshparameters,n_dot_u)
+    if i_method==1
+        #first order upwinding
+        rho_P=vars_P[1]
+        u_P=vars_P[2]
+        v_P=vars_P[3]
+        gamma_P=vars_P[4]
+        rho_A=vars_A[1]
+        u_A=vars_A[2]
+        v_A=vars_A[3]
+        gamma_A=vars_A[4]
+        n_x=meshparameters[1]
+        n_y=meshparameters[2]
+        A=meshparameters[3]        
+        n_dot_rhou=n_dot_u*0.5*(rho_A+rho_P)
+        phi=1
+        F_rho_num_add=n_dot_rhou*phi*A
+        if n_dot_u<=0 
+            phi=u_A                   
+        else
+            phi=u_P
+        end
+        F_u_num_add=n_dot_rhou*phi*A
+        if n_dot_u<=0 
+            phi=v_A                   
+        else
+            phi=v_P
+        end
+        F_v_num_add=n_dot_rhou*phi*A
+        if n_dot_u<=0 
+            phi=gamma_A                   
+        else
+            phi=gamma_P
+        end
+        F_gamma_num_add=n_dot_u*phi*A
+        phi=1
+        F_gamma_num1_add=n_dot_u*phi*A
+    end
+    return F_rho_num_add,F_u_num_add,F_v_num_add,F_gamma_num_add,F_gamma_num1_add
+end
