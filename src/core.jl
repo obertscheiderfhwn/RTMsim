@@ -114,7 +114,7 @@ function rtmsim_rev1(param)
     #----------------------------------------------------------------------
     # Simulation initialization
     #----------------------------------------------------------------------
-    
+     
     # Well defined variable types, except for strings meshfilename,restartfilename
     i_model=param.i_model
     tmax=param.tmax

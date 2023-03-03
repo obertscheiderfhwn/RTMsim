@@ -3,7 +3,7 @@ function gui()
 
 Opens the GUI.
 
-No arguments.
+No arguments. 
 
 Unit test:
 - `rtmsim.gui();` to open the GUI.

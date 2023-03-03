@@ -106,11 +106,11 @@ end
 Read file in Nastran format with fixed length (8 digits), nodes (`GRIDS`) defined in global coordinate system.
 
 Arguments:
-- meshfilename :: String
-- paramset, paramset1, paramset2, paramset3, paramset3 :: Vector{Float}
-- patchtype1val,patchtype1val1,patchtype1val2,patchtype1val3,patchtype1val4 :: Int
-- i_interactive :: Int
-- r_p :: Float
+- `meshfilename :: String`
+- `paramset, paramset1, paramset2, paramset3, paramset3 :: Vector{Float}`
+- `patchtype1val,patchtype1val1,patchtype1val2,patchtype1val3,patchtype1val4 :: Int`
+- `i_interactive :: Int`
+- `r_p :: Float`
 
 Unit test:
 - `MODULE_ROOT=splitdir(splitdir(pathof(rtmsim))[1])[1]; meshfilename=joinpath(MODULE_ROOT,"meshfiles","mesh_permeameter1_foursets.bdf"); paramset=[0.5,0.3,3e-10,1.0,1.0,0.0,0.0];paramset1=paramset;paramset2=paramset;paramset3=paramset;paramset4=paramset;patchtype1val=-1;patchtype2val=-1;patchtype3val=-1;patchtype4val=-1;i_interactive=0;r_p=0.01; input_struct=rtmsim.input_args_read_mesh(meshfilename,paramset,paramset1,paramset2,paramset3,paramset4,patchtype1val,patchtype2val,patchtype3val,patchtype4val,i_interactive,r_p); return_struct=rtmsim.read_mesh(input_struct);`

@@ -4,7 +4,7 @@
 Create contour plots of the filling factor and the pressure after loading a results file.
 
 Arguments:
-- resultsfilename :: String
+- resultsfilename :: String 
 
 Unit test: 
 - `WORK_DIR=pwd(); resultsfilename=joinpath(WORK_DIR,"results.jld2"); rtmsim.plot_results(resultsfilename);`

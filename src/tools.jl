@@ -1,4 +1,4 @@
-"""
+""" 
     function create_faces(input_struct)
 
 Find the set with the IDs of the neighbouring cells and identify wall cells.

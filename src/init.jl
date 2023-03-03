@@ -246,7 +246,7 @@ Arguments:
 - `patchtype3val :: Int`
 - `patchtype4val :: Int`
 - `i_interactive :: Int`
-- `r_p :: Float`
+- `r_p :: Float` 
 """
 Base.@kwdef mutable struct input_args_read_mesh
     meshfilename :: String

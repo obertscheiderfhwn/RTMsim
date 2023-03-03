@@ -255,4 +255,4 @@ function numerical_flux_function_boundary(input_struct)
     end
     return_struct=rtmsim.return_args_flux(F_rho_num_add,F_u_num_add,F_v_num_add,F_gamma_num_add,F_gamma_num1_add)
     return return_struct
-end
+end 
