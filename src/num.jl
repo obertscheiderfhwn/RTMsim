@@ -133,8 +133,8 @@ Return: Data structure with
 - `F_gamma_num1_add :: Float`
 
 Unit tests:
-- `input_struct=rtmsim.input_args_flux(1,[1.0; 1.2; 0.0; 0.0],[1.0; 1.2; 0.0; 0.0],[1.0;0.0;1.0]);rtmsim.numerical_flux_function(input_struct)` with return `(1.2, 1.44, 0.0, 0.0, 1.2)`
-- `input_struct=rtmsim.input_args_flux(1,[1.225; 1.2; 0.4; 0.9],[1.0; 0.4; 1.2; 0.1],[1/sqrt(2);1/sqrt(2);1.0]);rtmsim.numerical_flux_function(input_struct)` with return `(1.2586500705120547, 1.5103800846144655, 0.5034600282048219, 1.0182337649086284, 1.131370849898476)`
+- Comparison with flux function for one-dimensional case without upwinding for the continuity equation and with upwinding in the momentum equation, i.e. F_rho=(rho*u)_withoutupwinding=0.5*(1.0+1.0)*0.5*(1.2+0.4)=0.8 and F_u=(rho*u)_withoutupwinding*u_withupwinding=0.8*1.2=0.96 in density equation without upwinding and rho*u without upwinding. rho=1.0 in considered and neighbouring cell, u=1.2 in considered cell and u=0.4 in neighbouring cell, v=0 and gamma=0 in considered and neighbouring cell. `input_struct=rtmsim.input_args_flux(1,[1.0; 1.2; 0.0; 0.0],[1.0; 0.4; 0.0; 0.0],[1.0;0.0;1.0]);return_struct=rtmsim.numerical_flux_function(input_struct);println("F_rho="*string(return_struct.F_rho_num_add)*", F_u="*string(return_struct.F_u_num_add))` with result `F_rho=0.8, F_u=0.96`
+- General case with [rho,u,v,gamma]=[1.225,1.2,0.4,0.9] in the considered cell and [rho,u,v,gamma]=[1.225,1.2,0.4,0.9] in the neighbouring cell and outwards pointing cell normal vector [1/sqrt(2),1/sqrt(2)] and boundary face area 1.0. `input_struct=rtmsim.input_args_flux(1,[1.225; 1.2; 0.4; 0.9],[1.0; 0.4; 1.2; 0.1],[1/sqrt(2);1/sqrt(2);1.0]);return_struct=rtmsim.numerical_flux_function(input_struct);println("F_rho="*string(return_struct.F_rho_num_add)*", F_u="*string(return_struct.F_u_num_add)*", F_v="*string(return_struct.F_v_num_add)*", F_gamma="*string(return_struct.F_gamma_num_add)*", F_gamma_num1="*string(return_struct.F_gamma_num1_add))` with result `F_rho=1.2586500705120547, F_u=1.5103800846144655, F_v=0.5034600282048219, F_gamma=1.0182337649086284, F_gamma_num1=1.131370849898476` 
 """
 function numerical_flux_function(input_struct)
     i_method=input_struct.i_method
@@ -207,8 +207,8 @@ Return: Data structure with
 - `F_gamma_num1_add :: Float` 
 
 Unit tests:
-- `input_struct=rtmsim.input_args_flux_boundary(1,[1.0; 1.2; 0.0; 0.0],[1.0; 1.2; 0.0; 0.0],[1.0;0.0;1.0],-1.0);rtmsim.numerical_flux_function_boundary(input_struct)` with return `(-1.0, -1.2, -0.0, -0.0, -1.0)`
-- `input_struct=rtmsim.input_args_flux_boundary(1,[1.225; 1.2; 0.4; 0.9],[1.0; 0.4; 1.2; 0.1],[1/sqrt(2);1/sqrt(2);1.0],-0.8);rtmsim.numerical_flux_function_boundary(input_struct)` with return `-0.8900000000000001, -0.3560000000000001, -1.068, -0.08000000000000002, -0.8)`
+- One-dimensional inflow from a cell with rho=1.0 with u=1.2 into the considered cell. `input_struct=rtmsim.input_args_flux_boundary(1,[1.0; 1.2; 0.0; 0.0],[1.0; 0.0; 0.0; 0.0],[1.0;0.0;1.0],1.2);return_struct=rtmsim.numerical_flux_function(input_struct);println("F_rho="*string(return_struct.F_rho_num_add)*", F_u="*string(return_struct.F_u_num_add))` with result `F_rho=0.6, F_u=0.72`
+- General case `input_struct=rtmsim.input_args_flux_boundary(1,[1.225; 1.2; 0.4; 0.9],[1.0; 0.4; 1.2; 0.1],[1/sqrt(2);1/sqrt(2);1.0],-0.8);return_struct=rtmsim.numerical_flux_function_boundary(input_struct);println("F_rho="*string(return_struct.F_rho_num_add)*", F_u="*string(return_struct.F_u_num_add)*", F_v="*string(return_struct.F_v_num_add)*", F_gamma="*string(return_struct.F_gamma_num_add)*", F_gamma_num1="*string(return_struct.F_gamma_num1_add))` with result `F_rho=-0.8900000000000001, F_u=-0.3560000000000001, F_v=-1.068, F_gamma=-0.08000000000000002, F_gamma_num1=-0.8`
 """
 function numerical_flux_function_boundary(input_struct)
     i_method=input_struct.i_method
