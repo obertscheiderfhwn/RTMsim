@@ -4,7 +4,7 @@
 # Repository: https://github.com/obertscheiderfhwn/RTMsim
 #
 module rtmsim
-    using Glob, LinearAlgebra, JLD2, GeometryBasics, GLMakie, Makie, Random, FileIO, ProgressMeter, NativeFileDialog, Gtk.ShortNames, Gtk.GConstants, Gtk.Graphics, Gtk, DelimitedFiles
+    using Glob, LinearAlgebra, JLD2, GeometryBasics, GLMakie, Makie, Random, FileIO, ProgressMeter, NativeFileDialog, Gtk.ShortNames, Gtk.GConstants, Gtk.Graphics, Gtk, DelimitedFiles, Test
     GLMakie.activate!()    
     #using MAT  #temporary output in Matlab mat-format
 
