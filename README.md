@@ -29,6 +29,7 @@ Alternatively, one can use the package manager with the following commands:
 - `test rtmsim`
 - Return with the `backspace` key
 
+Running on headless machines currently is not supported due to problems with the package GLMakie. A workaround is implemented in the [automated tests](https://github.com/obertscheiderfhwn/RTMsim/blob/main/.github/workflows/ci.yml).
 
 ## How to use - Windows
 
