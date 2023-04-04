@@ -76,7 +76,7 @@ where
 
 - $\gamma$ is the adiabatic index, and 
 
-- $\kappa=p_{\rm ref}/\rho_{\rm ref}^\gamma$ is a constant determined from pressure and mass density reference values.
+- $\kappa=p_{ref}/\rho_{ref}^\gamma$ is a constant determined from pressure and mass density reference values.
 
 Since the filling is a result of the pressure difference between injection pressure and initial cavity pressure, gauge pressures are used for the simulation. The initial pressure in the cavity is set equal to zero and the injection pressure is set equal to the pressure difference. This normalization results in a filling which is independent of the pressure level and only depends on the pressure difference. 
 
